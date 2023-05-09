@@ -7,6 +7,7 @@ public class TextMachine : MonoBehaviour
 {
     private Canvas canvas = new Canvas();
     private GameObject atmBlue = null;
+
     private bool enteredCollider = false;
     // Start is called before the first frame update
     void Start()
@@ -17,10 +18,11 @@ public class TextMachine : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+       {
         if (atmBlue && enteredCollider && Input.GetKeyDown("r")) {
-            Destroy(atmBlue);
+            //Destroy(atmBlue);
             canvas.enabled = false;
+            StateManager.chatCanvasShouldRender = true;
         }
     }
 
@@ -45,5 +47,6 @@ public class TextMachine : MonoBehaviour
     {
         canvas.enabled = false;
         enteredCollider = false;
+        StateManager.chatCanvasShouldRender = false;
     }
 }

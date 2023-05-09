@@ -155,6 +155,7 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
+            this._playerInput.enabled = !StateManager.isDialogRunning;
 
             JumpAndGravity();
             GroundedCheck();
