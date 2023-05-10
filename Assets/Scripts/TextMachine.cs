@@ -5,24 +5,25 @@ using UnityEngine;
 
 public class TextMachine : MonoBehaviour
 {
-    private Canvas canvas = new Canvas();
-    private GameObject atmBlue = null;
+    public Canvas canvas = null;
+    public GameObject objectInteractor = null;
 
     private bool enteredCollider = false;
     // Start is called before the first frame update
-    void Start()
-    {
-        canvas = GameObject.Find("textCanvas").GetComponent<Canvas>();
-        atmBlue = GameObject.Find("ATM_Blue");
-    }
 
     // Update is called once per frame
     void Update()
        {
-        if (atmBlue && enteredCollider && Input.GetKeyDown("r")) {
-            //Destroy(atmBlue);
-            canvas.enabled = false;
+        if (!objectInteractor) {
+            return;
+        }
+
+        canvas.enabled = enteredCollider;
+        if (enteredCollider && Input.GetKeyDown("r")) {
+            //Destroy(objectInteractor);
             StateManager.chatCanvasShouldRender = true;
+            StateManager.sentencesDialog.Add("Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in mauris nec tortor iaculis luctus sed vitae turpis. Etiam ut dignissim enim. Pellentesque auctor leo id viverra dictum.");
+            StateManager.sentencesDialog.Add("Testing sentence");
         }
     }
 
@@ -32,7 +33,7 @@ public class TextMachine : MonoBehaviour
     /// <param name="other">The other Collider involved in this collision.</param>
     void OnTriggerEnter(Collider other)
     {
-        if (atmBlue) {
+        if (objectInteractor) {
             canvas.enabled = true;
         }
         enteredCollider = true;

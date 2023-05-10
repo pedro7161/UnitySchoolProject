@@ -7,7 +7,6 @@ namespace StarterAssets
 {
     public class Dialog : MonoBehaviour
     {
-        public string[] sentences = new string[] { };
         private int currentIndex = 0;
         private TextMeshProUGUI display = null;
         private Coroutine dialogCoroutine = null;
@@ -19,7 +18,6 @@ namespace StarterAssets
         // Update is called once per frame
         void Update()
         {
-            Debug.Log(canvas);
             if (StateManager.chatCanvasShouldRender && !StateManager.isDialogRunning) {
                 StartDialog();
             }
@@ -41,10 +39,13 @@ namespace StarterAssets
                     return;
                 }
 
-                if (currentIndex < sentences.Length - 1) {
+                if (currentIndex < StateManager.sentencesDialog.Count - 1) {
                     currentIndex++;
                     StopCoroutine(dialogCoroutine);
                     dialogCoroutine = StartCoroutine(UpdateDisplay());
+
+                    // Clear sentencesDialog list after finished all the sentences
+                    StateManager.sentencesDialog.Clear();
                 } else {
                     StopDialog();
                 }
@@ -53,12 +54,12 @@ namespace StarterAssets
 
         void CompleteCurrentSentence() {
             StopCoroutine(dialogCoroutine);
-            getDisplay().text = sentences[currentIndex];
+            getDisplay().text = StateManager.sentencesDialog[currentIndex];
             isTextBeingTyped = false;
         }
 
         void StartDialog() {
-            if (sentences.Length == 0) {
+            if (StateManager.sentencesDialog.Count == 0) {
                 return;
             }
             
@@ -90,7 +91,7 @@ namespace StarterAssets
         {
             getDisplay().text = string.Empty;
             isTextBeingTyped = true;
-            foreach(char c in sentences[currentIndex].ToCharArray()) {
+            foreach(char c in StateManager.sentencesDialog[currentIndex].ToCharArray()) {
                 getDisplay().text += c;
                 yield return new WaitForSeconds(speedText);
             }
