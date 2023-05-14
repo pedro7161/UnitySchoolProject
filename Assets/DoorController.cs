@@ -17,7 +17,6 @@ public class DoorController : MonoBehaviour
         
     }
      void OnTriggerEnter(Collider other) {
-        Debug.Log("test collider");
         var animator = GetComponent<Animator>();
         animator.SetBool("character_nearby", true);
         
