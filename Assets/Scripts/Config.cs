@@ -39,11 +39,11 @@ public static class Config
 
     public static List<string> templateSentences = new List<string> 
     {
-        "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in mauris nec tortor iaculis luctus sed vitae turpis. Etiam ut dignissim enim. Pellentesque auctor leo id viverra dictum.",
-        "Testing sentence",
-        "Testing sentence",
-        "Testing sentence",
-        "Testing sentence"
+        "Welcome to the game!",
+        "To your Right you can see an example of a code challenge,just talk to the red robot and he will give you a challenge",
+        "To your Left you can see two Houses, just talk to the Yellow robot and he will give you a fetch challenge",
+        "Inside the other building you can see a Pink robot, just talk to him and he will give you a triple xxx challenge",
+        "Have Fun!!!!"
     };
 
     private static List<Question> questions = new List<Question>();
