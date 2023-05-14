@@ -40,6 +40,9 @@ public static class Config
     public static List<string> templateSentences = new List<string> 
     {
         "Lorem ipsum dolor sit amet, consectetur adipiscing elit. Fusce in mauris nec tortor iaculis luctus sed vitae turpis. Etiam ut dignissim enim. Pellentesque auctor leo id viverra dictum.",
+        "Testing sentence",
+        "Testing sentence",
+        "Testing sentence",
         "Testing sentence"
     };
 
