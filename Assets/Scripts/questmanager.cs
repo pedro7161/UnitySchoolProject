@@ -25,9 +25,35 @@ public class questmanager : MonoBehaviour
 
         DontDestroyOnLoad(gameObject);
     }
-    public void StartQuest(int questId)
+public void StartQuest(int questId)
 {
-    // Implementation of starting a quest goes here
-    // You can update the state of the quest or perform any other necessary actions
+    Debug.Log("Trying to start quest: " + questId);
+
+    // Check if the quest is valid and can be started
+    if (!IsQuestValid(questId))
+    {
+        Debug.LogWarning("Invalid quest or quest already started.");
+        return;
+    }
+
+    // Update the state of the quest or perform other necessary actions
+    // ...
+
+    // Trigger the quest started event
+    OnQuestStarted?.Invoke(questId);
+
+    Debug.Log("Quest started: " + questId);
+}
+
+private bool IsQuestValid(int questId)
+{
+    // Add your implementation to check if the quest is valid and can be started
+    // Return true if the quest is valid, or false otherwise
+    // You can check for conditions such as whether the quest has already been started or if the questId exists in your quest management system
+    // Example:
+    // return questDatabase.Contains(questId) && !IsQuestStarted(questId);
+
+    // For simplicity, let's assume all quests are valid in this example
+    return true;
 }
 }
