@@ -1,0 +1,13 @@
+{
+    "Questions": [
+      {
+        "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nint position = 0;\nint spherePosition = (position++ % 4) + 1;\n\nint capsulePosition = (position++ % 4) + 1;\n\nint cubePosition = (position++ % 4) + 1;\n\nint cylinderPosition = (position++ % 4) + 1;\n\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+        "order": {
+          "sphere": "1",
+          "capsule": "2",
+          "cube": "3",
+          "cylinder": "4"
+        }
+      }
+    ]
+  }
