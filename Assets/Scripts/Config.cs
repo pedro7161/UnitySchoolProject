@@ -7,7 +7,15 @@ public enum DialogType
 {
     DIALOG,
     CODE_CHALLENGE,
-    ALERT
+    ALERT,
+    PUZZLE,
+}
+
+public enum MinigameType {
+    NONE,
+    FETCH,
+    CODE_CHALLENGE,
+    PUZZLE
 }
 
 public enum QuestionDifficulty {
@@ -33,6 +41,17 @@ public class QuestionsData
     public List<Question> Questions;
 }
 
+[System.Serializable]
+public class QuestionPuzzle
+{
+    public string code;
+    public Dictionary<string, string> order;
+}
+
+public class QuestionPuzzleData {
+    public List<QuestionPuzzle> Questions;
+}
+
 
 public static class Config
 {
@@ -51,12 +70,19 @@ public static class Config
     // should initialize and preload questions
     public static List<Question> GetQuestions() {
         if (questions.Count == 0) {
-            TextAsset jsonFile = Resources.Load<TextAsset>("questions");
+            TextAsset jsonFile = Resources.Load<TextAsset>("code-challenge-questions");
             var myObject = JsonUtility.FromJson<QuestionsData>(jsonFile.text);
 
             questions.AddRange(myObject.Questions);
         }
         return questions;
+    }
+
+    public static List<QuestionPuzzle> GetPuzzleQuestions() {
+        TextAsset jsonFile = Resources.Load<TextAsset>("puzzle-challenge-questions");
+        var myObject = JsonUtility.FromJson<QuestionPuzzleData>(jsonFile.text);
+
+        return myObject.Questions;
     }
 
     public static Question GetRandomQuestion(QuestionDifficulty difficulty = QuestionDifficulty.NONE) {
@@ -69,6 +95,11 @@ public static class Config
 
         randomQuestion = filteredQuestions[Random.Range(0, filteredQuestions.Count)];
         return randomQuestion;
+    }
+
+    public static QuestionPuzzle GetRandomPuzzleQuestion() {
+        List<QuestionPuzzle> questions = GetPuzzleQuestions();
+        return questions[Random.Range(0, questions.Count)];
     }
 
     public static System.Action onDelegate;

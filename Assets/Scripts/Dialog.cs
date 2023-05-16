@@ -32,7 +32,7 @@ namespace StarterAssets
                 StopDialog();
             }
 
-            if (StateManager.chatCanvasShouldRender && StateManager.isDialogRunning)
+            if (StateManager.chatCanvasShouldRender && StateManager.isDialogRunning && StateManager.SelectedDialogCanvas.DialogType == DialogType.DIALOG)
             {
                 HandlePlayerInput();
             }
@@ -62,10 +62,24 @@ namespace StarterAssets
         }
 
         public void ConfigureExtraSteps() {
+            if (StateManager.SelectedDialogCanvas == null)
+            {
+                return;
+            }
             // Update canvas properties
             switch (StateManager.SelectedDialogCanvas.DialogType) {
+                case DialogType.DIALOG:
+                    if (StateManager.useAnimationOnDialog) 
+                    {
+                        dialogCoroutine = StartCoroutine(UpdateDisplay());
+                    } else 
+                    {
+                        CompleteCurrentSentence();
+                    }
+                    break;
                 case DialogType.CODE_CHALLENGE:
                     StateManager.SelectedDialogCanvas.CanvasTitle.text = StateManager.SelectedQuestion.title;
+                    StateManager.SelectedDialogCanvas.OutputSentences.text = StateManager.SelectedQuestion.code;
 
                     for (int i = 0; i < StateManager.SelectedQuestion.answers.Count; i++)
                     {
@@ -74,7 +88,8 @@ namespace StarterAssets
 
                     break;
                 case DialogType.ALERT:
-                    Debug.Log(StateManager.AnswerFromSelectedQuestion);
+                    // On dialog mode, we should only one sentence
+                    getDisplay().text = StateManager.sentencesDialog[0];
                     StateManager.SelectedDialogCanvas.Canvas.GetComponentInChildren<Image>().color = StateManager.AnswerFromSelectedQuestion == "Correct" ? 
                         new Color(103f/255f, 149f/255f, 107f/255f, 100f/255f) : new Color(178f/255f, 123f/255f, 110f/255f, 100f/255f);
                         
@@ -84,6 +99,9 @@ namespace StarterAssets
                             // Can't use OnStopDialog because we need to keep the answer after interaction until new setup dialog
                             StateManager.AnswerFromSelectedQuestion = null;
                         }, 1));
+                    break;
+                case DialogType.PUZZLE:
+                    StateManager.SelectedDialogCanvas.OutputSentences.text = StateManager.SelectedQuestionPuzzle.code;
                     break;
             }
         }
@@ -111,18 +129,11 @@ namespace StarterAssets
             getCanvas().gameObject.SetActive(true);
             StateManager.OnStartDialog();
             currentIndex = 0;
-
-            if (StateManager.useAnimationOnDialog) 
-            {
-                dialogCoroutine = StartCoroutine(UpdateDisplay());
-            } else 
-            {
-                CompleteCurrentSentence();
-            }
         }
 
         public void StopDialog()
         {
+            currentIndex = 0;
             getCanvas().gameObject.SetActive(false);
             StopCoroutineHandler();
 

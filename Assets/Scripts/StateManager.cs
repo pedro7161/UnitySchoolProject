@@ -5,8 +5,6 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-
-
 public class StateManager : MonoBehaviour
 {
     // Start is called before the first frame update
@@ -22,6 +20,12 @@ public class StateManager : MonoBehaviour
     public static Question SelectedQuestion = null;
     public static string AnswerFromSelectedQuestion = null;
 
+    // Minigame information
+    public static MinigameType SelectedMinigame = MinigameType.NONE;
+
+    // Puzzle information
+    public static QuestionPuzzle SelectedQuestionPuzzle = null;
+
     public static void SetDialogCanvasData(HashSet<DialogCanvasStructure> data) {
         StateManager.dialogCanvasData = data;
     }
@@ -34,6 +38,13 @@ public class StateManager : MonoBehaviour
 
         StateManager.chatCanvasShouldRender = true;
         StateManager.useAnimationOnDialog = useAnimationOnDialog;
+
+        if (DialogType.DIALOG == dialogType) {
+            StateManager.SelectedQuestion = null;
+            StateManager.AnswerFromSelectedQuestion = null;
+            StateManager.SelectedQuestionPuzzle = null;
+            StateManager.SelectedMinigame = MinigameType.NONE;
+        }
     }
 
     public static void OnStartDialog() 
@@ -48,5 +59,6 @@ public class StateManager : MonoBehaviour
         
         StateManager.SelectedDialogCanvas = null;
         StateManager.SelectedQuestion = null;
+        StateManager.SelectedQuestionPuzzle = null;
     }
 }

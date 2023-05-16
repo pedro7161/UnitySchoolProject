@@ -21,7 +21,7 @@ namespace StarterAssets
 		public bool cursorInputForLook = true;
 
 		void Update() {
-			SetCursorState(!StateManager.isDialogRunning);
+			SetCursorState(!StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.NONE);
 		}
 
 #if ENABLE_INPUT_SYSTEM
