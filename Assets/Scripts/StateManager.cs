@@ -18,13 +18,15 @@ public class StateManager : MonoBehaviour
     public static bool useAnimationOnDialog = false;
     // Questions information
     public static Question SelectedQuestion = null;
-    public static string AnswerFromSelectedQuestion = null;
+    public static string LastAnswerFromSelectedQuestion = null;
 
     // Minigame information
     public static MinigameType SelectedMinigame = MinigameType.NONE;
 
     // Puzzle information
     public static QuestionPuzzle SelectedQuestionPuzzle = null;
+    public static Dictionary<string, string> CurrentPuzzleAnswers = new Dictionary<string, string>();
+    public static string LastAnswerFromSelectedPuzzleQuestion = null;
 
     public static void SetDialogCanvasData(HashSet<DialogCanvasStructure> data) {
         StateManager.dialogCanvasData = data;
@@ -40,10 +42,8 @@ public class StateManager : MonoBehaviour
         StateManager.useAnimationOnDialog = useAnimationOnDialog;
 
         if (DialogType.DIALOG == dialogType) {
-            StateManager.SelectedQuestion = null;
-            StateManager.AnswerFromSelectedQuestion = null;
-            StateManager.SelectedQuestionPuzzle = null;
-            StateManager.SelectedMinigame = MinigameType.NONE;
+            StateManager.LastAnswerFromSelectedQuestion = null;
+            StateManager.LastAnswerFromSelectedPuzzleQuestion = null;
         }
     }
 
@@ -60,5 +60,7 @@ public class StateManager : MonoBehaviour
         StateManager.SelectedDialogCanvas = null;
         StateManager.SelectedQuestion = null;
         StateManager.SelectedQuestionPuzzle = null;
+        StateManager.CurrentPuzzleAnswers = new Dictionary<string, string>();
+        StateManager.SelectedMinigame = MinigameType.NONE;
     }
 }

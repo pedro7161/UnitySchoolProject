@@ -20,7 +20,6 @@ public class TextMachine : MonoBehaviour
             return;
         }
 
-        canvas.enabled = enteredCollider;
         if (enteredCollider && Input.GetKeyDown("r") && !StateManager.isDialogRunning)
         {
            ConfigureCanvas();
@@ -47,12 +46,11 @@ public class TextMachine : MonoBehaviour
 
     void OnTriggerEnter(Collider other)
     {
-        canvas.enabled = enteredCollider = true;
+        enteredCollider = true;
     }
 
     void OnTriggerExit(Collider other)
     {
-        canvas.enabled = enteredCollider = false;
         StateManager.OnStopDialog();
     }
 }

@@ -30,7 +30,7 @@ public class Puzzle : MonoBehaviour
                     Rigidbody rigidbody = PuzzlePiece.GetComponentInChildren<Rigidbody>();
                     rigidbody.useGravity = true;
                     rigidbody.isKinematic = false;
-                    rigidbody.collisionDetectionMode = CollisionDetectionMode.ContinuousDynamic;
+                    rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
                     if (PuzzlePiece == currentPiece) {
                         rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
                     } else {
@@ -39,6 +39,9 @@ public class Puzzle : MonoBehaviour
                     PuzzlePiece.GetComponent<MeshRenderer>().material.SetColor("_Color", PuzzlePiece == currentPiece ? Color.blue : Color.white);
                 }
             }
+
+            // Get canvas with DialogType.PUZZLE and set validate button to interactive true if state manager current puzzle anwsers has 4 elements
+            StateManager.SelectedDialogCanvas.Canvas.gameObject.GetComponentInChildren<UnityEngine.UI.Button>().interactable = StateManager.CurrentPuzzleAnswers.Count == 4;
         }
         else
         {

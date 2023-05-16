@@ -90,14 +90,15 @@ namespace StarterAssets
                 case DialogType.ALERT:
                     // On dialog mode, we should only one sentence
                     getDisplay().text = StateManager.sentencesDialog[0];
-                    StateManager.SelectedDialogCanvas.Canvas.GetComponentInChildren<Image>().color = StateManager.AnswerFromSelectedQuestion == "Correct" ? 
-                        new Color(103f/255f, 149f/255f, 107f/255f, 100f/255f) : new Color(178f/255f, 123f/255f, 110f/255f, 100f/255f);
+                    StateManager.SelectedDialogCanvas.Canvas.GetComponentInChildren<Image>().color = 
+                        StateManager.LastAnswerFromSelectedQuestion == "Correct" || StateManager.LastAnswerFromSelectedPuzzleQuestion == "Correct" ? 
+                            new Color(103f/255f, 149f/255f, 107f/255f, 100f/255f) : new Color(178f/255f, 123f/255f, 110f/255f, 100f/255f);
                         
                         // Alert dialog should close automatically
                         StartCoroutine(Config.Waiter(() => {}, () => {
                             StopDialog();
                             // Can't use OnStopDialog because we need to keep the answer after interaction until new setup dialog
-                            StateManager.AnswerFromSelectedQuestion = null;
+                            StateManager.LastAnswerFromSelectedQuestion = null;
                         }, 1));
                     break;
                 case DialogType.PUZZLE:
@@ -174,11 +175,36 @@ namespace StarterAssets
         }
 
         public void OnDialogButtonsHandler(GameObject gameObject) {
-            var index = int.Parse(gameObject.name);
+            var answer = "";
 
-            var text = StateManager.AnswerFromSelectedQuestion = StateManager.SelectedQuestion.correct_answer == index ? "Correct" : "Incorrect";
+            switch (StateManager.SelectedDialogCanvas.DialogType) {
+                case DialogType.CODE_CHALLENGE:
+                    var index = int.Parse(gameObject.name);
+                    answer = StateManager.LastAnswerFromSelectedQuestion = StateManager.SelectedQuestion.correct_answer == index ? "Correct" : "Incorrect";
+
+                    break;
+                case DialogType.PUZZLE:
+                    var isCorrect = StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.capsule == StateManager.CurrentPuzzleAnswers["capsule"] &&
+                        StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.cube == StateManager.CurrentPuzzleAnswers["cube"] &&
+                        StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.sphere == StateManager.CurrentPuzzleAnswers["sphere"] &&
+                        StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.cylinder == StateManager.CurrentPuzzleAnswers["cylinder"];
+                        answer = StateManager.LastAnswerFromSelectedPuzzleQuestion = isCorrect ? "Correct" : "Incorrect";
+                        var status = GameObject.Find("PuzzleChallengeStatus").GetComponentInChildren<TextMeshProUGUI>();
+
+                        if (!isCorrect) 
+                        {
+                            status.text = "The combination is invalid! Try again.";
+                            status.color = Color.red;
+                            return;
+                        }
+                        
+                        status.text = "";
+                        status.color = Color.white;
+                    break;
+            }
+
             StopDialog();
-            StateManager.SetupDialog(new List<string>{text}, DialogType.ALERT, false);
+            StateManager.SetupDialog(new List<string>{answer}, DialogType.ALERT, false);
         }
     }
 }
