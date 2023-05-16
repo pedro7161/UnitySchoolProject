@@ -111,10 +111,10 @@ public class questmanager : MonoBehaviour
     {
         if (inventory.instance.HasItem(questId) && activeQuests[questId] > 0)
         {
-            return false; // Item is still needed for at least one active quest
+            return true; // Item is still needed for at least one active quest
         }
     }
 
-    return true; // Item is not needed for any active quest
+    return false; // Item is not needed for any active quest
 }
 }
