@@ -1,21 +1,22 @@
 using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
- using UnityEngine.UI;
-public class GetItems : MonoBehaviour
-{ 
+using UnityEngine.UI;
 
+public class GetItems : MonoBehaviour
+{
     public Image imageComponent; // Assign the Image component in the Inspector
     public Sprite newSprite; // Assign the new sprite in the Inspector
-    public int questId;  // The quest ID associated with this triggerable object
+    public int questId; // The quest ID associated with this triggerable object
 
-    private bool isTriggerable = false;  // Flag to indicate if the object is currently triggerable
+    private HashSet<int> collectedItems = new HashSet<int>(); // Track the collected items
+
+    private bool isTriggerable = false; // Flag to indicate if the object is currently triggerable
 
     private void Start()
     {
         // Subscribe to the event for quest start
         questmanager.instance.OnQuestStarted += CheckTriggerability;
-        //  Debug.Log("Event subscription executed");
     }
 
     private void CheckTriggerability(int startedQuestId)
@@ -31,10 +32,25 @@ public class GetItems : MonoBehaviour
     {
         if (isTriggerable && other.CompareTag("Player"))
         {
-            imageComponent.sprite = newSprite;
-            Destroy(this.gameObject);
-            // Perform actions when the player collides with this object during the active quest
+            if (!collectedItems.Contains(questId))
+            {
+                imageComponent.sprite = newSprite;
+                inventory.instance.AddItem(questId);
+                collectedItems.Add(questId);
+                // Perform actions when the player collides with this object during the active quest
+            }
+            else
+            {
+                // Display a message or perform any other action indicating that the item has already been obtained
+                Debug.Log("Item already collected: " + questId);
+            }
+
+            // Check if the item is still needed
+            bool itemStillNeeded = questmanager.instance.IsItemStillNeeded(questId);
+            if (!itemStillNeeded)
+            {
+                Destroy(gameObject); // Destroy the game object if the item is no longer needed
+            }
         }
     }
 }
-   

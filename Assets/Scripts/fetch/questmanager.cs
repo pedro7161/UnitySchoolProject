@@ -31,6 +31,7 @@ public class questmanager : MonoBehaviour
         // Check if the quest is valid and can be started
         if (!IsQuestValid(questId))
         {
+             Debug.Log("Invalid quest or quest already started. " + questId);
             Debug.LogWarning("Invalid quest or quest already started.");
             return;
         }
@@ -100,5 +101,20 @@ public class questmanager : MonoBehaviour
 
         // Remove the quest from the active quests dictionary
         activeQuests.Remove(questId);
+        inventory.instance.RemoveItem(questId);
     }
+
+    // Method to check if an item is still needed for a quest
+   public bool IsItemStillNeeded(int itemId)
+{
+    foreach (int questId in activeQuests.Keys)
+    {
+        if (inventory.instance.HasItem(questId) && activeQuests[questId] > 0)
+        {
+            return false; // Item is still needed for at least one active quest
+        }
+    }
+
+    return true; // Item is not needed for any active quest
+}
 }

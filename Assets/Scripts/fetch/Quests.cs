@@ -8,25 +8,44 @@ public class Quests : MonoBehaviour
    public int requiredItemCount; 
    public TextMeshProUGUI canvasText;
    public Canvas canvas;
+
+   public bool questcompleted = false;
      // Flag to indicate if the quest has been completed
-    private void start()
+    private void Start()
     {
         canvas.enabled = false;
+        canvasText = canvas.GetComponentInChildren<TextMeshProUGUI>();
+
+        
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (inventory.instance.HasItem(questId) && other.CompareTag("Player"))
+        if (inventory.instance.HasItem(questId) && other.CompareTag("Player") && !questcompleted)
         {
                 canvas.enabled = true;
-                canvasText = GetComponent<TextMeshProUGUI>();
+
+               
                 canvasText.text = "Mission Complete";
+                questcompleted = true;
                 questmanager.instance.CompleteQuest(questId);
+                Debug.Log("Quest completed: " + questId);
               
          
         }
+        if (other.CompareTag("Player") && !questcompleted)
+        {
+            canvas.enabled = true;
+            canvasText.text = "Mission Incomplete";
+        }
+        if (other.CompareTag("Player") && questcompleted)
+        {
+            canvas.enabled = true;
+            canvasText.text = "Mission Complete";
+        }    
         else {
             Debug.Log("Quest started: " + questId);
                 questmanager.instance.StartQuest(questId,requiredItemCount);
+
             }
         }
 
