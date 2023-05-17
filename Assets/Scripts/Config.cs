@@ -41,11 +41,20 @@ public class QuestionsData
     public List<Question> Questions;
 }
 
+// Question Puzzle Structure
+[System.Serializable]
+public class PuzzleQuestionsOrder
+{
+    public string sphere;
+    public string capsule;
+    public string cube;
+    public string cylinder;
+}
 [System.Serializable]
 public class QuestionPuzzle
 {
     public string code;
-    public Dictionary<string, string> order;
+    public PuzzleQuestionsOrder PuzzleQuestionsOrder;
 }
 
 public class QuestionPuzzleData {
@@ -77,12 +86,19 @@ public static class Config
         }
         return questions;
     }
-
+    
     public static List<QuestionPuzzle> GetPuzzleQuestions() {
         TextAsset jsonFile = Resources.Load<TextAsset>("puzzle-challenge-questions");
         var myObject = JsonUtility.FromJson<QuestionPuzzleData>(jsonFile.text);
 
         return myObject.Questions;
+    }
+
+    public static QuestionPuzzle GetRandomQuestionPuzzle() {
+        List<QuestionPuzzle> questions = GetPuzzleQuestions();
+        QuestionPuzzle randomQuestion = new QuestionPuzzle();
+
+        return questions[Random.Range(0, questions.Count)];
     }
 
     public static Question GetRandomQuestion(QuestionDifficulty difficulty = QuestionDifficulty.NONE) {
@@ -95,11 +111,6 @@ public static class Config
 
         randomQuestion = filteredQuestions[Random.Range(0, filteredQuestions.Count)];
         return randomQuestion;
-    }
-
-    public static QuestionPuzzle GetRandomPuzzleQuestion() {
-        List<QuestionPuzzle> questions = GetPuzzleQuestions();
-        return questions[Random.Range(0, questions.Count)];
     }
 
     public static System.Action onDelegate;

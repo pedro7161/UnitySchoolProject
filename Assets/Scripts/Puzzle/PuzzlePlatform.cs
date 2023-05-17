@@ -1,5 +1,6 @@
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using UnityEngine;
 
 public class PuzzlePlatform : MonoBehaviour
@@ -22,6 +23,20 @@ public class PuzzlePlatform : MonoBehaviour
     /// <param name="other">The other Collider involved in this collision.</param>
     void OnTriggerEnter(Collider other)
     {
-        Debug.Log("lel");
+        // validate only those with layer PuzzleCollider
+        if (other.gameObject.layer == 3) {
+            var key = other.gameObject.name.ToLower();
+            
+            StateManager.CurrentPuzzleAnswers[key] = gameObject.name;
+            Debug.Log("Add element: " + "key: " + key + " value: " + gameObject.name);
+        }
+    }
+
+    void OnTriggerExit(Collider other) {
+        if (other.gameObject.layer == 3) {
+            var key = other.gameObject.name.ToLower();
+            StateManager.CurrentPuzzleAnswers.Remove(key);
+            Debug.Log("Remove element: " + "key: " + key + " value: " + gameObject.name);
+        }
     }
 }
