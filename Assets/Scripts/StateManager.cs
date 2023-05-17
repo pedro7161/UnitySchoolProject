@@ -41,9 +41,10 @@ public class StateManager : MonoBehaviour
         StateManager.chatCanvasShouldRender = true;
         StateManager.useAnimationOnDialog = useAnimationOnDialog;
 
-        if (DialogType.DIALOG == dialogType || dialogType == DialogType.PUZZLE) {
-            StateManager.LastAnswerFromSelectedQuestion = null;
-            StateManager.LastAnswerFromSelectedPuzzleQuestion = null;
+        // Set minigame if dialogType as any value that match with a minigame enumerator
+        if (Enum.IsDefined(typeof(MinigameType), dialogType.ToString()))
+        {
+            StateManager.SelectedMinigame = (MinigameType) Enum.Parse(typeof(MinigameType), dialogType.ToString());
         }
     }
 
@@ -61,6 +62,5 @@ public class StateManager : MonoBehaviour
         StateManager.SelectedQuestion = null;
         StateManager.SelectedQuestionPuzzle = null;
         StateManager.CurrentPuzzleAnswers = new Dictionary<string, string>();
-        StateManager.SelectedMinigame = MinigameType.NONE;
     }
 }

@@ -15,7 +15,6 @@ public class PuzzleStartCollider : MonoBehaviour
     void Update()
     {
         if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) && StateManager.SelectedMinigame == MinigameType.NONE) {
-            StateManager.SelectedMinigame = MinigameType.PUZZLE;
             StateManager.SelectedQuestionPuzzle = Config.GetRandomQuestionPuzzle();
 
             Debug.Log("Selected question puzzle anwsers");

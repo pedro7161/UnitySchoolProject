@@ -19,7 +19,7 @@ public class PuzzleWall : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 3) {
-            Puzzle.resetElement(this.gameObject);
+            Puzzle.resetElement(other.gameObject);
         }  
     }
 }

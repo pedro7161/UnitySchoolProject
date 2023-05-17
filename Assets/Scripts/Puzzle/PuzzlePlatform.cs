@@ -6,6 +6,7 @@ using UnityEngine;
 public class PuzzlePlatform : MonoBehaviour
 {
     private bool isPlatformOcupied = false;
+    private int objectsOnPlatform = 0;
     // Start is called before the first frame update
     void Start()
     {
@@ -15,7 +16,7 @@ public class PuzzlePlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log(gameObject.name + " " + isPlatformOcupied);
+        Debug.Log("Current objects in platform: " + objectsOnPlatform);
     }
 
     /// <summary>
@@ -24,6 +25,7 @@ public class PuzzlePlatform : MonoBehaviour
     /// <param name="other">The other Collider involved in this collision.</param>
     void OnTriggerEnter(Collider other)
     {
+        objectsOnPlatform++;
         // validate only those with layer PuzzleCollider
         if (other.gameObject.layer == 3 && !isPlatformOcupied) {
             gameObject.GetComponent<Renderer>().material.color = Color.yellow;
@@ -37,7 +39,8 @@ public class PuzzlePlatform : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
-        if (other.gameObject.layer == 3 && isPlatformOcupied)
+        objectsOnPlatform--;
+        if (other.gameObject.layer == 3 && isPlatformOcupied && objectsOnPlatform == 0)
         {
             gameObject.GetComponent<Renderer>().material.color = Color.white;
             var key = other.gameObject.name.ToLower();

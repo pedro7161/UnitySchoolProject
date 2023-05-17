@@ -14,10 +14,10 @@ public class Puzzle : MonoBehaviour
 
     void Start()
     {
+        _PuzzlePieces = PuzzlePieces;
         PuzzlePiecesOriginalPosition = new Vector3[PuzzlePieces.Count];
         for (int i = 0; i < PuzzlePieces.Count; i++)
         {
-            _PuzzlePieces.Add(PuzzlePieces[i]);
             PuzzlePiecesOriginalPosition[i] = PuzzlePieces[i].transform.position;
         }
     }
@@ -42,8 +42,11 @@ public class Puzzle : MonoBehaviour
                 }
             }
 
-            // Get canvas with DialogType.PUZZLE and set validate button to interactive true if state manager current puzzle anwsers has 4 elements
-            StateManager.SelectedDialogCanvas.Canvas.gameObject.GetComponentInChildren<UnityEngine.UI.Button>().interactable = StateManager.CurrentPuzzleAnswers.Count == 4;
+            var button = StateManager.SelectedDialogCanvas?.Canvas?.gameObject?.GetComponentInChildren<UnityEngine.UI.Button>();
+            if (button) {
+                // Get canvas with DialogType.PUZZLE and set validate button to interactive true if state manager current puzzle anwsers has 4 elements
+                StateManager.SelectedDialogCanvas.Canvas.gameObject.GetComponentInChildren<UnityEngine.UI.Button>().interactable = StateManager.CurrentPuzzleAnswers.Count == 4;
+            }
         }
         else
         {
@@ -88,14 +91,7 @@ public class Puzzle : MonoBehaviour
 
     public static void resetElement(GameObject gameObject)
     {
-        for (var i = 0; i < _PuzzlePieces.Count; i++)
-        {
-            Debug.Log("testing element " + gameObject.name + " " + _PuzzlePieces[i].name);
-            if (gameObject.name == _PuzzlePieces[i].name)
-            {
-                _PuzzlePieces[i].transform.position = PuzzlePiecesOriginalPosition[i];
-                break;
-            }
-        }
+        var index = _PuzzlePieces.IndexOf(gameObject);
+        gameObject.transform.position = PuzzlePiecesOriginalPosition[index];
     }
 }
