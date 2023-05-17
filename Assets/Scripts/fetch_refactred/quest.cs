@@ -26,7 +26,9 @@ public class quest : MonoBehaviour
     public List<QuestStructure> AllItemsNeeded;
 
     private questionmanager questionmanager = new questionmanager();
+    public bool PlayerEnteredOnCollider = false;
 
+   
     void Start()
     {
         if (AllItemsNeeded != null)
@@ -34,34 +36,59 @@ public class quest : MonoBehaviour
             questionmanager.AllItemsNeeded = AllItemsNeeded;
         }
     }
-    private void OnTriggerEnter(Collider other)
-    {
-        Debug.Log("trigger funciona");
-        if (other.gameObject.tag == "Player")
-        {
-            Debug.Log("sou um player tag");
-            Debug.Log("Quest name: " + Quest_name + questionmanager.CurrentQuest);
-            Debug.Log("Current quest: "+ questionmanager.CurrentQuest);
 
-            if (Input.GetKeyDown(KeyCode.R))
-            {
-                if (questionmanager.CurrentQuest is null)
+    void FixedUpdate()
+    {
+        
+        if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R))
+        {
+            Debug.Log("Quest name: " + Quest_name);
+            Debug.Log("Quest description: " + Quest_description);
+            Debug.Log("Quest code: " + Quest_code);
+            Debug.Log("Quest dificulty: " + dificulty);
+            Debug.Log("Quest is finished: " + Isfinished);
+            Debug.Log("Quest items needed: " + questionmanager.AllItemsNeeded.Count);
+            Debug.Log("Current quest: " + questionmanager.CurrentQuest);
+
+                Debug.Log("cliquei no R");
+                if (questionmanager.CurrentQuest == null)
                 {
                     Debug.Log("Quest is going to start");
                     questionmanager.MissionStart(this);
                 }
                 else if (questionmanager.CurrentQuest.Isfinished && questionmanager.CurrentQuest != null)
                 {
-                    Debug.Log("Quest is going to be finished");
+                    Debug.Log("Quest is going to be finished/closed for good");
+                   
                     questionmanager.MissionEnd();
                 }
-                else
+                else if (!questionmanager.CurrentQuest.Isfinished && questionmanager.CurrentQuest != null)
                 {
                     // Display a message or take appropriate action to indicate that a quest is already in progress
                     Debug.Log("A quest is already in progress");
                 }
-            }
+            
         }
+        else if (questionmanager.HasAllItems && PlayerEnteredOnCollider)
+                {
+                 
+                    Debug.Log("make quest finisheble");
+                   questionmanager.MissionCompleted();
+                }      
+        else{
+            Debug.Log("Player is not on collider");}
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        PlayerEnteredOnCollider = true;
+        Debug.Log("Player on Collider?" + PlayerEnteredOnCollider);
+        Debug.Log("Pressed R key:" + Input.GetKey(KeyCode.R));
+
+    }
+    private void OnTriggerExit(Collider other)
+    {
+        Debug.Log("Player on Collider?" + PlayerEnteredOnCollider);
+        PlayerEnteredOnCollider = false;
     }
 
 }

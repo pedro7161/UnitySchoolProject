@@ -18,6 +18,7 @@ public class questionmanager : MonoBehaviour
     private consumable consumablesScript;
     private InventoryConsumable inventoryConsumableScript;
 
+public bool HasAllItems = false;
 
     // Start is called before the first frame update
     void Start()
@@ -69,6 +70,12 @@ public class questionmanager : MonoBehaviour
                 // Update collected items for the quest in the canvas
                 UpdateCollectedItems(currentAmount);
             }
+            else if (currentAmount >= amountRequired)
+            {
+                HasAllItems = true;
+                // Display a warning that the quest is completed
+                MissionCompletedWarning();
+            }
         }
     }
 
@@ -88,6 +95,7 @@ public class questionmanager : MonoBehaviour
     {
         CurrentQuest.Isfinished = true;
         GetAllMission();
+
     }
 
     public int ItemCollected(int questItem)
