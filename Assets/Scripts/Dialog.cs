@@ -102,6 +102,13 @@ namespace StarterAssets
                             break;
                     }
 
+                    if (StateManager.SelectedMinigame != MinigameType.NONE)
+                    {
+                        StateManager.SelectedMinigame = MinigameType.NONE;
+                    }
+
+                    Debug.Log("Current Anwser: " + anwser);
+
                     StateManager.SelectedDialogCanvas.Canvas.GetComponentInChildren<Image>().color =
                             anwser == "Correct" ?
                                 new Color(103f / 255f, 149f / 255f, 107f / 255f, 100f / 255f) :
@@ -110,8 +117,6 @@ namespace StarterAssets
                     // Alert dialog should close automatically
                     StartCoroutine(Config.Waiter(() => {}, () => {
                         StopDialog();
-                        // Can't use OnStopDialog because we need to keep the answer after interaction until new setup dialog
-                        StateManager.LastAnswerFromSelectedQuestion = null;
                     }, 1));
 
                     break;
@@ -202,7 +207,9 @@ namespace StarterAssets
                         StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.cube == StateManager.CurrentPuzzleAnswers["cube"] &&
                         StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.sphere == StateManager.CurrentPuzzleAnswers["sphere"] &&
                         StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.cylinder == StateManager.CurrentPuzzleAnswers["cylinder"];
-                        answer = StateManager.LastAnswerFromSelectedPuzzleQuestion = isCorrect ? "Correct" : "Incorrect";
+
+                        StateManager.LastAnswerFromSelectedPuzzleQuestion = isCorrect ? "Correct" : "Incorrect";
+                        answer = StateManager.LastAnswerFromSelectedPuzzleQuestion;
                         var status = GameObject.Find("PuzzleChallengeStatus").GetComponentInChildren<TextMeshProUGUI>();
 
                         if (!isCorrect) 
