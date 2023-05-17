@@ -30,7 +30,7 @@ public class Puzzle : MonoBehaviour
                     Rigidbody rigidbody = PuzzlePiece.GetComponentInChildren<Rigidbody>();
                     rigidbody.useGravity = true;
                     rigidbody.isKinematic = false;
-                    rigidbody.collisionDetectionMode = CollisionDetectionMode.Discrete;
+                    rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
                     if (PuzzlePiece == currentPiece) {
                         rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
                     } else {

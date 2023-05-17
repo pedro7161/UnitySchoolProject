@@ -41,7 +41,7 @@ public class StateManager : MonoBehaviour
         StateManager.chatCanvasShouldRender = true;
         StateManager.useAnimationOnDialog = useAnimationOnDialog;
 
-        if (DialogType.DIALOG == dialogType) {
+        if (DialogType.DIALOG == dialogType || dialogType == DialogType.PUZZLE) {
             StateManager.LastAnswerFromSelectedQuestion = null;
             StateManager.LastAnswerFromSelectedPuzzleQuestion = null;
         }

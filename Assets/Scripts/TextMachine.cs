@@ -41,6 +41,8 @@ public class TextMachine : MonoBehaviour
             sentences.AddRange(Config.templateSentences);
         }
 
+        Debug.Log("Current object name: " + gameObject.name);
+        Debug.Log("Current dialog Type: " + ActionCanvasType);
         StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE);
     }
 
@@ -51,6 +53,7 @@ public class TextMachine : MonoBehaviour
 
     void OnTriggerExit(Collider other)
     {
+        enteredCollider = false;
         StateManager.OnStopDialog();
     }
 }
