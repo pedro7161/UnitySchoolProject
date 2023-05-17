@@ -6,13 +6,18 @@ public class Puzzle : MonoBehaviour
 {
     // Start is called before the first frame update
     public Camera Camera;
-    public GameObject[] PuzzlePieces;
-    private Vector3[] PuzzlePiecesOriginalPosition;
+    public List<GameObject> PuzzlePieces;
     public static GameObject currentPiece;
 
-    void Start() {
-        PuzzlePiecesOriginalPosition = new Vector3[PuzzlePieces.Length];
-        for (int i = 0; i < PuzzlePieces.Length; i++) {
+    private static Vector3[] PuzzlePiecesOriginalPosition;
+    private static List<GameObject> _PuzzlePieces = new List<GameObject>();
+
+    void Start()
+    {
+        PuzzlePiecesOriginalPosition = new Vector3[PuzzlePieces.Count];
+        for (int i = 0; i < PuzzlePieces.Count; i++)
+        {
+            _PuzzlePieces.Add(PuzzlePieces[i]);
             PuzzlePiecesOriginalPosition[i] = PuzzlePieces[i].transform.position;
         }
     }
@@ -22,20 +27,17 @@ public class Puzzle : MonoBehaviour
         Camera.enabled = StateManager.SelectedMinigame == MinigameType.PUZZLE;
         if (StateManager.SelectedMinigame == MinigameType.PUZZLE)
         {
-            if (currentPiece) 
+            if (currentPiece)
             {
                 handlePieceMovement();
-                foreach (GameObject PuzzlePiece in PuzzlePieces) 
+                foreach (GameObject PuzzlePiece in PuzzlePieces)
                 {
                     Rigidbody rigidbody = PuzzlePiece.GetComponentInChildren<Rigidbody>();
                     rigidbody.useGravity = true;
                     rigidbody.isKinematic = false;
                     rigidbody.collisionDetectionMode = CollisionDetectionMode.Continuous;
-                    if (PuzzlePiece == currentPiece) {
-                        rigidbody.constraints = RigidbodyConstraints.FreezeRotationX | RigidbodyConstraints.FreezeRotationY | RigidbodyConstraints.FreezeRotationZ | RigidbodyConstraints.FreezePositionY | RigidbodyConstraints.FreezePositionZ;
-                    } else {
-                        rigidbody.constraints = RigidbodyConstraints.FreezeAll;
-                    }
+
+                    rigidbody.constraints = RigidbodyConstraints.FreezeRotation | RigidbodyConstraints.FreezePositionY;
                     PuzzlePiece.GetComponent<MeshRenderer>().material.SetColor("_Color", PuzzlePiece == currentPiece ? Color.blue : Color.white);
                 }
             }
@@ -46,7 +48,7 @@ public class Puzzle : MonoBehaviour
         else
         {
             resetPiecesPosition();
-            if (currentPiece) 
+            if (currentPiece)
             {
                 currentPiece.GetComponent<MeshRenderer>().material.SetColor("_Color", Color.white);
                 currentPiece = null;
@@ -54,14 +56,15 @@ public class Puzzle : MonoBehaviour
         }
     }
 
-    void resetPiecesPosition() 
+    void resetPiecesPosition()
     {
-        for (int i = 0; i < PuzzlePieces.Length; i++) {
+        for (int i = 0; i < PuzzlePieces.Count; i++)
+        {
             PuzzlePieces[i].transform.position = PuzzlePiecesOriginalPosition[i];
         }
     }
 
-    void handlePieceMovement() 
+    void handlePieceMovement()
     {
         var speed = 2.5f * Time.deltaTime;
         //wasd keyboard movement
@@ -80,6 +83,19 @@ public class Puzzle : MonoBehaviour
         if (Input.GetKey(KeyCode.D))
         {
             currentPiece.transform.position += new Vector3(-speed, 0, 0);
+        }
+    }
+
+    public static void resetElement(GameObject gameObject)
+    {
+        for (var i = 0; i < _PuzzlePieces.Count; i++)
+        {
+            Debug.Log("testing element " + gameObject.name + " " + _PuzzlePieces[i].name);
+            if (gameObject.name == _PuzzlePieces[i].name)
+            {
+                _PuzzlePieces[i].transform.position = PuzzlePiecesOriginalPosition[i];
+                break;
+            }
         }
     }
 }

@@ -90,16 +90,30 @@ namespace StarterAssets
                 case DialogType.ALERT:
                     // On dialog mode, we should only one sentence
                     getDisplay().text = StateManager.sentencesDialog[0];
-                    StateManager.SelectedDialogCanvas.Canvas.GetComponentInChildren<Image>().color = 
-                        StateManager.LastAnswerFromSelectedQuestion == "Correct" || StateManager.LastAnswerFromSelectedPuzzleQuestion == "Correct" ? 
-                            new Color(103f/255f, 149f/255f, 107f/255f, 100f/255f) : new Color(178f/255f, 123f/255f, 110f/255f, 100f/255f);
-                        
-                        // Alert dialog should close automatically
-                        StartCoroutine(Config.Waiter(() => {}, () => {
-                            StopDialog();
-                            // Can't use OnStopDialog because we need to keep the answer after interaction until new setup dialog
-                            StateManager.LastAnswerFromSelectedQuestion = null;
-                        }, 1));
+                    var anwser = string.Empty;
+
+                    switch(StateManager.SelectedMinigame)
+                    {
+                        case MinigameType.CODE_CHALLENGE:
+                            anwser = StateManager.LastAnswerFromSelectedQuestion;
+                            break;
+                        case MinigameType.PUZZLE:
+                            anwser = StateManager.LastAnswerFromSelectedPuzzleQuestion;
+                            break;
+                    }
+
+                    StateManager.SelectedDialogCanvas.Canvas.GetComponentInChildren<Image>().color =
+                            anwser == "Correct" ?
+                                new Color(103f / 255f, 149f / 255f, 107f / 255f, 100f / 255f) :
+                                new Color(178f / 255f, 123f / 255f, 110f / 255f, 100f / 255f);
+
+                    // Alert dialog should close automatically
+                    StartCoroutine(Config.Waiter(() => {}, () => {
+                        StopDialog();
+                        // Can't use OnStopDialog because we need to keep the answer after interaction until new setup dialog
+                        StateManager.LastAnswerFromSelectedQuestion = null;
+                    }, 1));
+
                     break;
                 case DialogType.PUZZLE:
                     StateManager.SelectedDialogCanvas.OutputSentences.text = StateManager.SelectedQuestionPuzzle.code;
