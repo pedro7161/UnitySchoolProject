@@ -1108,6 +1108,7 @@ MonoBehaviour:
   imageComponent: {fileID: 1830996474}
   newSprite: {fileID: 21300000, guid: 02800fb9cff14da47a04572790384d8b, type: 3}
   questId: 0
+  isTriggerable: 0
 --- !u!136 &92426562
 CapsuleCollider:
   m_ObjectHideFlags: 0
@@ -3343,7 +3344,6 @@ GameObject:
   - component: {fileID: 242080057}
   - component: {fileID: 242080056}
   - component: {fileID: 242080055}
-  - component: {fileID: 242080054}
   - component: {fileID: 242080053}
   m_Layer: 0
   m_Name: Sphere (3)
@@ -3380,21 +3380,6 @@ SphereCollider:
   serializedVersion: 2
   m_Radius: 0.5
   m_Center: {x: 0, y: 0, z: 0}
---- !u!114 &242080054
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 242080051}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: e95d898ca60041e48889ac1adbd6a9c8, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  imageComponent: {fileID: 142167270}
-  newSprite: {fileID: 21300000, guid: ddf2e76e8a1f88f46ae1e42277850b48, type: 3}
-  questId: 1
 --- !u!135 &242080055
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -6277,7 +6262,8 @@ GameObject:
   serializedVersion: 6
   m_Component:
   - component: {fileID: 440877737}
-  - component: {fileID: 440877736}
+  - component: {fileID: 440877739}
+  - component: {fileID: 440877738}
   m_Layer: 0
   m_Name: questmanager
   m_TagString: Untagged
@@ -6285,18 +6271,6 @@ GameObject:
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
   m_IsActive: 1
---- !u!114 &440877736
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 440877735}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: df387f3caccafc146ac0addc36f6e035, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
 --- !u!4 &440877737
 Transform:
   m_ObjectHideFlags: 0
@@ -6312,6 +6286,35 @@ Transform:
   m_Father: {fileID: 0}
   m_RootOrder: 26
   m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
+--- !u!114 &440877738
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440877735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 8e5be9d032980184e947ffd97a1bc624, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  AllItems:
+  - Item: {fileID: 1896459574}
+    Item_Name: test
+    Item_Description: test
+--- !u!114 &440877739
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 440877735}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 68ad3c1dae2c87e4080cee98774e3d49, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  ItemsQuestScript: {fileID: 0}
 --- !u!4 &446121929 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 469248, guid: 3845c7234a0ed4843ba4e38e2404f54d, type: 3}
@@ -9218,23 +9221,6 @@ GameObject:
   m_CorrespondingSourceObject: {fileID: 1864840046505020, guid: 1b9539d3a83add242bc52578ef007a69, type: 3}
   m_PrefabInstance: {fileID: 1599286647}
   m_PrefabAsset: {fileID: 0}
---- !u!114 &708380008
-MonoBehaviour:
-  m_ObjectHideFlags: 0
-  m_CorrespondingSourceObject: {fileID: 0}
-  m_PrefabInstance: {fileID: 0}
-  m_PrefabAsset: {fileID: 0}
-  m_GameObject: {fileID: 708380005}
-  m_Enabled: 1
-  m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 2e5737c1c719a7740aed7baafd549cb5, type: 3}
-  m_Name: 
-  m_EditorClassIdentifier: 
-  questId: 1
-  requiredItemCount: 1
-  canvasText: {fileID: 467714611}
-  canvas: {fileID: 672633883}
-  questcompleted: 0
 --- !u!65 &708380009
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -9246,26 +9232,47 @@ BoxCollider:
   m_IsTrigger: 1
   m_Enabled: 1
   serializedVersion: 2
-  m_Size: {x: 2.245991, y: 3.4910765, z: 2.7136943}
-  m_Center: {x: -0.004119553, y: 1.2455525, z: 0.8568475}
---- !u!114 &708380010
+  m_Size: {x: 2.245991, y: 3.4910765, z: 4.7197537}
+  m_Center: {x: -0.004119187, y: 1.2455525, z: 1.859878}
+--- !u!4 &708380012 stripped
+Transform:
+  m_CorrespondingSourceObject: {fileID: 4483312203818436, guid: 1b9539d3a83add242bc52578ef007a69, type: 3}
+  m_PrefabInstance: {fileID: 1599286647}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &708380013
 MonoBehaviour:
   m_ObjectHideFlags: 0
   m_CorrespondingSourceObject: {fileID: 0}
   m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
   m_GameObject: {fileID: 708380005}
-  m_Enabled: 0
+  m_Enabled: 1
   m_EditorHideFlags: 0
-  m_Script: {fileID: 11500000, guid: 03742a3ebaffaab49825fa1d3bf1681e, type: 3}
+  m_Script: {fileID: 11500000, guid: 658f90f69d2e090458155795641d47bf, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
-  speedText: 0.005
---- !u!4 &708380012 stripped
-Transform:
-  m_CorrespondingSourceObject: {fileID: 4483312203818436, guid: 1b9539d3a83add242bc52578ef007a69, type: 3}
-  m_PrefabInstance: {fileID: 1599286647}
+  AllquestItems:
+  - Item: {fileID: 0}
+    AmountRequired: 4
+    CurrentAmount: 2
+--- !u!114 &708380014
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
   m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 708380005}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 78528c31e1af3b84fb2d9c650ee1594f, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  Quest_name: test
+  Quest_description: "isto \xE9 um teste"
+  Quest_code: 1
+  Isfinished: 0
+  dificulty: 0
+  AllItemsNeeded: []
 --- !u!1 &715308431
 GameObject:
   m_ObjectHideFlags: 0
@@ -12898,6 +12905,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 7e2cc221e3686454d926bfaafab8ce5b, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  items: 
 --- !u!1001 &1036202812
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -17790,6 +17798,7 @@ MonoBehaviour:
   imageComponent: {fileID: 142167270}
   newSprite: {fileID: 21300000, guid: ddf2e76e8a1f88f46ae1e42277850b48, type: 3}
   questId: 0
+  isTriggerable: 0
 --- !u!135 &1395809467
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -20297,6 +20306,7 @@ MonoBehaviour:
   imageComponent: {fileID: 125379978}
   newSprite: {fileID: 21300000, guid: 874d8401331ede14087e8d8d486ddda6, type: 3}
   questId: 0
+  isTriggerable: 0
 --- !u!65 &1542899146
 BoxCollider:
   m_ObjectHideFlags: 0
@@ -25803,6 +25813,7 @@ MonoBehaviour:
   imageComponent: {fileID: 142167270}
   newSprite: {fileID: 21300000, guid: ddf2e76e8a1f88f46ae1e42277850b48, type: 3}
   questId: 1
+  isTriggerable: 0
 --- !u!135 &1896459578
 SphereCollider:
   m_ObjectHideFlags: 0
@@ -26846,6 +26857,7 @@ MonoBehaviour:
   imageComponent: {fileID: 142167270}
   newSprite: {fileID: 21300000, guid: ddf2e76e8a1f88f46ae1e42277850b48, type: 3}
   questId: 1
+  isTriggerable: 0
 --- !u!135 &1980671693
 SphereCollider:
   m_ObjectHideFlags: 0
