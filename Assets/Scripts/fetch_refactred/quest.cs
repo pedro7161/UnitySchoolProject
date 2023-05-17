@@ -25,10 +25,31 @@ public class quest : MonoBehaviour
     public Dificulty dificulty;
     public List<QuestStructure> AllItemsNeeded;
 
+    private questionmanager questionmanager = new questionmanager();
+
    void Start() {
         if (AllItemsNeeded != null)
         {
             questionmanager.AllItemsNeeded = AllItemsNeeded;
         }
+   }
+   private void OnTriggerEnter(Collider other) {
+         if (other.gameObject.tag == "Player")
+         {
+             if (Input.GetKeyDown("R") && questionmanager.CurrentQuest == null)
+                {
+                   questionmanager.MissionStart(this);
+                
+                }
+                if(Input.GetKeyDown("R") && questionmanager.CurrentQuest.Isfinished == true && questionmanager.CurrentQuest != null)
+                {
+                    questionmanager.MissionEnd();
+                }
+                else{
+                    // avisar que ja tem uma quest em andamento
+                    return;
+                }
+                
+         }
    }
 }

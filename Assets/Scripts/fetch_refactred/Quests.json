@@ -1,0 +1,20 @@
+{
+    "quest_id":1,
+    "quest_name":"Quest 1",
+    "quest_description":"Quest 1 Description",
+    "quest_dificulty":"Easy",
+    "quest_items":[
+       {
+          "item_id":1,
+          "item_name":"Item 1",
+          "item_description":"Item 1 Description",
+          "item_amount":1
+       },
+       {
+          "item_id":2,
+          "item_name":"Item 2",
+          "item_description":"Item 2 Description",
+          "item_amount":2
+       }
+    ]
+ }
