@@ -7,6 +7,8 @@ public class questionmanager : MonoBehaviour
 {
     public Dictionary<string, string> AllQuests = new Dictionary<string, string>();
     public static quest CurrentQuest = new quest();
+    // public static quest CurrentQuest = null;
+
     public static List<ItemsStructore> allItems = new List<ItemsStructore>();
     public static List<QuestStructure> AllItemsNeeded = new List<QuestStructure>();
 
@@ -23,7 +25,7 @@ public class questionmanager : MonoBehaviour
         consumablesScript = FindObjectOfType<consumable>();
         inventoryConsumableScript = FindObjectOfType<InventoryConsumable>();
 
-        GetAllMission();
+        // GetAllMission();
     }
 
     public void GetAllMission()
@@ -40,9 +42,18 @@ public class questionmanager : MonoBehaviour
         {
             AllQuests.Add(CurrentQuest.Quest_name, CurrentQuest.Quest_description + " Finished");
         }
-        else
+        else if (!CurrentQuest.Isfinished)
         {
             AllQuests.Add(CurrentQuest.Quest_name, CurrentQuest.Quest_description + " Unfinished");
+            
+        }
+        else if(CurrentQuest == null)
+        {
+            AllQuests.Add("No Quest", "No Quest" + " Unfinished");
+        }
+        else
+        {
+            return;
         }
     }
 

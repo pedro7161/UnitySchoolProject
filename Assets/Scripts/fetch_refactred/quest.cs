@@ -6,13 +6,13 @@ using System;
 
 public class QuestStructure
 {
-   
+
     public itemsquest Item = new itemsquest();
-  
+
 }
 public class quest : MonoBehaviour
 {
-     public string Quest_name;
+    public string Quest_name;
     public string Quest_description;
     public string Quest_code;
     public bool Isfinished = false;
@@ -27,29 +27,42 @@ public class quest : MonoBehaviour
 
     private questionmanager questionmanager = new questionmanager();
 
-   void Start() {
+    void Start()
+    {
         if (AllItemsNeeded != null)
         {
             questionmanager.AllItemsNeeded = AllItemsNeeded;
         }
-   }
-   private void OnTriggerEnter(Collider other) {
-         if (other.gameObject.tag == "Player")
-         {
-             if (Input.GetKeyDown("R") && questionmanager.CurrentQuest == null)
+    }
+    private void OnTriggerEnter(Collider other)
+    {
+        Debug.Log("trigger funciona");
+        if (other.gameObject.tag == "Player")
+        {
+            Debug.Log("sou um player tag");
+            Debug.Log("Quest name: " + Quest_name + questionmanager.CurrentQuest);
+            Debug.Log("Current quest: "+ questionmanager.CurrentQuest);
+
+            if (Input.GetKeyDown(KeyCode.R))
+            {
+                if (questionmanager.CurrentQuest is null)
                 {
-                   questionmanager.MissionStart(this);
-                
+                    Debug.Log("Quest is going to start");
+                    questionmanager.MissionStart(this);
                 }
-                if(Input.GetKeyDown("R") && questionmanager.CurrentQuest.Isfinished == true && questionmanager.CurrentQuest != null)
+                else if (questionmanager.CurrentQuest.Isfinished && questionmanager.CurrentQuest != null)
                 {
+                    Debug.Log("Quest is going to be finished");
                     questionmanager.MissionEnd();
                 }
-                else{
-                    // avisar que ja tem uma quest em andamento
-                    return;
+                else
+                {
+                    // Display a message or take appropriate action to indicate that a quest is already in progress
+                    Debug.Log("A quest is already in progress");
                 }
-                
-         }
-   }
+            }
+        }
+    }
+
 }
+
