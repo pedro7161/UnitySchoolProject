@@ -5,6 +5,7 @@ using UnityEngine;
 
 public class PuzzlePlatform : MonoBehaviour
 {
+    private bool isPlatformOcupied = false;
     // Start is called before the first frame update
     void Start()
     {
@@ -14,7 +15,7 @@ public class PuzzlePlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        
+        Debug.Log(gameObject.name + " " + isPlatformOcupied);
     }
 
     /// <summary>
@@ -24,19 +25,25 @@ public class PuzzlePlatform : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         // validate only those with layer PuzzleCollider
-        if (other.gameObject.layer == 3) {
+        if (other.gameObject.layer == 3 && !isPlatformOcupied) {
+            gameObject.GetComponent<Renderer>().material.color = Color.yellow;
             var key = other.gameObject.name.ToLower();
+            isPlatformOcupied = true;
             
             StateManager.CurrentPuzzleAnswers[key] = gameObject.name;
             Debug.Log("Add element: " + "key: " + key + " value: " + gameObject.name);
         }
     }
 
-    void OnTriggerExit(Collider other) {
-        if (other.gameObject.layer == 3) {
+    void OnTriggerExit(Collider other)
+    {
+        if (other.gameObject.layer == 3 && isPlatformOcupied)
+        {
+            gameObject.GetComponent<Renderer>().material.color = Color.white;
             var key = other.gameObject.name.ToLower();
             StateManager.CurrentPuzzleAnswers.Remove(key);
             Debug.Log("Remove element: " + "key: " + key + " value: " + gameObject.name);
+            isPlatformOcupied = false;
         }
     }
 }
