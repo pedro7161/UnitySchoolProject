@@ -91,6 +91,7 @@ namespace StarterAssets
                     // On dialog mode, we should only one sentence
                     getDisplay().text = StateManager.sentencesDialog[0];
                     var anwser = string.Empty;
+                    var questCompleted = false;
 
                     switch(StateManager.SelectedMinigame)
                     {
@@ -100,17 +101,19 @@ namespace StarterAssets
                         case MinigameType.PUZZLE:
                             anwser = StateManager.LastAnswerFromSelectedPuzzleQuestion;
                             break;
+                        case MinigameType.FETCH_QUEST:
+                            questCompleted = true;
+                            break;
                     }
-
+                    
+                    Debug.Log("Selected Minigame value on alert lol: " + StateManager.SelectedMinigame);
                     if (StateManager.SelectedMinigame != MinigameType.NONE)
                     {
                         StateManager.SelectedMinigame = MinigameType.NONE;
                     }
 
-                    Debug.Log("Current Anwser: " + anwser);
-
                     StateManager.SelectedDialogCanvas.Canvas.GetComponentInChildren<Image>().color =
-                            anwser == "Correct" ?
+                            anwser == "Correct" || questCompleted ?
                                 new Color(103f / 255f, 149f / 255f, 107f / 255f, 100f / 255f) :
                                 new Color(178f / 255f, 123f / 255f, 110f / 255f, 100f / 255f);
 
@@ -154,6 +157,10 @@ namespace StarterAssets
         public void StopDialog()
         {
             currentIndex = 0;
+            if (StateManager.SelectedDialogCanvas == null)
+            {
+                return;
+            }
             getCanvas().gameObject.SetActive(false);
             StopCoroutineHandler();
 

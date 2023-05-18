@@ -16,7 +16,6 @@ public class PuzzlePlatform : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        Debug.Log("Current objects in platform: " + objectsOnPlatform);
     }
 
     /// <summary>

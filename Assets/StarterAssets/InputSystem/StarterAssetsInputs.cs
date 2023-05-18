@@ -21,7 +21,10 @@ namespace StarterAssets
 		public bool cursorInputForLook = true;
 
 		void Update() {
-			SetCursorState(!StateManager.isDialogRunning || StateManager.SelectedMinigame == MinigameType.NONE);
+			// Should lock cursor when
+			SetCursorState((!StateManager.isDialogRunning 
+				|| (StateManager.SelectedMinigame != MinigameType.PUZZLE && StateManager.SelectedMinigame != MinigameType.CODE_CHALLENGE)
+			));
 		}
 
 #if ENABLE_INPUT_SYSTEM
