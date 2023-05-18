@@ -17,6 +17,7 @@ public class questionmanager : MonoBehaviour
     public itemsquest ItemsQuestScript;
     private consumable consumablesScript;
     private InventoryConsumable inventoryConsumableScript;
+    
 
 public bool HasAllItems = false;
 
@@ -113,6 +114,7 @@ public bool HasAllItems = false;
     public void MissionEnd()
     {
         Debug.Log("Quest ended");
+        CurrentQuest.Isfinished = true;
         CurrentQuest = null;
     }
     // Codigo a ver com consumiveis ainda a ser pensado
