@@ -10,6 +10,8 @@ public class questionmanager : MonoBehaviour
     public static quest CurrentQuest = new quest();
     // public static quest CurrentQuest = null;
 
+    public static List<quest> AllQuestsList = new List<quest>();
+
     public static List<ItemsStructore> allItems = new List<ItemsStructore>();
     public static List<QuestStructure> AllItemsNeeded = new List<QuestStructure>();
 
@@ -141,6 +143,4 @@ public class questionmanager : MonoBehaviour
         // ...
 
     }
-
-
 }
