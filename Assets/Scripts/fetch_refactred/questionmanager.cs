@@ -5,7 +5,8 @@ using UnityEngine;
 
 public class questionmanager : MonoBehaviour
 {
-    public Dictionary<string, string> AllQuests = new Dictionary<string, string>();
+    // public Dictionary<string, string> AllQuests = new Dictionary<string, string>();
+    public quest[] AllQuests;
     public static quest CurrentQuest = new quest();
     // public static quest CurrentQuest = null;
 
@@ -17,9 +18,9 @@ public class questionmanager : MonoBehaviour
     public itemsquest ItemsQuestScript;
     private consumable consumablesScript;
     private InventoryConsumable inventoryConsumableScript;
-    
 
-public bool HasAllItems = false;
+
+    public bool HasAllItems = false;
 
     // Start is called before the first frame update
     void Start()
@@ -42,17 +43,20 @@ public bool HasAllItems = false;
 
         if (CurrentQuest.Isfinished)
         {
-            AllQuests.Add(CurrentQuest.Quest_name, CurrentQuest.Quest_description + " Finished");
-        }
-        else if (!CurrentQuest.Isfinished)
+            AllQuests = new quest[]
+            {
+        new quest
         {
-            AllQuests.Add(CurrentQuest.Quest_name, CurrentQuest.Quest_description + " Unfinished");
-            
+            Quest_name = CurrentQuest.Quest_name,
+            Quest_description = CurrentQuest.Quest_description,
+            Quest_code = CurrentQuest.Quest_code,
+            Isfinished = CurrentQuest.Isfinished,
+            dificulty = CurrentQuest.dificulty,
+            AllItemsNeeded = CurrentQuest.AllItemsNeeded
         }
-        else if(CurrentQuest == null)
-        {
-            AllQuests.Add("No Quest", "No Quest" + " Unfinished");
+            };
         }
+
         else
         {
             return;
@@ -114,7 +118,6 @@ public bool HasAllItems = false;
     public void MissionEnd()
     {
         Debug.Log("Quest ended");
-        CurrentQuest.Isfinished = true;
         CurrentQuest = null;
     }
     // Codigo a ver com consumiveis ainda a ser pensado
