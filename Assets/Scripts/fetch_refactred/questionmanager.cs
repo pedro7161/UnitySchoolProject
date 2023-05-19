@@ -157,6 +157,8 @@ public class questionmanager : MonoBehaviour
     {
         Debug.Log("Quest ended");
         CurrentQuest = null;
+        // Apenas para ser usado na zona de testes
+        ActivateAllGameObjects();
     }
     // Codigo a ver com consumiveis ainda a ser pensado
     // Example method to access the variables from consumable script
@@ -179,4 +181,13 @@ public class questionmanager : MonoBehaviour
         // ...
 
     }
+public void ActivateAllGameObjects()
+{
+    GetItems[] getItemsScripts = Resources.FindObjectsOfTypeAll<GetItems>();
+ 
+    foreach (GetItems script in getItemsScripts)
+    {
+        script.ActivateGameObject();
+    }
+}
 }

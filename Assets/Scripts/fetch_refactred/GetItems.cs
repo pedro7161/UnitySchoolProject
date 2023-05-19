@@ -33,4 +33,9 @@ public class GetItems : MonoBehaviour
 
         }
     }
+    public void ActivateGameObject()
+    {
+        gameObject.SetActive(true);
+        // Additional logic or actions to be performed when the game object is activated
+    }
 }
