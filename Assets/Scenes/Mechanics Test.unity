@@ -21623,7 +21623,7 @@ GameObject:
   - component: {fileID: 550881796}
   - component: {fileID: 550881795}
   m_Layer: 5
-  m_Name: Quantity
+  m_Name: quantity
   m_TagString: Untagged
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
@@ -57312,11 +57312,13 @@ MonoBehaviour:
     CurrentAmount: 0
     AmountRequired: 2
     IsCompleted: 0
+    ItemName: Item test 1
   - Item:
     - {fileID: 1635881329}
     CurrentAmount: 0
     AmountRequired: 1
     IsCompleted: 0
+    ItemName: Item test 2
   PlayerEnteredOnCollider: 0
   AllQuestsCompleted: 0
 --- !u!114 &1433052724
@@ -78620,7 +78622,7 @@ GameObject:
   m_Icon: {fileID: 0}
   m_NavMeshLayer: 0
   m_StaticEditorFlags: 0
-  m_IsActive: 1
+  m_IsActive: 0
 --- !u!224 &1990596200
 RectTransform:
   m_ObjectHideFlags: 0

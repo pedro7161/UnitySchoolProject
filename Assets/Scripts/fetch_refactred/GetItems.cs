@@ -6,8 +6,6 @@ public class GetItems : MonoBehaviour
 {
     public questionmanager questionmanager; // Instance of the questionmanager class
 
-
-
     private void OnTriggerEnter(Collider other)
     {
         // Debug.Log("Collision detected");

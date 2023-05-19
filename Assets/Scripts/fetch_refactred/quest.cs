@@ -10,6 +10,7 @@ public class QuestStructure
     public int CurrentAmount;
     public int AmountRequired;
     public bool IsCompleted;
+    public string ItemName;
 }
 
 public class quest : MonoBehaviour

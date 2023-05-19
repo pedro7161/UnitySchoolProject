@@ -19,9 +19,9 @@ public class questionmanager : MonoBehaviour
     public itemsquest ItemsQuestScript;
     private consumable consumablesScript;
     private InventoryConsumable inventoryConsumableScript;
-    
+    public bool HasAllItems = false;
 
-public bool HasAllItems = false;
+    public static bool QuestCanvasReadyWithItems = false;
 
     // Start is called before the first frame update
     void Start()
@@ -30,6 +30,41 @@ public bool HasAllItems = false;
         inventoryConsumableScript = FindObjectOfType<InventoryConsumable>();
 
         // GetAllMission();
+    }
+
+    void Update() {
+        if (CurrentQuest != null && StateManager.SelectedMinigame == MinigameType.FETCH_QUEST && !QuestCanvasReadyWithItems)
+        {
+            GameObject[] others = GameObject.FindGameObjectsWithTag("Row-Item");
+            foreach (GameObject other in others)
+            {
+                Destroy(other);
+            }
+
+            var parent = StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("background");
+            var row =  parent?.Find("Row");
+
+            if (row) 
+            {
+                for(int i = 0; i < questionmanager.CurrentQuest.AllItemsNeeded.Count; i++)
+                {
+                    var itemRow = Instantiate(row, parent);
+                    itemRow.name = "Row-Item";
+                    itemRow.gameObject.tag = "Row-Item"; // Identify as UI tag Row-Item
+
+                    itemRow.transform.position = new Vector3(itemRow.transform.position.x, itemRow.transform.position.y - (20 * (i)), itemRow.transform.position.z);
+                    itemRow.gameObject.SetActive(true);
+                    
+                    var item = questionmanager.CurrentQuest.AllItemsNeeded[i];
+                    var itemText = itemRow.Find("name");
+                    var itemAmount = itemRow.Find("quantity");
+
+                    itemText.GetComponent<TMPro.TextMeshProUGUI>().text = item.ItemName;
+                    itemAmount.GetComponent<TMPro.TextMeshProUGUI>().text = $"{item.CurrentAmount}/{item.AmountRequired}";
+                }
+                QuestCanvasReadyWithItems = true;
+            }
+        }
     }
 
     public void GetAllMission()
@@ -80,6 +115,7 @@ public bool HasAllItems = false;
                 MissionCompletedWarning();
             }
         }
+        QuestCanvasReadyWithItems = false;
     }
 
     private void UpdateCollectedItems(int currentAmount)
