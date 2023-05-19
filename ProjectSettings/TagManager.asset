@@ -6,6 +6,7 @@ TagManager:
   tags:
   - CinemachineTarget
   - Row-Item
+  - Quest
   layers:
   - Default
   - TransparentFX

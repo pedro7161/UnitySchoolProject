@@ -3877,6 +3877,10 @@ PrefabInstance:
       propertyPath: m_Name
       value: Robo2 (1)
       objectReference: {fileID: 0}
+    - target: {fileID: 1864840046505020, guid: 1b9539d3a83add242bc52578ef007a69, type: 3}
+      propertyPath: m_TagString
+      value: Quest
+      objectReference: {fileID: 0}
     - target: {fileID: 4483312203818436, guid: 1b9539d3a83add242bc52578ef007a69, type: 3}
       propertyPath: m_RootOrder
       value: 0
@@ -52726,6 +52730,7 @@ MonoBehaviour:
   m_Script: {fileID: 11500000, guid: 68ad3c1dae2c87e4080cee98774e3d49, type: 3}
   m_Name: 
   m_EditorClassIdentifier: 
+  AllQuests: []
   ItemsQuestScript: {fileID: 0}
   HasAllItems: 0
 --- !u!4 &1311216214

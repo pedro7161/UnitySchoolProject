@@ -82,15 +82,15 @@ public class questionmanager : MonoBehaviour
         {
             AllQuests = new quest[]
             {
-        new quest
-        {
-            Quest_name = CurrentQuest.Quest_name,
-            Quest_description = CurrentQuest.Quest_description,
-            Quest_code = CurrentQuest.Quest_code,
-            Isfinished = CurrentQuest.Isfinished,
-            dificulty = CurrentQuest.dificulty,
-            AllItemsNeeded = CurrentQuest.AllItemsNeeded
-        }
+                new quest
+                {
+                    Quest_name = CurrentQuest.Quest_name,
+                    Quest_description = CurrentQuest.Quest_description,
+                    Quest_code = CurrentQuest.Quest_code,
+                    Isfinished = CurrentQuest.Isfinished,
+                    dificulty = CurrentQuest.dificulty,
+                    AllItemsNeeded = CurrentQuest.AllItemsNeeded
+                }
             };
         }
 
@@ -150,6 +150,7 @@ public class questionmanager : MonoBehaviour
     {
         Debug.Log("Quest started");
         CurrentQuest = quest;
+        questionmanager.QuestCanvasReadyWithItems = false;
         // Start the quest in the canvas
     }
 
@@ -159,6 +160,7 @@ public class questionmanager : MonoBehaviour
         CurrentQuest = null;
         // Apenas para ser usado na zona de testes
         ActivateAllGameObjects();
+        questionmanager.QuestCanvasReadyWithItems = false;
     }
     // Codigo a ver com consumiveis ainda a ser pensado
     // Example method to access the variables from consumable script
@@ -181,13 +183,13 @@ public class questionmanager : MonoBehaviour
         // ...
 
     }
-public void ActivateAllGameObjects()
-{
-    GetItems[] getItemsScripts = Resources.FindObjectsOfTypeAll<GetItems>();
- 
-    foreach (GetItems script in getItemsScripts)
+    public void ActivateAllGameObjects()
     {
-        script.ActivateGameObject();
+        GetItems[] getItemsScripts = Resources.FindObjectsOfTypeAll<GetItems>();
+    
+        foreach (GetItems script in getItemsScripts)
+        {
+            script.ActivateGameObject();
+        }
     }
-}
 }

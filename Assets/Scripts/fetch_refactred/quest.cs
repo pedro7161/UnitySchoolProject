@@ -43,16 +43,14 @@ public class quest : MonoBehaviour
 
     private void Update()
     {
+        if (StateManager.isDialogRunning && StateManager.SelectedDialogCanvas?.DialogType == DialogType.ALERT)
+        {
+            return;
+        }
+
         if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R))
         {
             StateManager.SelectedMinigame = MinigameType.FETCH_QUEST;
-            // Debug.Log("Quest name: " + Quest_name);
-            // Debug.Log("Quest description: " + Quest_description);
-            // Debug.Log("Quest code: " + Quest_code);
-            // Debug.Log("Quest difficulty: " + dificulty);
-            // Debug.Log("Quest is finished: " + Isfinished);
-            // Debug.Log("Quest items needed: " + questionmanager.AllItemsNeeded.Count);
-            // Debug.Log("Current quest: " + questionmanager.CurrentQuest);
 
             Debug.Log("Clicked R");
             if (questionmanager.CurrentQuest == null && !AllQuestsCompleted)
@@ -76,6 +74,11 @@ public class quest : MonoBehaviour
                         questCanvas.SetActive(false);
                     }
                     StateManager.SetupDialog(new List<string>{"Quest Completed!"}, DialogType.ALERT, false);
+                    
+                    if (IsAllQuestsInMapDone()) 
+                    {
+                        ResetAllQuestsInMap();
+                    }
                     return;
                 }
                 else
@@ -100,8 +103,6 @@ public class quest : MonoBehaviour
             {
                 Debug.Log("Something went wrong");
             }
-
-
         }
         else if (questionmanager.HasAllItems && PlayerEnteredOnCollider)
         {
@@ -144,6 +145,21 @@ public class quest : MonoBehaviour
             }
         }
     }
+
+    public void ResetAllQuestsInMap() {
+        foreach(GameObject gameObject in GameObject.FindGameObjectsWithTag("Quest"))
+        {
+            quest quest = gameObject.GetComponent<quest>();
+            foreach(QuestStructure questStructure in quest.AllItemsNeeded)
+            {
+                questStructure.IsCompleted = false;
+                questStructure.CurrentAmount = 0;
+            }
+        }
+
+        AllQuestsCompleted = false;
+    }
+
     private bool AllItemsCompleted()
     {
         foreach (QuestStructure questItem in AllItemsNeeded)
@@ -154,5 +170,20 @@ public class quest : MonoBehaviour
             }
         }
         return true; // All items are completed
+    }
+
+    public bool IsAllQuestsInMapDone() {
+        var allQuestsDone = true;
+        foreach(GameObject gameObject in GameObject.FindGameObjectsWithTag("Quest"))
+        {
+            quest quest = gameObject.GetComponent<quest>();
+            if (quest != null)
+            {
+                Debug.Log("Quest: " + quest.Quest_name + " is completed? " + quest.AllQuestsCompleted);
+                allQuestsDone = allQuestsDone && quest.AllQuestsCompleted;
+            }
+        }
+
+        return allQuestsDone;
     }
 }
