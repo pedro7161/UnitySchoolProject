@@ -38628,7 +38628,7 @@ RectTransform:
   m_AnchorMin: {x: 0, y: 0}
   m_AnchorMax: {x: 0, y: 0}
   m_AnchoredPosition: {x: 9.12, y: 6.11}
-  m_SizeDelta: {x: 1, y: 1}
+  m_SizeDelta: {x: 1.43, y: 1.73}
   m_Pivot: {x: 0.5, y: 0.5}
 --- !u!114 &938218121
 MonoBehaviour:
@@ -51155,7 +51155,11 @@ MonoBehaviour:
   m_OnCullStateChanged:
     m_PersistentCalls:
       m_Calls: []
-  m_text: 'Go to the door to teleport to Open World assets
+  m_text: 'Go to the door to teleport to Open World assets.
+
+
+    Ensure you have
+    your missions completed
 
 '
   m_isRightToLeft: 0
@@ -60120,6 +60124,26 @@ PrefabInstance:
       objectReference: {fileID: 0}
     m_RemovedComponents: []
   m_SourcePrefab: {fileID: 100100000, guid: cf8443763fc34314490f8a3e2f94dd37, type: 3}
+--- !u!1 &1467101173 stripped
+GameObject:
+  m_CorrespondingSourceObject: {fileID: 6331770244228191754, guid: 4b7e697f4c4330d42a2cef29e91cb77e, type: 3}
+  m_PrefabInstance: {fileID: 6331770244474198106}
+  m_PrefabAsset: {fileID: 0}
+--- !u!114 &1467101176
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1467101173}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: 763fbe7401c193148bce54ca9076adbd, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  canvas: {fileID: 1941155968}
+  objectInteractor: {fileID: 1467101173}
+  ActionCanvasType: 1
 --- !u!4 &1467690755 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6954531691785998512, guid: cf8443763fc34314490f8a3e2f94dd37, type: 3}
