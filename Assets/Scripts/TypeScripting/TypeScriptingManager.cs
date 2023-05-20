@@ -28,6 +28,9 @@ public class TypeScriptingManager : MonoBehaviour
     public float currentSecondsRemaing = 0;
 
     public Coroutine timerCoroutine = null;
+    public Coroutine startCoroutine = null;
+
+    public List<GameObject> RowItems = new List<GameObject>();
 
     void Update()
     {
@@ -50,19 +53,21 @@ public class TypeScriptingManager : MonoBehaviour
         
         if (StateManager.SelectedDialogCanvas != null && StateManager.SelectedMinigame == MinigameType.TYPE_SCRIPTING_CHALLENGE && !minigameStarted && minigameShouldStart)
         {
-            StartCoroutine(Config.Waiter(() => {
-                if (minigameShouldStart && !minigameStarted)
-                {
-                    StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = "The minigame is about to start in 10s";
-                }
-            }, () => {
-                if (minigameShouldStart && !minigameStarted)
-                {
-                    Debug.Log("Starting a new minigame type scripting challenge");
-                    StartGame();
-                    minigameShouldStart = false;
-                }
-            }, 10));
+            if (startCoroutine == null)
+            {
+                startCoroutine = StartCoroutine(Config.Waiter(() => {
+                    if (minigameShouldStart && !minigameStarted)
+                    {
+                        StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = "The minigame is about to start in 10s";
+                    }
+                }, () => {
+                    if (minigameShouldStart && !minigameStarted)
+                    {
+                        Debug.Log("Starting a new minigame type scripting challenge");
+                        StartGame();
+                    }
+                }, 10));
+            }
         }
 
         if (minigameStarted && currentSecondsRemaing == 0)
@@ -75,10 +80,18 @@ public class TypeScriptingManager : MonoBehaviour
             StateManager.LastResultFromTypingscript = false;
             StateManager.SetupDialog(new List<string>(){"Time is up :/"}, DialogType.ALERT, false);
         }
+
+        if (Input.GetKeyUp(KeyCode.Escape))
+        {
+            StateManager.SelectedMinigame = MinigameType.NONE;
+            ExitGame();
+            return;
+        }
     }
 
     public void StartGame()
     {
+        ResetGame();
         StartTimer();
         currentSentenceIndex = 0;
         SelectedTypeScriptingSentences.Clear();
@@ -114,10 +127,9 @@ public class TypeScriptingManager : MonoBehaviour
         }
         else
         {
-            
-            StateManager.SelectedDialogCanvas.Canvas.enabled = false;
+            // We need to close this canvas in order to show the alert canvas
+            GameObject.Find("TypescriptingCanvas")?.SetActive(false);
             ExitGame();
-            Debug.Log("Time is up!");
             StateManager.chatCanvasShouldRender = false;
             StateManager.OnStopDialog();
             StateManager.LastResultFromTypingscript = true;
@@ -170,7 +182,7 @@ public class TypeScriptingManager : MonoBehaviour
         {
             var currentSentenceRow = SelectedTypeScriptingSentences[i];
             var currentRow = Instantiate(baseRow, baseRow.parent);
-            currentRow.name = "Row-item";
+            currentRow.name = "Row-Item";
             currentRow.tag = "Row-Item";
             currentRow.gameObject.SetActive(true);
             currentRow.localPosition = new Vector3(currentRow.localPosition.x, currentRow.localPosition.y - (i * 30), currentRow.localPosition.z);
@@ -183,17 +195,25 @@ public class TypeScriptingManager : MonoBehaviour
             // Set green color 50% opacity if sentence is compleed, 100% yellow is sentence is in progress, 50% opacity white if sentence is pending
             currentRow.Find("sentence").GetComponent<TextMeshProUGUI>().color = currentSentenceIndex == i ? new Color(1, 1, 1, 0.9f) : new Color(0.5f, 0.5f, 0.5f, 0.5f);
             currentRow.Find("status").GetComponent<TextMeshProUGUI>().color = currentSentenceIndex == i ? new Color(1, 1, 0, 1) : currentSentenceIndex > i ? new Color(0, 1, 0, 0.5f) : new Color(1, 1, 1, 0.5f);
+
+            RowItems.Add(currentRow.gameObject);
         }
     }
 
     void ResetGame()
     {
+        if (StateManager.SelectedDialogCanvas != null)
+        {
+            StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = "The minigame is about to start in 10s";
+            StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("CurrentWord").GetComponent<TextMeshProUGUI>().text = "";
+        }
         // Remove all Row-Item objects. Tag = Row-Item
-        GameObject[] others = GameObject.FindGameObjectsWithTag("Row-Item");
-        foreach (GameObject other in others)
+        foreach (GameObject other in RowItems)
         {
             Destroy(other);
         }
+
+        RowItems.Clear();
         minigameShouldStart = false;
         minigameStarted = false;
         currentSentenceIndex = 0;
@@ -202,6 +222,12 @@ public class TypeScriptingManager : MonoBehaviour
         {
             StopCoroutine(timerCoroutine);
             timerCoroutine = null;
+        }
+
+        if (startCoroutine != null)
+        {
+            StopCoroutine(startCoroutine);
+            startCoroutine = null;
         }
     }
 
@@ -219,9 +245,8 @@ public class TypeScriptingManager : MonoBehaviour
 
     public void ExitGame()
     {
-        StateManager.chatCanvasShouldRender = false;
-        //StateManager.SelectedMinigame = MinigameType.NONE;
         ResetGame();
+        StateManager.chatCanvasShouldRender = false;
     }
 
     private IEnumerator TimerCoroutine()
@@ -247,12 +272,6 @@ public class TypeScriptingManager : MonoBehaviour
             Event e = Event.current;
             if (e.isKey && e.keyCode != KeyCode.None && !sentenceFinished)
             {
-                if (e.keyCode == KeyCode.Escape)
-                {
-                    ExitGame();
-                    return;
-                }
-                
                 var currentSentence = SelectedTypeScriptingSentences[currentSentenceIndex];
                 var currentTypedChar = currentSentence.characters[currentSentence.currentIndex];
 

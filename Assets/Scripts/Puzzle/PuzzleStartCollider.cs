@@ -26,7 +26,7 @@ public class PuzzleStartCollider : MonoBehaviour
             StateManager.SetupDialog(new List<string>{StateManager.SelectedQuestionPuzzle.code}, DialogType.PUZZLE, false);
         }
 
-        if (StateManager.SelectedMinigame == MinigameType.PUZZLE && PlayerEnteredOnCollider && Input.GetKey(KeyCode.Escape)) {
+        if (StateManager.SelectedMinigame == MinigameType.PUZZLE && Input.GetKey(KeyCode.Escape)) {
             StateManager.SelectedMinigame = MinigameType.NONE;
             StateManager.chatCanvasShouldRender = false;
         }

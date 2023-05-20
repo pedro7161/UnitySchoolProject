@@ -7,8 +7,7 @@ public class TextMachine : MonoBehaviour
 {
     public Canvas canvas = null;
     public GameObject objectInteractor = null;
-    public DialogType ActionCanvasType = DialogType.DIALOG;
-
+    public DialogType ActionCanvasType;
     private bool enteredCollider = false;
     // Start is called before the first frame update
 
@@ -20,9 +19,9 @@ public class TextMachine : MonoBehaviour
             return;
         }
 
-        if (enteredCollider && Input.GetKeyDown("r") && !StateManager.isDialogRunning)
+        if (enteredCollider && Input.GetKeyDown("r") && !StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.NONE)
         {
-           ConfigureCanvas();
+            ConfigureCanvas();
         }
     }
 
@@ -41,7 +40,6 @@ public class TextMachine : MonoBehaviour
             sentences.AddRange(Config.templateSentences);
         }
 
-        Debug.Log("Current object name: " + gameObject.name);
         Debug.Log("Current dialog Type: " + ActionCanvasType);
         StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE);
     }
@@ -54,6 +52,10 @@ public class TextMachine : MonoBehaviour
     void OnTriggerExit(Collider other)
     {
         enteredCollider = false;
+        if (StateManager.isDialogRunning || StateManager.SelectedMinigame != MinigameType.NONE)
+        {
+            return;
+        }
         StateManager.OnStopDialog();
     }
 }

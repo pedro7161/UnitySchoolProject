@@ -22,9 +22,18 @@ namespace StarterAssets
 
 		void Update() {
 			// Should lock cursor when
-			SetCursorState((!StateManager.isDialogRunning 
-				|| (StateManager.SelectedMinigame != MinigameType.PUZZLE && StateManager.SelectedMinigame != MinigameType.CODE_CHALLENGE)
-			));
+			// SetCursorState(!StateManager.isDialogRunning 
+			// 	|| !StateManager.isDialogRunning && StateManager.SelectedMinigame != MinigameType.PUZZLE && StateManager.SelectedMinigame != MinigameType.CODE_CHALLENGE
+			// );
+
+			// Should lock cursor except when selected minigame is puzzle or quest
+			if (StateManager.SelectedMinigame == MinigameType.PUZZLE || StateManager.SelectedMinigame == MinigameType.CODE_CHALLENGE)
+			{
+				SetCursorState(false);
+			} else
+			{
+				SetCursorState(true);
+			}
 		}
 
 #if ENABLE_INPUT_SYSTEM
