@@ -26,7 +26,7 @@
     "Modularization technique",
     "Callback function usage",
     "Promise handling",
-    "Async/await pattern",
+    "Async await pattern",
     "Event registration",
     "Event listener function",
     "Module import",
@@ -38,23 +38,11 @@
     "Filter operation",
     "Reduce function",
     "forEach loop",
-    "if-else statement",
+    "if else statement",
     "for loop iteration",
     "while loop repetition",
-    "try-catch block",
-    "console.log('Hello, World!');",
-    "const variableName = 10;",
-    "functionName();",
-    "class ClassName { }",
-    "arrayName.length",
-    "objectName.property",
-    "methodName(parameter);",
-    "return variable;",
-    "async function asyncFunction() { await promise; }",
-    "import { module } from 'module';",
-    "export default class ClassName { }",
-    "interface InterfaceName { }",
-    "const result = arrayName.map(element => element * 2);"
+    "try catch block",
+    "arrayName length",
+    "objectName property"
   ]
 }
-

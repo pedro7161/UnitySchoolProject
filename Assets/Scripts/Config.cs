@@ -140,7 +140,7 @@ public static class Config
     }
 
     public static System.Action onDelegate;
-    public static IEnumerator Waiter(System.Action callback, System.Action onComplete = null, int waitTime = 1)
+    public static IEnumerator Waiter(System.Action callback, System.Action onComplete = null, float waitTime = 1)
     {
         callback?.Invoke();
         yield return new WaitForSeconds(waitTime);

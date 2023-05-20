@@ -28,6 +28,9 @@ public class StateManager : MonoBehaviour
     public static Dictionary<string, string> CurrentPuzzleAnswers = new Dictionary<string, string>();
     public static string LastAnswerFromSelectedPuzzleQuestion = null;
 
+    // Typescripting Information
+    public static bool LastResultFromTypingscript = false;
+
     public static void SetDialogCanvasData(HashSet<DialogCanvasStructure> data) {
         StateManager.dialogCanvasData = data;
     }
