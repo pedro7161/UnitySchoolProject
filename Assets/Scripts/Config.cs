@@ -10,6 +10,7 @@ public enum DialogType
     ALERT,
     PUZZLE,
     FETCH_QUEST,
+    TYPE_SCRIPTING_CHALLENGE,
 }
 
 public enum MinigameType {
@@ -17,6 +18,7 @@ public enum MinigameType {
     FETCH_QUEST,
     CODE_CHALLENGE,
     PUZZLE,
+    TYPE_SCRIPTING_CHALLENGE,
 }
 
 public enum QuestionDifficulty {
@@ -62,6 +64,11 @@ public class QuestionPuzzleData {
     public List<QuestionPuzzle> Questions;
 }
 
+[System.Serializable]
+public class TypescriptingData {
+    public List<string> Words;
+}
+
 
 public static class Config
 {
@@ -95,11 +102,11 @@ public static class Config
         return myObject.Questions;
     }
 
-    public static QuestionPuzzle GetRandomQuestionPuzzle() {
-        List<QuestionPuzzle> questions = GetPuzzleQuestions();
-        QuestionPuzzle randomQuestion = new QuestionPuzzle();
+    public static List<string> GetTypescriptingPhrases() {
+        TextAsset jsonFile = Resources.Load<TextAsset>("typescripting-challenge-phrases");
+        var myObject = JsonUtility.FromJson<TypescriptingData>(jsonFile.text);
 
-        return questions[Random.Range(0, questions.Count)];
+        return myObject.Words;
     }
 
     public static Question GetRandomQuestion(QuestionDifficulty difficulty = QuestionDifficulty.NONE) {
@@ -112,6 +119,24 @@ public static class Config
 
         randomQuestion = filteredQuestions[Random.Range(0, filteredQuestions.Count)];
         return randomQuestion;
+    }
+
+    public static QuestionPuzzle GetRandomQuestionPuzzle() {
+        List<QuestionPuzzle> questions = GetPuzzleQuestions();
+        QuestionPuzzle randomQuestion = new QuestionPuzzle();
+
+        return questions[Random.Range(0, questions.Count)];
+    }
+
+    public static List<string> GetRandomTypescriptingPhrases(int amount) {
+        List<string> phrases = GetTypescriptingPhrases();
+        List<string> randomPhrases = new List<string>();
+
+        for (int i = 0; i < amount; i++) {
+            randomPhrases.Add(phrases[Random.Range(0, phrases.Count)]);
+        }
+
+        return randomPhrases;
     }
 
     public static System.Action onDelegate;
