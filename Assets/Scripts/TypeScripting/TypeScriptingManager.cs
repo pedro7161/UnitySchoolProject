@@ -72,13 +72,14 @@ public class TypeScriptingManager : MonoBehaviour
 
         if (minigameStarted && currentSecondsRemaing == 0)
         {
-            StateManager.SelectedDialogCanvas.Canvas.enabled = false;
+            // We need to close this canvas in order to show the alert canvas
+            GameObject.Find("TypescriptingCanvas")?.SetActive(false);
             ExitGame();
-            Debug.Log("Time is up!");
             StateManager.chatCanvasShouldRender = false;
             StateManager.OnStopDialog();
             StateManager.LastResultFromTypingscript = false;
-            StateManager.SetupDialog(new List<string>(){"Time is up :/"}, DialogType.ALERT, false);
+            StateManager.SetupDialog(new List<string>(){"Time's up! :/"}, DialogType.ALERT, false);
+            return;
         }
 
         if (Input.GetKeyUp(KeyCode.Escape))
