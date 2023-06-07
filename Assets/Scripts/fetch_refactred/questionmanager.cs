@@ -5,19 +5,13 @@ using UnityEngine;
 
 public class questionmanager : MonoBehaviour
 {
-    // public Dictionary<string, string> AllQuests = new Dictionary<string, string>();
-    public quest[] AllQuests;
     public static quest CurrentQuest = new quest();
     // public static quest CurrentQuest = null;
-
-    public static List<quest> AllQuestsList = new List<quest>();
 
     public static List<ItemsStructore> allItems = new List<ItemsStructore>();
     public static List<QuestStructure> AllItemsNeeded = new List<QuestStructure>();
 
     public static List<ItemsQuestStructore> AllquestItems = new List<ItemsQuestStructore>();
-
-    public itemsquest ItemsQuestScript;
     private consumable consumablesScript;
     private InventoryConsumable inventoryConsumableScript;
     public bool HasAllItems = false;
@@ -29,12 +23,10 @@ public class questionmanager : MonoBehaviour
     {
         consumablesScript = FindObjectOfType<consumable>();
         inventoryConsumableScript = FindObjectOfType<InventoryConsumable>();
-
-        // GetAllMission();
     }
 
     void Update() {
-        if (CurrentQuest != null && StateManager.SelectedMinigame == MinigameType.FETCH_QUEST && !QuestCanvasReadyWithItems)
+        if (CurrentQuest != null && !QuestCanvasReadyWithItems)
         {
             GameObject[] others = GameObject.FindGameObjectsWithTag("Row-Item");
             foreach (GameObject other in others)
@@ -53,7 +45,10 @@ public class questionmanager : MonoBehaviour
                     itemRow.name = "Row-Item";
                     itemRow.gameObject.tag = "Row-Item"; // Identify as UI tag Row-Item
 
-                    itemRow.transform.position = new Vector3(itemRow.transform.position.x, itemRow.transform.position.y - (20 * (i)), itemRow.transform.position.z);
+                    // update itemRow to be top 30 and bottom -30
+                    var rectTransform = itemRow.GetComponent<RectTransform>();
+                    rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, i * -50);
+
                     itemRow.gameObject.SetActive(true);
                     
                     var item = questionmanager.CurrentQuest.AllItemsNeeded[i];
@@ -65,38 +60,6 @@ public class questionmanager : MonoBehaviour
                 }
                 QuestCanvasReadyWithItems = true;
             }
-        }
-    }
-
-    public void GetAllMission()
-    {
-        foreach (ItemsQuestStructore questItem in AllquestItems)
-        {
-            if (questItem.CurrentAmount >= questItem.AmountRequired)
-            {
-                CurrentQuest.Isfinished = true;
-            }
-        }
-
-        if (CurrentQuest.Isfinished)
-        {
-            AllQuests = new quest[]
-            {
-                new quest
-                {
-                    Quest_name = CurrentQuest.Quest_name,
-                    Quest_description = CurrentQuest.Quest_description,
-                    Quest_code = CurrentQuest.Quest_code,
-                    Isfinished = CurrentQuest.Isfinished,
-                    dificulty = CurrentQuest.dificulty,
-                    AllItemsNeeded = CurrentQuest.AllItemsNeeded
-                }
-            };
-        }
-
-        else
-        {
-            return;
         }
     }
 
@@ -137,7 +100,6 @@ public class questionmanager : MonoBehaviour
     public void MissionCompleted()
     {
         CurrentQuest.Isfinished = true;
-        GetAllMission();
 
     }
 
@@ -152,14 +114,33 @@ public class questionmanager : MonoBehaviour
         CurrentQuest = quest;
         questionmanager.QuestCanvasReadyWithItems = false;
         // Start the quest in the canvas
+
+        // Enable quest items active to true
+        foreach (QuestStructure questItem in quest.AllItemsNeeded)
+        {
+            foreach(GameObject item in questItem.Item)
+            {
+                item.SetActive(true);
+            }
+        }
     }
 
     public void MissionEnd()
     {
-        Debug.Log("Quest ended");
+        // Update current quest game object
+        CurrentQuest.Isfinished = true;
+
+        // Enable quest items active to true
+        foreach (QuestStructure questItem in CurrentQuest.AllItemsNeeded)
+        {
+            foreach(GameObject item in questItem.Item)
+            {
+                item.SetActive(false);
+            }
+        }
+
+        // Removed current quest instance from state
         CurrentQuest = null;
-        // Apenas para ser usado na zona de testes
-        ActivateAllGameObjects();
         questionmanager.QuestCanvasReadyWithItems = false;
     }
     // Codigo a ver com consumiveis ainda a ser pensado

@@ -6,20 +6,20 @@ using UnityEngine;
 public class TextMachine : MonoBehaviour
 {
     public Canvas canvas = null;
-    public GameObject objectInteractor = null;
     public DialogType ActionCanvasType;
     private bool enteredCollider = false;
+    public string[] machineSentences;
     // Start is called before the first frame update
+
+    public GameObject externalObjectToActivateOnInteract = null;
+
+    public bool shouldStartDialogProgrammatically = false;
 
     // Update is called once per frame
     void Update()
     {
-        if (!objectInteractor)
-        {
-            return;
-        }
 
-        if (enteredCollider && Input.GetKeyDown("r") && !StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.NONE)
+        if ((enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) && !StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.NONE)
         {
             ConfigureCanvas();
         }
@@ -37,11 +37,17 @@ public class TextMachine : MonoBehaviour
         } 
         else
         {
-            sentences.AddRange(Config.templateSentences);
+            sentences.AddRange(machineSentences);
         }
 
         Debug.Log("Current dialog Type: " + ActionCanvasType);
-        StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE);
+        StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE, gameObject.transform.parent.gameObject.name);
+        
+        shouldStartDialogProgrammatically = false;
+        if (externalObjectToActivateOnInteract != null)
+        {
+            externalObjectToActivateOnInteract.SetActive(true);
+        }
     }
 
     void OnTriggerEnter(Collider other)

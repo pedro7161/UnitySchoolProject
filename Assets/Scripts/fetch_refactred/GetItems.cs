@@ -8,6 +8,10 @@ public class GetItems : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        if (!questionmanager)
+        {
+            questionmanager = GameObject.Find("QuestManager").GetComponent<questionmanager>();
+        }
         // Debug.Log("Collision detected");
         // Debug.Log("questionmanager.CurrentQuest: " + questionmanager.CurrentQuest);
         // Debug.Log("questionmanager.CurrentQuest.AllItemsNeeded != null: " + (questionmanager.CurrentQuest.AllItemsNeeded != null));

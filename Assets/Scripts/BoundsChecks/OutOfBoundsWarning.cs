@@ -17,9 +17,7 @@ public class OutOfBoundsWarning : MonoBehaviour
         
     }
     private void OnTriggerEnter(Collider other) {
-            
             if (other.gameObject.tag == "Player") {
-                Debug.Log("Player is out of bounds");
                 warningCanvas.enabled = true;
 
             }
@@ -27,7 +25,6 @@ public class OutOfBoundsWarning : MonoBehaviour
     private void OnTriggerExit(Collider other) {
             
             if (other.gameObject.tag == "Player") {
-                Debug.Log("Player is in bounds");
                 warningCanvas.enabled = false;
 
             }

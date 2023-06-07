@@ -11,6 +11,7 @@ public class QuestStructure
     public int AmountRequired;
     public bool IsCompleted;
     public string ItemName;
+    public bool isMinigameQuest = false;
 }
 
 public class quest : MonoBehaviour
@@ -31,7 +32,9 @@ public class quest : MonoBehaviour
     private questionmanager questionmanager = new questionmanager();
     public bool PlayerEnteredOnCollider = false;
 
-    public bool AllQuestsCompleted = false;
+    public bool AllMissionsCompleted = false;
+
+    public bool shouldStartQuestProgramatically = false;
 
     private void Start()
     {
@@ -48,23 +51,19 @@ public class quest : MonoBehaviour
             return;
         }
 
-        if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R))
+        if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) || shouldStartQuestProgramatically)
         {
-            StateManager.SelectedMinigame = MinigameType.FETCH_QUEST;
-
-            Debug.Log("Clicked R");
-            if (questionmanager.CurrentQuest == null && !AllQuestsCompleted)
+            if (questionmanager.CurrentQuest == null && !AllMissionsCompleted)
             {
-                Debug.Log("Quest is going to start");
+                shouldStartQuestProgramatically = false;
                 questionmanager.MissionStart(this);
-                StateManager.SetupDialog(new List<string>(), DialogType.FETCH_QUEST, false);
+                StateManager.SetupDialog(new List<string>(), DialogType.QUEST, false);
             }
 
             else if (AllItemsCompleted())
             {
-                if (AllQuestsCompleted)
+                if (AllMissionsCompleted)
                 {
-                    Debug.Log("All quests are completed");
                     StateManager.chatCanvasShouldRender = false;
                     StateManager.OnStopDialog();
 
@@ -74,17 +73,10 @@ public class quest : MonoBehaviour
                         questCanvas.SetActive(false);
                     }
                     StateManager.SetupDialog(new List<string>{"Quest Completed!"}, DialogType.ALERT, false);
-                    
-                    if (IsAllQuestsInMapDone()) 
-                    {
-                        ResetAllQuestsInMap();
-                    }
-                    return;
                 }
                 else
                 {
-                    Debug.Log("Quest is going to be finished/closed for good");
-                    AllQuestsCompleted = true;
+                    AllMissionsCompleted = true;
                     questionmanager.MissionEnd();
                 }
 
@@ -92,21 +84,16 @@ public class quest : MonoBehaviour
             else if (!questionmanager.CurrentQuest.Isfinished && questionmanager.CurrentQuest != null)
             {
                 // Display a message or take appropriate action to indicate that a quest is already in progress
-                Debug.Log("A quest is already in progress");
             }
             else if (questionmanager.CurrentQuest.Isfinished)
             {
-                Debug.Log("Quest is already been done/closed");
-
             }
             else
             {
-                Debug.Log("Something went wrong");
             }
         }
         else if (questionmanager.HasAllItems && PlayerEnteredOnCollider)
         {
-            Debug.Log("Make quest finishable");
             questionmanager.MissionCompleted();
         }
         else
@@ -119,14 +106,11 @@ public class quest : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         PlayerEnteredOnCollider = true;
-        Debug.Log("Player on Collider? " + PlayerEnteredOnCollider);
-        Debug.Log("Pressed R key: " + Input.GetKey(KeyCode.R));
 
     }
 
     private void OnTriggerExit(Collider other)
     {
-        Debug.Log("Player on Collider? " + PlayerEnteredOnCollider);
         PlayerEnteredOnCollider = false;
     }
 
@@ -157,7 +141,7 @@ public class quest : MonoBehaviour
             }
         }
 
-        AllQuestsCompleted = false;
+        AllMissionsCompleted = false;
     }
 
     private bool AllItemsCompleted()
@@ -179,11 +163,9 @@ public class quest : MonoBehaviour
             quest quest = gameObject.GetComponent<quest>();
             if (quest != null)
             {
-                Debug.Log("Quest: " + quest.Quest_name + " is completed? " + quest.AllQuestsCompleted);
-                allQuestsDone = allQuestsDone && quest.AllQuestsCompleted;
+                allQuestsDone = allQuestsDone && quest.AllMissionsCompleted;
             }
         }
-
         return allQuestsDone;
     }
 }

@@ -32,7 +32,6 @@ public class PuzzlePlatform : MonoBehaviour
             isPlatformOcupied = true;
             
             StateManager.CurrentPuzzleAnswers[key] = gameObject.name;
-            Debug.Log("Add element: " + "key: " + key + " value: " + gameObject.name);
         }
     }
 
@@ -44,7 +43,6 @@ public class PuzzlePlatform : MonoBehaviour
             gameObject.GetComponent<Renderer>().material.color = Color.white;
             var key = other.gameObject.name.ToLower();
             StateManager.CurrentPuzzleAnswers.Remove(key);
-            Debug.Log("Remove element: " + "key: " + key + " value: " + gameObject.name);
             isPlatformOcupied = false;
         }
     }

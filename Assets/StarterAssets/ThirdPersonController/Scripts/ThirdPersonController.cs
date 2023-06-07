@@ -156,7 +156,7 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
             this._playerInput.enabled = (!StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.NONE) 
-                || (StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.FETCH_QUEST);
+                || (StateManager.isDialogRunning && questionmanager.CurrentQuest != null);
 
             JumpAndGravity();
             GroundedCheck();

@@ -9,13 +9,13 @@ public enum DialogType
     CODE_CHALLENGE,
     ALERT,
     PUZZLE,
-    FETCH_QUEST,
+    QUEST,
     TYPE_SCRIPTING_CHALLENGE,
 }
 
 public enum MinigameType {
     NONE,
-    FETCH_QUEST,
+    QUEST,
     CODE_CHALLENGE,
     PUZZLE,
     TYPE_SCRIPTING_CHALLENGE,

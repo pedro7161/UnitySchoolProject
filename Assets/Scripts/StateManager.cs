@@ -35,10 +35,10 @@ public class StateManager : MonoBehaviour
         StateManager.dialogCanvasData = data;
     }
 
-    public static void SetupDialog(List<string> sentences, DialogType dialogType, bool useAnimationOnDialog = false) {
+    public static void SetupDialog(List<string> sentences, DialogType dialogType, bool useAnimationOnDialog = false, string objectInteractor = null) {
         StateManager.sentencesDialog.Clear();
         StateManager.sentencesDialog.AddRange(sentences);
-        
+
         StateManager.SelectedDialogCanvas = StateManager.dialogCanvasData.First(canvas => canvas.DialogType == dialogType);
 
         StateManager.chatCanvasShouldRender = true;

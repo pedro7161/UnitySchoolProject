@@ -101,7 +101,7 @@ namespace StarterAssets
                         case MinigameType.PUZZLE:
                             anwser = StateManager.LastAnswerFromSelectedPuzzleQuestion;
                             break;
-                        case MinigameType.FETCH_QUEST:
+                        case MinigameType.QUEST:
                             isCorrectBool = true;
                             break;
                         case MinigameType.TYPE_SCRIPTING_CHALLENGE:

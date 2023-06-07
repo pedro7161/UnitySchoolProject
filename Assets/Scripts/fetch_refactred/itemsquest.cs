@@ -12,8 +12,6 @@ public ItemsQuestStructore QuestItem;
     public int AmountRequired;
     public int CurrentAmount;
 }
-    
-
 
 public class itemsquest : MonoBehaviour
 {
