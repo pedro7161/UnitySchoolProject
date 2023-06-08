@@ -14,7 +14,7 @@ public class StateManager : MonoBehaviour
     
     // Dialogs information
     private static HashSet<DialogCanvasStructure> dialogCanvasData = new HashSet<DialogCanvasStructure>();
-    public static  DialogCanvasStructure SelectedDialogCanvas = null;
+    public static  List<DialogCanvasStructure> SelectedDialogCanvas = new List<DialogCanvasStructure>();
     public static bool useAnimationOnDialog = false;
     // Questions information
     public static Question SelectedQuestion = null;
@@ -39,13 +39,18 @@ public class StateManager : MonoBehaviour
         StateManager.sentencesDialog.Clear();
         StateManager.sentencesDialog.AddRange(sentences);
 
-        StateManager.SelectedDialogCanvas = StateManager.dialogCanvasData.First(canvas => canvas.DialogType == dialogType);
+        var canvas = StateManager.dialogCanvasData.First(canvas => canvas.DialogType == dialogType);
+        if (canvas != null && !StateManager.SelectedDialogCanvas.Contains(canvas))
+        {
+            Debug.Log("Canvas found: " + canvas.Canvas.name);
+            StateManager.SelectedDialogCanvas.Add(canvas);
+        }
 
         StateManager.chatCanvasShouldRender = true;
         StateManager.useAnimationOnDialog = useAnimationOnDialog;
 
         // Set minigame if dialogType as any value that match with a minigame enumerator
-        if (Enum.IsDefined(typeof(MinigameType), dialogType.ToString()))
+        if (Enum.IsDefined(typeof(MinigameType), dialogType.ToString()) && DialogType.QUEST != dialogType)
         {
             StateManager.SelectedMinigame = (MinigameType) Enum.Parse(typeof(MinigameType), dialogType.ToString());
         }
@@ -60,8 +65,27 @@ public class StateManager : MonoBehaviour
     {
         StateManager.chatCanvasShouldRender = false;
         StateManager.isDialogRunning = false;
+        var canvasToBeRemoved = new List<DialogCanvasStructure>();
+
+        // remove all active dialog canvas from selected dialog canvas
+        StateManager.SelectedDialogCanvas.ForEach(canvas => {
+            if (
+                (canvas.DialogType == DialogType.QUEST && !LevelManager.GetCurrentLevel().isFinished) || 
+                (canvas.DialogType != DialogType.QUEST && Enum.IsDefined(typeof(MinigameType), canvas.DialogType.ToString()) && canvas.Canvas.gameObject.activeSelf))
+            {
+                return;
+            }
+            canvasToBeRemoved.Add(canvas);
+        });
+
+        Debug.Log("Canvas to be removed: " + canvasToBeRemoved.Count);
+
+        canvasToBeRemoved.ForEach(canvas => {
+            canvas.Canvas.gameObject.SetActive(false);
+            StateManager.SelectedDialogCanvas.Remove(canvas);
+        });
         
-        StateManager.SelectedDialogCanvas = null;
+        //StateManager.SelectedDialogCanvas = null;
         StateManager.SelectedQuestion = null;
         StateManager.SelectedQuestionPuzzle = null;
         StateManager.CurrentPuzzleAnswers = new Dictionary<string, string>();

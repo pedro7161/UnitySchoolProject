@@ -46,7 +46,7 @@ public class quest : MonoBehaviour
 
     private void Update()
     {
-        if (StateManager.isDialogRunning && StateManager.SelectedDialogCanvas?.DialogType == DialogType.ALERT)
+        if (StateManager.isDialogRunning && StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.ALERT) != null)
         {
             return;
         }

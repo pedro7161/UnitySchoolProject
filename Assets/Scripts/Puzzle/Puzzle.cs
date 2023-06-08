@@ -42,10 +42,16 @@ public class Puzzle : MonoBehaviour
                 }
             }
 
-            var button = StateManager.SelectedDialogCanvas?.Canvas?.gameObject?.GetComponentInChildren<UnityEngine.UI.Button>();
+            var canvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.PUZZLE);
+            if (canvas == null)
+            {
+                return;
+            }
+
+            var button = canvas?.Canvas?.gameObject?.GetComponentInChildren<UnityEngine.UI.Button>();
             if (button) {
                 // Get canvas with DialogType.PUZZLE and set validate button to interactive true if state manager current puzzle anwsers has 4 elements
-                StateManager.SelectedDialogCanvas.Canvas.gameObject.GetComponentInChildren<UnityEngine.UI.Button>().interactable = StateManager.CurrentPuzzleAnswers.Count == 4;
+                canvas.Canvas.gameObject.GetComponentInChildren<UnityEngine.UI.Button>().interactable = StateManager.CurrentPuzzleAnswers.Count == 4;
             }
         }
         else

@@ -14,14 +14,41 @@ public class TextMachine : MonoBehaviour
     public GameObject externalObjectToActivateOnInteract = null;
 
     public bool shouldStartDialogProgrammatically = false;
-
-    // Update is called once per frame
     void Update()
     {
-
-        if ((enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) && !StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.NONE)
+        Debug.Log("Configuring canvas..." + shouldStartDialogProgrammatically);
+        if (
+            (enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) && (
+            !StateManager.isDialogRunning || questionmanager.CurrentQuest != null) && 
+            StateManager.SelectedMinigame == MinigameType.NONE &&
+            StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == ActionCanvasType) == null)
         {
-            ConfigureCanvas();
+            if (ShouldConfigureCanvas())
+            {
+                ConfigureCanvas();
+            }
+        } 
+    }
+
+    public void StartDialog()
+    {
+        ConfigureCanvas();
+    }
+
+    public bool ShouldConfigureCanvas()
+    {
+        switch(ActionCanvasType)
+        {
+            case DialogType.PUZZLE:
+                var isQuestPuzzle = true;
+
+                if (questionmanager.CurrentQuest != null && !isQuestPuzzle)
+                {
+                    return false;
+                }
+                return true;
+            default:
+                return true;
         }
     }
 
@@ -41,9 +68,8 @@ public class TextMachine : MonoBehaviour
         }
 
         Debug.Log("Current dialog Type: " + ActionCanvasType);
+        //shouldStartDialogProgrammatically = false;
         StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE, gameObject.transform.parent.gameObject.name);
-        
-        shouldStartDialogProgrammatically = false;
         if (externalObjectToActivateOnInteract != null)
         {
             externalObjectToActivateOnInteract.SetActive(true);

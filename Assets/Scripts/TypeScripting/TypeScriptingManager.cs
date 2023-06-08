@@ -34,10 +34,11 @@ public class TypeScriptingManager : MonoBehaviour
 
     void Update()
     {
+        var typeScritingCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.TYPE_SCRIPTING_CHALLENGE);
+        var alertCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.ALERT);
         if (
-            StateManager.SelectedMinigame != MinigameType.TYPE_SCRIPTING_CHALLENGE && 
-            StateManager.SelectedDialogCanvas?.DialogType != DialogType.ALERT && 
-            StateManager.SelectedDialogCanvas?.DialogType != DialogType.TYPE_SCRIPTING_CHALLENGE)
+            alertCanvas == null &&
+            typeScritingCanvas == null)
         {
             minigameShouldStart = false;
             minigameStarted = false;
@@ -46,19 +47,21 @@ public class TypeScriptingManager : MonoBehaviour
 
         if (
             StateManager.SelectedMinigame == MinigameType.TYPE_SCRIPTING_CHALLENGE && 
-            StateManager.SelectedDialogCanvas?.DialogType == DialogType.TYPE_SCRIPTING_CHALLENGE && !minigameStarted && !minigameShouldStart)
+            typeScritingCanvas != null && 
+            !minigameStarted && !minigameShouldStart
+            )
         {
             minigameShouldStart = true;
         }
         
-        if (StateManager.SelectedDialogCanvas != null && StateManager.SelectedMinigame == MinigameType.TYPE_SCRIPTING_CHALLENGE && !minigameStarted && minigameShouldStart)
+        if (typeScritingCanvas != null && StateManager.SelectedMinigame == MinigameType.TYPE_SCRIPTING_CHALLENGE && !minigameStarted && minigameShouldStart)
         {
             if (startCoroutine == null)
             {
                 startCoroutine = StartCoroutine(Config.Waiter(() => {
                     if (minigameShouldStart && !minigameStarted)
                     {
-                        StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = "The minigame is about to start in 10s";
+                       typeScritingCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = "The minigame is about to start in 10s";
                     }
                 }, () => {
                     if (minigameShouldStart && !minigameStarted)
@@ -141,7 +144,8 @@ public class TypeScriptingManager : MonoBehaviour
 
     void RefreshCanvas()
     {
-        if (StateManager.SelectedDialogCanvas == null)
+        var typeScritingCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.TYPE_SCRIPTING_CHALLENGE);
+        if (typeScritingCanvas == null)
         {
             return;
         }
@@ -166,7 +170,7 @@ public class TypeScriptingManager : MonoBehaviour
         newTextFormatted = "<b>" + newTextFormatted + "</b>";
         
         // Update Current word
-        StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("CurrentWord").GetComponent<TextMeshProUGUI>().text = newTextFormatted;
+        typeScritingCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("CurrentWord").GetComponent<TextMeshProUGUI>().text = newTextFormatted;
 
         // Remove all Row-Item objects. Tag = Row-Item
         GameObject[] others = GameObject.FindGameObjectsWithTag("Row-Item");
@@ -176,7 +180,7 @@ public class TypeScriptingManager : MonoBehaviour
         }
 
         // Get the base row on TypescriptingCanvas/PanelInfo/Row and instantiate it. Each row is a new sentence
-        var baseRow = StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelInfo").Find("Panel").Find("Row");
+        var baseRow = typeScritingCanvas.Canvas.gameObject.transform.Find("PanelInfo").Find("Panel").Find("Row");
 
         // For each sentence, we instantiate a new row and. If row is > 1, start updating the vertical position to avoid overlapping
         for (int i = 0; i < SelectedTypeScriptingSentences.Count; i++)
@@ -203,10 +207,12 @@ public class TypeScriptingManager : MonoBehaviour
 
     void ResetGame()
     {
-        if (StateManager.SelectedDialogCanvas != null)
+        var typeScritingCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.TYPE_SCRIPTING_CHALLENGE);
+
+        if (typeScritingCanvas != null)
         {
-            StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = "The minigame is about to start in 10s";
-            StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("CurrentWord").GetComponent<TextMeshProUGUI>().text = "";
+           typeScritingCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = "The minigame is about to start in 10s";
+           typeScritingCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("CurrentWord").GetComponent<TextMeshProUGUI>().text = "";
         }
         // Remove all Row-Item objects. Tag = Row-Item
         foreach (GameObject other in RowItems)
@@ -234,7 +240,8 @@ public class TypeScriptingManager : MonoBehaviour
 
     void StartTimer()
     {
-        if (StateManager.SelectedDialogCanvas == null || timerCoroutine != null)
+        var typeScritingCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.TYPE_SCRIPTING_CHALLENGE);
+        if (typeScritingCanvas == null || timerCoroutine != null)
         {
             return;
         }
@@ -252,18 +259,24 @@ public class TypeScriptingManager : MonoBehaviour
 
     private IEnumerator TimerCoroutine()
     {
+        var typeScritingCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.TYPE_SCRIPTING_CHALLENGE);
+        if (typeScritingCanvas == null)
+        {
+            yield break;
+        }
         // Each second, we decrease the CurrentSecondsRemaing variable and update the timer text
         while (currentSecondsRemaing > 0)
         {
             currentSecondsRemaing--;
-            StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = $"{currentSecondsRemaing.ToString()}s";
+            typeScritingCanvas.Canvas.gameObject.transform.Find("PanelMainText").Find("Timer").GetComponent<TextMeshProUGUI>().text = $"{currentSecondsRemaing.ToString()}s";
             yield return new WaitForSeconds(1);
         }
     }
 
     void OnGUI()
     {
-        if (StateManager.SelectedMinigame != MinigameType.TYPE_SCRIPTING_CHALLENGE && StateManager.SelectedDialogCanvas?.DialogType != DialogType.ALERT || SelectedTypeScriptingSentences.Count == 0)
+        var alertCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.ALERT);
+        if (StateManager.SelectedMinigame != MinigameType.TYPE_SCRIPTING_CHALLENGE && alertCanvas == null || SelectedTypeScriptingSentences.Count == 0)
         {
             return;
         }

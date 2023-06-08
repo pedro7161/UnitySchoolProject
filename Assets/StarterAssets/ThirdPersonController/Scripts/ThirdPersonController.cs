@@ -155,8 +155,13 @@ namespace StarterAssets
         private void Update()
         {
             _hasAnimator = TryGetComponent(out _animator);
-            this._playerInput.enabled = (!StateManager.isDialogRunning && StateManager.SelectedMinigame == MinigameType.NONE) 
-                || (StateManager.isDialogRunning && questionmanager.CurrentQuest != null);
+            var alertDialog = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.DIALOG);
+            
+            Debug.Log("Alert dialog is null: " + (alertDialog == null) + " " + StateManager.SelectedMinigame);
+
+            this._playerInput.enabled = alertDialog == null && StateManager.SelectedMinigame == MinigameType.NONE && (
+                    (!StateManager.isDialogRunning) || (StateManager.isDialogRunning && questionmanager.CurrentQuest != null)
+                );
 
             JumpAndGravity();
             GroundedCheck();

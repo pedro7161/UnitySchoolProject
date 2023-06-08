@@ -34,7 +34,13 @@ public class questionmanager : MonoBehaviour
                 Destroy(other);
             }
 
-            var parent = StateManager.SelectedDialogCanvas.Canvas.gameObject.transform.Find("background");
+            // get quest canvas
+            var canvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.QUEST);
+            if (canvas == null)
+            {
+                return;
+            }
+            var parent = canvas.Canvas.gameObject.transform.Find("background");
             var row =  parent?.Find("Row");
 
             if (row) 
