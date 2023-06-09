@@ -8,6 +8,7 @@ public class AreaCollider : MonoBehaviour
     public Canvas warningCanvas;
     public LevelEnum currentZone = LevelEnum.LEVEL_1;
     public LevelEnum previousZone = LevelEnum.LEVEL_1;
+    public static string zoneName = string.Empty;
     void Start()
     {
 
@@ -19,7 +20,7 @@ public class AreaCollider : MonoBehaviour
 
     }
 
-    private void updateLevelMusic()
+    private void UpdateLevel()
     {
         var gameObjectName = this.gameObject.name;
         switch (gameObjectName)
@@ -40,17 +41,17 @@ public class AreaCollider : MonoBehaviour
         var gameObjectName = this.gameObject.name;
         switch (gameObjectName)
         {
-            case "next_area_1":
+            case "Zone1":
                 LevelManager.setAudioLevel(LevelEnum.LEVEL_1);
                 change_skybox.Change_Skybox(2);
                 break;
-            case "next_area_2":
+            case "Zone2":
                 currentZone = LevelEnum.LEVEL_2;
                 
                 LevelManager.setAudioLevel(LevelEnum.LEVEL_2);
                 change_skybox.Change_Skybox(0);
                 break;
-            case "next_area_3":
+            case "Zone3":
                 currentZone = LevelEnum.LEVEL_3;
              
                 LevelManager.setAudioLevel(LevelEnum.LEVEL_3);
@@ -60,27 +61,21 @@ public class AreaCollider : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        if (other.gameObject.tag == "Player")
+        Debug.Log("OnTriggerEnter: " + other.gameObject.tag + " " + gameObject.tag + " " + gameObject.name);
+        if (other.gameObject.tag == "Player" && gameObject.tag == "Environment")
         {
-            updateLevelMusic();
-            UpdateEnvironment();
-            //warningCanvas.enabled = true;
-        }
-    }
-    private void OnTriggerExit(Collider other)
-    {
-        if (other.gameObject.tag == "Player")
-        {
-            if(this.gameObject.name == "next_area_2")
+            if (zoneName != gameObject.name)
             {
-                previousZone = currentZone = LevelEnum.LEVEL_2;
+                zoneName = gameObject.name;
+                UpdateEnvironment();
+                //warningCanvas.enabled = true;
             }
-            else{
-            previousZone = currentZone;
-            }
-            updateLevelMusic();    
-            UpdateEnvironment();
-            //warningCanvas.enabled = false;
+        }
+        
+        if (other.gameObject.tag == "Player" && gameObject.tag == "Zone")
+        {
+            Debug.Log("Zone: " + gameObject.name);
+            UpdateLevel();
         }
     }
 }

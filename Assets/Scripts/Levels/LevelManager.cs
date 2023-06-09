@@ -51,7 +51,8 @@ public class LevelManager : MonoBehaviour
         DefineLevels();
 
         setLevel(LevelEnum.LEVEL_1);
-        change_skybox.Change_Skybox(0);
+        setAudioLevel(LevelEnum.LEVEL_1);
+        change_skybox.Change_Skybox(2);
 
         StartCoroutine(Config.Waiter(() => { }, () =>
         {

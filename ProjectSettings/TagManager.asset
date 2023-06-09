@@ -7,6 +7,8 @@ TagManager:
   - CinemachineTarget
   - Row-Item
   - Quest
+  - Zone
+  - Environment
   layers:
   - Default
   - TransparentFX
@@ -14,7 +16,7 @@ TagManager:
   - PuzzleCollider
   - Water
   - UI
-  - 
+  - Zone
   - 
   - 
   - 
