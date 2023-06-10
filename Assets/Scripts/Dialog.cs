@@ -135,6 +135,8 @@ namespace StarterAssets
                         if (questionmanager.CurrentQuest != null && questionmanager.CurrentQuest.Isfinished || LevelManager.GetCurrentLevel().isFinished)
                         {
                             isCorrectBool = true;
+                            questionmanager.CurrentQuest = null;
+                            questionmanager.QuestCanvasReadyWithItems = false;
                         }
                         
                         if (StateManager.SelectedMinigame != MinigameType.NONE)

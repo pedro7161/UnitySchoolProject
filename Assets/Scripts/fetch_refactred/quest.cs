@@ -50,6 +50,7 @@ public class quest : MonoBehaviour
         shouldStartQuestProgramatically = false;
         questionmanager.MissionStart(this);
         StateManager.SetupDialog(new List<string>(), DialogType.QUEST, false);
+        Debug.Log("test - Setting up quest dialog");
     }
 
     private void Update()
@@ -78,20 +79,22 @@ public class quest : MonoBehaviour
                     {
                         questCanvas.SetActive(false);
                     }
+                    Debug.Log("test - Setting up dialog");
                     StateManager.SetupDialog(new List<string>{"Quest Completed!"}, DialogType.ALERT, false);
                 }
                 else
                 {
+                    Debug.Log("test - All Items completed");
                     AllMissionsCompleted = true;
                     questionmanager.MissionEnd();
                 }
 
             }
-            else if (!questionmanager.CurrentQuest.Isfinished && questionmanager.CurrentQuest != null)
+            else if (questionmanager.CurrentQuest != null && !questionmanager.CurrentQuest.Isfinished && questionmanager.CurrentQuest != null)
             {
                 // Display a message or take appropriate action to indicate that a quest is already in progress
             }
-            else if (questionmanager.CurrentQuest.Isfinished)
+            else if (questionmanager.CurrentQuest != null && questionmanager.CurrentQuest.Isfinished)
             {
             }
             else
@@ -152,7 +155,12 @@ public class quest : MonoBehaviour
 
     private bool AllItemsCompleted()
     {
-        foreach (QuestStructure questItem in AllItemsNeeded)
+        var currentQuest = GameObject.Find(LevelManager.GetCurrentLevel()?.currentQuest)?.GetComponent<quest>();
+        if (currentQuest == null)
+        {
+            return false;
+        }
+        foreach (QuestStructure questItem in currentQuest.AllItemsNeeded)
         {
             if (!questItem.IsCompleted)
             {

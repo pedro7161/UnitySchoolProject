@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using System.Linq;
 using StarterAssets;
 using UnityEngine;
 
@@ -43,8 +44,8 @@ public class LevelManager : MonoBehaviour
         // Define levels
         var level1 = new Level();
         level1.level = LevelEnum.LEVEL_1;
-        level1.questsGameObject.AddRange(new string[] { "StartQuestMachine_Console" });
-        level1.currentQuest = "StartQuestMachine_Console";
+        level1.questsGameObject.AddRange(new string[] { "StartQuestMachine_Quest1", "StartQuestMachine_Quest2" });
+        level1.currentQuest = "StartQuestMachine_Quest1";
         levels.Add(level1);
     }
     void Start()
@@ -150,21 +151,70 @@ public class LevelManager : MonoBehaviour
             return;
         }
 
+        var currentLevelStructure = GetCurrentLevel();
         // check if all quests from current level are completed
         var allQuestionsAreCompletedFromCurrentLevel = false;
-        foreach (Level level in levels)
+
+        if (currentLevelStructure != null)
         {
-            level.questsGameObject.ForEach(questGameObject =>
+            allQuestionsAreCompletedFromCurrentLevel = currentLevelStructure.questsGameObject.TrueForAll(questGameObject =>
             {
-                var questGameObjectInstance = GameObject.Find(questGameObject);
-                if (questGameObjectInstance != null)
-                {
-                    var quest = GameObject.Find(questGameObject).GetComponent<quest>();
-                    allQuestionsAreCompletedFromCurrentLevel = quest.Isfinished;
-                }
+                var quest = GameObject.Find(questGameObject)?.GetComponent<quest>();
+                return quest != null && quest.Isfinished;
             });
         }
 
+        Debug.Log("test - " + allQuestionsAreCompletedFromCurrentLevel + " - " + levels.Find(level => level.level == currentLevel).questsGameObject.Count);
+
+        if (!allQuestionsAreCompletedFromCurrentLevel)
+        {
+            // Check if current quest is completed. If so, start the next one if exists
+            var currentLevel = GetCurrentLevel();
+            var currentQuestGameObject = GameObject.Find(currentLevel.currentQuest);
+            if (currentQuestGameObject != null)
+            {
+                var currentQuest = currentQuestGameObject.GetComponent<quest>();
+                if (currentQuest.Isfinished)
+                {
+                    var allQuestsInLevel = currentLevel.questsGameObject;
+                    var currentQuestIndex = allQuestsInLevel.IndexOf(currentLevel.currentQuest);
+                    
+                    if (currentQuestIndex == allQuestsInLevel.Count - 1)
+                    {
+                        // last quest from level
+                        allQuestionsAreCompletedFromCurrentLevel = true;
+                        currentLevel.currentQuest = "";
+                    }
+                    else
+                    {
+                        // next quest
+                        currentLevel.currentQuest = allQuestsInLevel[currentQuestIndex + 1];
+
+                        // Update quest level object
+                        foreach (var quest in Resources.FindObjectsOfTypeAll<quest>())
+                        {
+                            var gameObject = quest.gameObject;
+                            switch (gameObject.name)
+                            {
+                                case "StartQuestMachine_Quest2":
+                                    GameObject.Find("StartQuestMachine_Quest1")?.SetActive(false);
+                                    gameObject?.SetActive(true);
+                                    
+                                    var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
+                                    globalDialogMachine.machineSentences = new string[] { 
+                                        "Congratulations, you completed the first quest! :)",
+                                        "Now, let's start the second quest. You must learn how to play the minigames",
+                                        "To learn more about the quest, please interact with the ATM on your left :)",
+                                    };
+                                    globalDialogMachine.shouldStartDialogProgrammatically = true;  
+                                break;
+                            }
+                        }
+                    }
+                }
+            }
+        }
+        
         if (allQuestionsAreCompletedFromCurrentLevel && !isCurrentLevelFinished)
         {
             switch (currentLevel)

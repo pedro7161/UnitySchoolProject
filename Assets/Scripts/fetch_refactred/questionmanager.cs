@@ -17,6 +17,8 @@ public class questionmanager : MonoBehaviour
     public bool HasAllItems = false;
 
     public static bool QuestCanvasReadyWithItems = false;
+    private static List<GameObject> currentQuestRowItems = new List<GameObject>();
+    public static bool shouldStartQuestAutomatically = false;
 
     // Start is called before the first frame update
     void Start()
@@ -25,10 +27,18 @@ public class questionmanager : MonoBehaviour
         inventoryConsumableScript = FindObjectOfType<InventoryConsumable>();
     }
 
-    void Update() {
+    void Update()
+    {
+        if (!QuestCanvasReadyWithItems)
+        {
+            foreach (GameObject other in currentQuestRowItems)
+            {
+                Destroy(other);
+            }
+        }
         if (CurrentQuest != null && !QuestCanvasReadyWithItems)
         {
-
+            currentQuestRowItems.Clear();
             // get quest canvas
             var canvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.QUEST);
             if (canvas == null)
@@ -36,18 +46,12 @@ public class questionmanager : MonoBehaviour
                 return;
             }
 
-            GameObject[] others = GameObject.FindGameObjectsWithTag("QuestRowItem");
-            foreach (GameObject other in others)
-            {
-                Destroy(other);
-            }
-
             var parent = canvas.Canvas.gameObject.transform.Find("background");
-            var row =  parent?.Find("Row");
+            var row = parent?.Find("Row");
 
-            if (row) 
+            if (row)
             {
-                for(int i = 0; i < questionmanager.CurrentQuest.AllItemsNeeded.Count; i++)
+                for (int i = 0; i < questionmanager.CurrentQuest.AllItemsNeeded.Count; i++)
                 {
                     var itemRow = Instantiate(row, parent);
                     itemRow.name = "QuestRowItem";
@@ -58,15 +62,17 @@ public class questionmanager : MonoBehaviour
                     rectTransform.offsetMin = new Vector2(rectTransform.offsetMin.x, i * -50);
 
                     itemRow.gameObject.SetActive(true);
-                    
+
                     var item = questionmanager.CurrentQuest.AllItemsNeeded[i];
                     var itemText = itemRow.Find("name");
                     var itemAmount = itemRow.Find("quantity");
 
-                    itemText.GetComponent<TMPro.TextMeshProUGUI>().text = item.isMinigameQuest && item.MinigameName != MinigameType.NONE 
+                    itemText.GetComponent<TMPro.TextMeshProUGUI>().text = item.isMinigameQuest && item.MinigameName != MinigameType.NONE
                         ? humanizeMinigameName(item.MinigameName)
                         : item.ItemName;
                     itemAmount.GetComponent<TMPro.TextMeshProUGUI>().text = $"{item.CurrentAmount}/{item.AmountRequired}";
+
+                    currentQuestRowItems.Add(itemRow.gameObject);
                 }
                 QuestCanvasReadyWithItems = true;
             }
@@ -75,7 +81,9 @@ public class questionmanager : MonoBehaviour
 
     public void UpdateQuest()
     {
-        foreach (ItemsQuestStructore questItem in AllquestItems)
+        Debug.Log("test - UpdateQuest() called" + LevelManager.GetCurrentLevel()?.currentQuest);
+        var currentQuest = GameObject.Find(LevelManager.GetCurrentLevel().currentQuest).GetComponent<quest>();
+        foreach (QuestStructure questItem in currentQuest.AllItemsNeeded)
         {
             int currentAmount = questItem.CurrentAmount;
             int amountRequired = questItem.AmountRequired;
@@ -109,7 +117,6 @@ public class questionmanager : MonoBehaviour
     public void MissionCompleted()
     {
         CurrentQuest.Isfinished = true;
-
     }
 
     public int ItemCollected(int questItem)
@@ -126,7 +133,7 @@ public class questionmanager : MonoBehaviour
         // Enable quest items active to true
         foreach (QuestStructure questItem in quest.AllItemsNeeded)
         {
-            foreach(GameObject item in questItem.Item)
+            foreach (GameObject item in questItem.Item)
             {
                 item.SetActive(true);
             }
@@ -141,14 +148,12 @@ public class questionmanager : MonoBehaviour
         // Enable quest items active to true
         foreach (QuestStructure questItem in CurrentQuest.AllItemsNeeded)
         {
-            foreach(GameObject item in questItem.Item)
+            foreach (GameObject item in questItem.Item)
             {
                 item.SetActive(false);
             }
         }
 
-        // Removed current quest instance from state
-        CurrentQuest = null;
         questionmanager.QuestCanvasReadyWithItems = false;
     }
     // Codigo a ver com consumiveis ainda a ser pensado
@@ -175,7 +180,7 @@ public class questionmanager : MonoBehaviour
     public void ActivateAllGameObjects()
     {
         GetItems[] getItemsScripts = Resources.FindObjectsOfTypeAll<GetItems>();
-    
+
         foreach (GetItems script in getItemsScripts)
         {
             script.ActivateGameObject();

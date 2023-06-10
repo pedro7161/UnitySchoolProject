@@ -69,7 +69,7 @@ public class StateManager : MonoBehaviour
         // remove all active dialog canvas from selected dialog canvas
         StateManager.SelectedDialogCanvas.ForEach(canvas => {
             if (
-                (canvas.DialogType == DialogType.QUEST && !LevelManager.GetCurrentLevel().isFinished) || 
+                (canvas.DialogType == DialogType.QUEST && !questionmanager.CurrentQuest.Isfinished) || 
                 (canvas.DialogType != DialogType.QUEST && Enum.IsDefined(typeof(MinigameType), canvas.DialogType.ToString()) && canvas.Canvas.gameObject.activeSelf))
             {
                 return;

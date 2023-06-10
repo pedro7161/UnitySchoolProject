@@ -11,14 +11,12 @@ public class TextMachine : MonoBehaviour
     public string[] machineSentences;
     // Start is called before the first frame update
 
-    public GameObject externalObjectToActivateOnInteract = null;
-
     public bool shouldStartDialogProgrammatically = false;
     void Update()
     {
         if (
-            (enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) && (
-            !StateManager.isDialogRunning || questionmanager.CurrentQuest != null) && 
+            (enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) && 
+            (!StateManager.isDialogRunning || questionmanager.CurrentQuest != null) && 
             StateManager.SelectedMinigame == MinigameType.NONE &&
             StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == ActionCanvasType) == null)
         {
@@ -64,14 +62,50 @@ public class TextMachine : MonoBehaviour
         else
         {
             sentences.AddRange(machineSentences);
+            switch(this.gameObject.transform.parent.gameObject.name)
+            {
+                case "StartQuestMachine_Dialog":
+                    var levelInstance = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+                    var levelStructure = levelInstance.levels.Find(x => x.level == LevelEnum.LEVEL_1);
+
+                    if (levelStructure != null)
+                    {
+                        if (levelStructure.isFinished)
+                        {   
+                            sentences.Clear();
+                            sentences.Add("Congratulations, you completed all questions of level 1. The maze door is been unlocked. Go check outside for level two :)");
+                        }
+                        switch (levelStructure.currentQuest)
+                        {
+                            case "StartQuestMachine_Quest2":
+                                sentences.Clear();
+                                sentences.AddRange(
+                                    new string[] { 
+                                            "Congratulations, you completed the first quest! :)",
+                                            "Now, let's start the second quest. You must learn how to play the minigames",
+                                            "We have four types of minigames: Typescripting challenge, Puzzle challenge, Code challenge and...",
+                                            "... what you already experienced, the item fetch challenge.",
+                                            "...",
+                                            "Typescript challenge -> You must write some programming terms with a timer running. If you don't write the terms in time, you lose.",
+                                            "...",
+                                            "Puzzle challenge -> You have four objects to place in the correct position. You need to discover the correct position by ...",
+                                            "... reading the code and understanding what the code does",
+                                            "...",
+                                            "Code challenge -> You must read the question and choose the correct answer. If you choose the wrong answer, you lose.",
+                                            "To start the quest, please press R when interacting with the terminal on my right.",
+                                        }
+                                );
+                                break;
+                        }
+                    }
+                break;
+            }
         }
 
         //shouldStartDialogProgrammatically = false;
         StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE, gameObject.transform.parent.gameObject.name);
-        if (externalObjectToActivateOnInteract != null)
-        {
-            externalObjectToActivateOnInteract.SetActive(true);
-        }
+        //UpdateGameObjectQuests();
+        UpdateGameObjectQuests();
     }
 
     void OnTriggerEnter(Collider other)
@@ -87,5 +121,34 @@ public class TextMachine : MonoBehaviour
             return;
         }
         StateManager.OnStopDialog();
+    }
+
+    void UpdateGameObjectQuests() {
+        var allQuestsInMap = Resources.FindObjectsOfTypeAll<quest>();
+
+        var currentLevel = LevelManager.GetCurrentLevel();
+        switch (currentLevel.level)
+        {
+            case LevelEnum.LEVEL_1:
+                
+                foreach(var resource in allQuestsInMap)
+                {
+                    var gameObject = resource.gameObject;
+                    
+                    switch (gameObject.name)
+                    {
+                        case "StartQuestMachine_Quest1":
+                            if (
+                                currentLevel.currentQuest == "StartQuestMachine_Quest1" && 
+                                (this.gameObject.transform.parent.name == "StartQuestMachine_Dialog" && enteredCollider) // this quest object appers if player interact for the first time with the machine
+                            )
+                            {
+                                gameObject.SetActive(true);
+                            }
+                            break;
+                    }
+                }
+                break;
+        }
     }
 }
