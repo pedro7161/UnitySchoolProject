@@ -12,6 +12,7 @@ public class QuestStructure
     public bool IsCompleted;
     public string ItemName;
     public bool isMinigameQuest = false;
+    public MinigameType MinigameName = MinigameType.NONE;
 }
 
 public class quest : MonoBehaviour
@@ -44,6 +45,13 @@ public class quest : MonoBehaviour
         }
     }
 
+    public void StartQuest()
+    {
+        shouldStartQuestProgramatically = false;
+        questionmanager.MissionStart(this);
+        StateManager.SetupDialog(new List<string>(), DialogType.QUEST, false);
+    }
+
     private void Update()
     {
         if (StateManager.isDialogRunning && StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.ALERT) != null)
@@ -55,9 +63,7 @@ public class quest : MonoBehaviour
         {
             if (questionmanager.CurrentQuest == null && !AllMissionsCompleted)
             {
-                shouldStartQuestProgramatically = false;
-                questionmanager.MissionStart(this);
-                StateManager.SetupDialog(new List<string>(), DialogType.QUEST, false);
+                LevelManager.StartQuestLevel();
             }
 
             else if (AllItemsCompleted())

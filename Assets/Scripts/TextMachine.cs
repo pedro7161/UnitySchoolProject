@@ -16,7 +16,6 @@ public class TextMachine : MonoBehaviour
     public bool shouldStartDialogProgrammatically = false;
     void Update()
     {
-        Debug.Log("Configuring canvas..." + shouldStartDialogProgrammatically);
         if (
             (enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) && (
             !StateManager.isDialogRunning || questionmanager.CurrentQuest != null) && 
@@ -67,7 +66,6 @@ public class TextMachine : MonoBehaviour
             sentences.AddRange(machineSentences);
         }
 
-        Debug.Log("Current dialog Type: " + ActionCanvasType);
         //shouldStartDialogProgrammatically = false;
         StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE, gameObject.transform.parent.gameObject.name);
         if (externalObjectToActivateOnInteract != null)

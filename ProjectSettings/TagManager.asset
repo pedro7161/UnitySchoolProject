@@ -9,6 +9,7 @@ TagManager:
   - Quest
   - Zone
   - Environment
+  - QuestRowItem
   layers:
   - Default
   - TransparentFX

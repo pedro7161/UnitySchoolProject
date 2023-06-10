@@ -24,14 +24,12 @@ public class GetItems : MonoBehaviour
                 if (questItem.Item.Contains(this.gameObject))
                 {
                     questItem.CurrentAmount++;
-                    questionmanager.UpdateQuest();
                     gameObject.SetActive(false);
                     if (questItem.CurrentAmount >= questItem.AmountRequired)
                     {
                         questItem.IsCompleted = true;
-                        // Call the quest manager's method to handle the completion of this item
-                        questionmanager.UpdateQuest();
                     }
+                    questionmanager.UpdateQuest();
                 }
             }
 

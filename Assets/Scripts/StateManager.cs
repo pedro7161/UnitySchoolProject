@@ -42,7 +42,6 @@ public class StateManager : MonoBehaviour
         var canvas = StateManager.dialogCanvasData.First(canvas => canvas.DialogType == dialogType);
         if (canvas != null && !StateManager.SelectedDialogCanvas.Contains(canvas))
         {
-            Debug.Log("Canvas found: " + canvas.Canvas.name);
             StateManager.SelectedDialogCanvas.Add(canvas);
         }
 
@@ -78,7 +77,6 @@ public class StateManager : MonoBehaviour
             canvasToBeRemoved.Add(canvas);
         });
 
-        Debug.Log("Canvas to be removed: " + canvasToBeRemoved.Count);
 
         canvasToBeRemoved.ForEach(canvas => {
             canvas.Canvas.gameObject.SetActive(false);

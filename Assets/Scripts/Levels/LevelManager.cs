@@ -44,12 +44,13 @@ public class LevelManager : MonoBehaviour
         var level1 = new Level();
         level1.level = LevelEnum.LEVEL_1;
         level1.questsGameObject.AddRange(new string[] { "StartQuestMachine_Console" });
+        level1.currentQuest = "StartQuestMachine_Console";
         levels.Add(level1);
     }
     void Start()
     {
         DefineLevels();
-
+        
         setLevel(LevelEnum.LEVEL_1);
         setAudioLevel(LevelEnum.LEVEL_1);
         change_skybox.Change_Skybox(2);
@@ -63,7 +64,8 @@ public class LevelManager : MonoBehaviour
 
     // Update is called once per frame
     void Update()
-    {
+    {  
+        Debug.Log("Current level" + currentLevel);
         updateLevelObjects();
         CheckLevelQuests();
     }
@@ -121,6 +123,26 @@ public class LevelManager : MonoBehaviour
         }
     }
 
+    public static void StartQuestLevel()
+    {
+        var levelStructure = GetCurrentLevel(); 
+        switch (levelStructure.level)
+        {
+            case LevelEnum.LEVEL_1:
+                // start mission on Gameobject with quest script
+                
+                // get level
+                var questToStart = levelStructure.currentQuest;
+                var questGameObject = GameObject.Find(questToStart)?.GetComponent<quest>();
+                if (questGameObject != null)
+                {
+                    questGameObject.StartQuest();
+                }
+        
+                break;
+        }
+    }
+
     private void CheckLevelQuests()
     {
         if (StateManager.isDialogRunning && questionmanager.CurrentQuest != null)
@@ -151,7 +173,6 @@ public class LevelManager : MonoBehaviour
                     var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
                     globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 1. The maze door is been unlocked. Go check outside for level two :)" };
                     globalDialogMachine.shouldStartDialogProgrammatically = true;
-                    Debug.Log("Should rendering a new dialog canvas");
                     isCurrentLevelFinished = true;
                     break;
                 case LevelEnum.LEVEL_2:

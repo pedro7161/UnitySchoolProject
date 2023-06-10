@@ -66,7 +66,6 @@ public class TypeScriptingManager : MonoBehaviour
                 }, () => {
                     if (minigameShouldStart && !minigameStarted)
                     {
-                        Debug.Log("Starting a new minigame type scripting challenge");
                         StartGame();
                     }
                 }, 10));
@@ -288,8 +287,6 @@ public class TypeScriptingManager : MonoBehaviour
             {
                 var currentSentence = SelectedTypeScriptingSentences[currentSentenceIndex];
                 var currentTypedChar = currentSentence.characters[currentSentence.currentIndex];
-
-                Debug.Log("Current char to be typed: " + currentTypedChar.character.ToString().ToUpper() + " - " + e.keyCode);
                 
                 if (
                     e.keyCode.ToString() == currentTypedChar.character.ToString().ToUpper() || 

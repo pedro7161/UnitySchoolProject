@@ -19,23 +19,6 @@ public class AreaCollider : MonoBehaviour
     {
 
     }
-
-    private void UpdateLevel()
-    {
-        var gameObjectName = this.gameObject.name;
-        switch (gameObjectName)
-        {
-            case "next_area_1":
-                LevelManager.setLevel(LevelEnum.LEVEL_1);
-                break;
-            case "next_area_2":
-                LevelManager.setLevel(LevelEnum.LEVEL_2);
-                break;
-            case "next_area_3":
-                LevelManager.setLevel(LevelEnum.LEVEL_3);
-                break;
-        }
-    }
     private void UpdateEnvironment()
     {
         var gameObjectName = this.gameObject.name;
@@ -61,7 +44,6 @@ public class AreaCollider : MonoBehaviour
     }
     private void OnTriggerEnter(Collider other)
     {
-        Debug.Log("OnTriggerEnter: " + other.gameObject.tag + " " + gameObject.tag + " " + gameObject.name);
         if (other.gameObject.tag == "Player" && gameObject.tag == "Environment")
         {
             if (zoneName != gameObject.name)
@@ -70,12 +52,6 @@ public class AreaCollider : MonoBehaviour
                 UpdateEnvironment();
                 //warningCanvas.enabled = true;
             }
-        }
-        
-        if (other.gameObject.tag == "Player" && gameObject.tag == "Zone")
-        {
-            Debug.Log("Zone: " + gameObject.name);
-            UpdateLevel();
         }
     }
 }

@@ -22,7 +22,6 @@ namespace StarterAssets
             // Syncronize the dialogCanvasStructuresInProgress with the SelectedDialogCanvas by removing old elements on dialogCanvasStructuresInProgress
             dialogCanvasStructuresInProgress.RemoveAll(
                 dialogCanvas => StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == dialogCanvas.DialogType) == null);
-            Debug.Log("DialogCanvasStructuresInProgress: " + dialogCanvasStructuresInProgress.Count + " SelectedDialogCanvas: " + StateManager.SelectedDialogCanvas.Count);
 
             var dialogCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.DIALOG);
             if (StateManager.SelectedDialogCanvas.Count == 0)
@@ -117,6 +116,19 @@ namespace StarterAssets
                                 break;
                             case MinigameType.TYPE_SCRIPTING_CHALLENGE:
                                 isCorrectBool = StateManager.LastResultFromTypingscript;
+                                if (isCorrectBool && questionmanager.CurrentQuest != null && !questionmanager.CurrentQuest.Isfinished)
+                                {
+                                    var questMission = questionmanager.CurrentQuest.AllItemsNeeded.Find(x => x.isMinigameQuest && x.MinigameName == MinigameType.TYPE_SCRIPTING_CHALLENGE);
+                                    if (questMission != null && !questMission.IsCompleted)
+                                    {
+                                        questMission.CurrentAmount++;
+                                        if (questMission.CurrentAmount >= questMission.AmountRequired)
+                                        {
+                                            questMission.IsCompleted = true;
+                                        }
+                                        questionmanager.QuestCanvasReadyWithItems = false;
+                                    }
+                                }
                                 break;
                         }
 
@@ -125,7 +137,6 @@ namespace StarterAssets
                             isCorrectBool = true;
                         }
                         
-                        Debug.Log("Selected Minigame value on alert lol: " + StateManager.SelectedMinigame);
                         if (StateManager.SelectedMinigame != MinigameType.NONE)
                         {
                             StateManager.SelectedMinigame = MinigameType.NONE;
@@ -178,14 +189,11 @@ namespace StarterAssets
             }
 
             // Check if a dialog on selectedialogcanvas exists on dialogCanvasStructuresInProgres
-            Debug.Log(StateManager.SelectedDialogCanvas.Count);
-            Debug.Log(dialogCanvasStructuresInProgress.Count);
 
             ConfigureExtraSteps();
             StateManager.SelectedDialogCanvas.ForEach(canvas => canvas.Canvas.gameObject.SetActive(true));
             StateManager.OnStartDialog();
             currentIndex = 0;
-            Debug.Log("Reseting current index to 0");
 
             // Update the dialogCanvasStructuresInProgress with elements from SelectedDialogCanvas that are not present on dialogCanvasStructuresInProgress. Filter by DialogType
             StateManager.SelectedDialogCanvas.ForEach(canvas => {

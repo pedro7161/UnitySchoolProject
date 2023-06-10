@@ -28,11 +28,6 @@ public class questionmanager : MonoBehaviour
     void Update() {
         if (CurrentQuest != null && !QuestCanvasReadyWithItems)
         {
-            GameObject[] others = GameObject.FindGameObjectsWithTag("Row-Item");
-            foreach (GameObject other in others)
-            {
-                Destroy(other);
-            }
 
             // get quest canvas
             var canvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.QUEST);
@@ -40,6 +35,13 @@ public class questionmanager : MonoBehaviour
             {
                 return;
             }
+
+            GameObject[] others = GameObject.FindGameObjectsWithTag("QuestRowItem");
+            foreach (GameObject other in others)
+            {
+                Destroy(other);
+            }
+
             var parent = canvas.Canvas.gameObject.transform.Find("background");
             var row =  parent?.Find("Row");
 
@@ -48,8 +50,8 @@ public class questionmanager : MonoBehaviour
                 for(int i = 0; i < questionmanager.CurrentQuest.AllItemsNeeded.Count; i++)
                 {
                     var itemRow = Instantiate(row, parent);
-                    itemRow.name = "Row-Item";
-                    itemRow.gameObject.tag = "Row-Item"; // Identify as UI tag Row-Item
+                    itemRow.name = "QuestRowItem";
+                    itemRow.gameObject.tag = "QuestRowItem"; // Identify as UI tag Row-Item
 
                     // update itemRow to be top 30 and bottom -30
                     var rectTransform = itemRow.GetComponent<RectTransform>();
@@ -61,7 +63,9 @@ public class questionmanager : MonoBehaviour
                     var itemText = itemRow.Find("name");
                     var itemAmount = itemRow.Find("quantity");
 
-                    itemText.GetComponent<TMPro.TextMeshProUGUI>().text = item.ItemName;
+                    itemText.GetComponent<TMPro.TextMeshProUGUI>().text = item.isMinigameQuest && item.MinigameName != MinigameType.NONE 
+                        ? humanizeMinigameName(item.MinigameName)
+                        : item.ItemName;
                     itemAmount.GetComponent<TMPro.TextMeshProUGUI>().text = $"{item.CurrentAmount}/{item.AmountRequired}";
                 }
                 QuestCanvasReadyWithItems = true;
@@ -99,7 +103,6 @@ public class questionmanager : MonoBehaviour
 
     public void MissionCompletedWarning()
     {
-        Debug.Log("Quest completed warning");
         // Display a warning that the quest is completed
     }
 
@@ -116,7 +119,6 @@ public class questionmanager : MonoBehaviour
 
     public void MissionStart(quest quest)
     {
-        Debug.Log("Quest started");
         CurrentQuest = quest;
         questionmanager.QuestCanvasReadyWithItems = false;
         // Start the quest in the canvas
@@ -178,5 +180,14 @@ public class questionmanager : MonoBehaviour
         {
             script.ActivateGameObject();
         }
+    }
+
+    public string humanizeMinigameName(MinigameType minigameType)
+    {
+        string minigameName = minigameType.ToString();
+
+        minigameName = minigameName.Replace("_", " ").ToLower();
+        minigameName = char.ToUpper(minigameName[0]) + minigameName.Substring(1);
+        return minigameName;
     }
 }
