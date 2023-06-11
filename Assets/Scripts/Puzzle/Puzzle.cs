@@ -12,6 +12,8 @@ public class Puzzle : MonoBehaviour
     private static Vector3[] PuzzlePiecesOriginalPosition;
     private static List<GameObject> _PuzzlePieces = new List<GameObject>();
 
+    public bool invertDirections = false;
+
     void Start()
     {
         _PuzzlePieces = PuzzlePieces;
@@ -76,22 +78,46 @@ public class Puzzle : MonoBehaviour
     void handlePieceMovement()
     {
         var speed = 2.5f * Time.deltaTime;
-        //wasd keyboard movement
-        if (Input.GetKey(KeyCode.W))
+
+        if (invertDirections)
         {
-            currentPiece.transform.position += new Vector3(0, 0, -speed);
+            //wasd keyboard movement
+            if (Input.GetKey(KeyCode.W))
+            {
+                currentPiece.transform.position += new Vector3(-speed, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                currentPiece.transform.position += new Vector3(speed, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                currentPiece.transform.position += new Vector3(0, 0, -speed);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                currentPiece.transform.position += new Vector3(0, 0, speed);
+            }
         }
-        if (Input.GetKey(KeyCode.S))
+        else
         {
-            currentPiece.transform.position += new Vector3(0, 0, speed);
-        }
-        if (Input.GetKey(KeyCode.A))
-        {
-            currentPiece.transform.position += new Vector3(speed, 0, 0);
-        }
-        if (Input.GetKey(KeyCode.D))
-        {
-            currentPiece.transform.position += new Vector3(-speed, 0, 0);
+            //wasd keyboard movement
+            if (Input.GetKey(KeyCode.W))
+            {
+                currentPiece.transform.position += new Vector3(0, 0, -speed);
+            }
+            if (Input.GetKey(KeyCode.S))
+            {
+                currentPiece.transform.position += new Vector3(0, 0, speed);
+            }
+            if (Input.GetKey(KeyCode.A))
+            {
+                currentPiece.transform.position += new Vector3(speed, 0, 0);
+            }
+            if (Input.GetKey(KeyCode.D))
+            {
+                currentPiece.transform.position += new Vector3(-speed, 0, 0);
+            } 
         }
     }
 

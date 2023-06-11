@@ -20,7 +20,11 @@ public class change_skybox : MonoBehaviour
     }
     public static void Change_Skybox(int time)
     {
-        var instance = GameObject.Find("environment").GetComponent<change_skybox>();
+        var instance = GameObject.Find("environment")?.GetComponent<change_skybox>();
+        if (instance == null)
+        {
+            return;
+        }
      
         if (time == 0)
         {

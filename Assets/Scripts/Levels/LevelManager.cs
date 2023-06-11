@@ -59,6 +59,10 @@ public class LevelManager : MonoBehaviour
         StartCoroutine(Config.Waiter(() => { }, () =>
         {
             var welcomeMachine = GameObject.Find("WelcomeMachine");
+            if (welcomeMachine == null)
+            {
+                return;
+            }
             welcomeMachine.GetComponentInChildren<TextMachine>().StartDialog();
         }, 1f));
     }
@@ -78,23 +82,36 @@ public class LevelManager : MonoBehaviour
 
     public static Level GetCurrentLevel()
     {
-        var levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+        var levelManager = GameObject.Find("LevelManager")?.GetComponent<LevelManager>();
+        if (levelManager == null)
+        {
+            return null;
+        }
         return levelManager.levels.Find(level => level.level == currentLevel);
     }
 
     private void resetLevelObjects()
     {
         var doorToLevel2 = GameObject.Find("door_to_level_2");
-        doorToLevel2.GetComponent<DoorController>().isLocked = false;
+        if (doorToLevel2 != null)
+        {
+            doorToLevel2.GetComponent<DoorController>().isLocked = false;
+        }
     }
 
     private void updateLevelObjects()
     {
+        var doorLevel2 = GameObject.Find("door_to_level_2");
+        if (doorLevel2 == null)
+        {
+            return;
+        }
         resetLevelObjects();
         switch (currentLevel)
         {
             case LevelEnum.LEVEL_1:
                 // get door_to_level_2 and prevent that door to open
+                
                 GameObject.Find("door_to_level_2").GetComponent<DoorController>().isLocked = isCurrentLevelFinished ? false : true;
                 break;
             case LevelEnum.LEVEL_2:

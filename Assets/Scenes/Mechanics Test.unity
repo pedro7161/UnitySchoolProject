@@ -5899,6 +5899,7 @@ MonoBehaviour:
   m_EditorClassIdentifier: 
   Camera: {fileID: 2047480126}
   PuzzlePieces: []
+  invertDirections: 0
 --- !u!4 &142908215 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6954531691785998512, guid: cf8443763fc34314490f8a3e2f94dd37, type: 3}
@@ -46654,6 +46655,52 @@ Transform:
   m_CorrespondingSourceObject: {fileID: 6954531691785998512, guid: cf8443763fc34314490f8a3e2f94dd37, type: 3}
   m_PrefabInstance: {fileID: 1899100017}
   m_PrefabAsset: {fileID: 0}
+--- !u!1 &1118900929
+GameObject:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  serializedVersion: 6
+  m_Component:
+  - component: {fileID: 1118900931}
+  - component: {fileID: 1118900930}
+  m_Layer: 0
+  m_Name: LevelManager
+  m_TagString: Untagged
+  m_Icon: {fileID: 0}
+  m_NavMeshLayer: 0
+  m_StaticEditorFlags: 0
+  m_IsActive: 1
+--- !u!114 &1118900930
+MonoBehaviour:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118900929}
+  m_Enabled: 1
+  m_EditorHideFlags: 0
+  m_Script: {fileID: 11500000, guid: c2f3d0faa1b3cb746a4f72d84f9c5d27, type: 3}
+  m_Name: 
+  m_EditorClassIdentifier: 
+  audioLevels: []
+  isCurrentLevelFinished: 0
+--- !u!4 &1118900931
+Transform:
+  m_ObjectHideFlags: 0
+  m_CorrespondingSourceObject: {fileID: 0}
+  m_PrefabInstance: {fileID: 0}
+  m_PrefabAsset: {fileID: 0}
+  m_GameObject: {fileID: 1118900929}
+  m_LocalRotation: {x: 0, y: 0, z: 0, w: 1}
+  m_LocalPosition: {x: 12.342947, y: 8.888175, z: 7.2089605}
+  m_LocalScale: {x: 1, y: 1, z: 1}
+  m_ConstrainProportionsScale: 0
+  m_Children: []
+  m_Father: {fileID: 0}
+  m_RootOrder: 18
+  m_LocalEulerAnglesHint: {x: 0, y: 0, z: 0}
 --- !u!1001 &1119138888
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -59032,12 +59079,16 @@ MonoBehaviour:
     AmountRequired: 2
     IsCompleted: 0
     ItemName: Collect Item giant sphere 1
+    isMinigameQuest: 0
+    MinigameName: 0
   - Item:
     - {fileID: 1635881329}
     CurrentAmount: 0
     AmountRequired: 1
     IsCompleted: 0
     ItemName: Collect Item giant sphere 2
+    isMinigameQuest: 0
+    MinigameName: 0
   PlayerEnteredOnCollider: 0
   AllMissionsCompleted: 0
   shouldStartQuestProgramatically: 0
@@ -78462,6 +78513,7 @@ MonoBehaviour:
   - {fileID: 411650488}
   - {fileID: 424437020}
   - {fileID: 1220647531}
+  invertDirections: 0
 --- !u!1001 &1932149709
 PrefabInstance:
   m_ObjectHideFlags: 0
