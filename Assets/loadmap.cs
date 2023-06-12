@@ -10,4 +10,11 @@ public class loadmap : MonoBehaviour
     {
         SceneManager.LoadScene(mapname);
     }
+     public void button_exit()
+    {
+    
+        Application.Quit();
+
+    }
+    
 }
