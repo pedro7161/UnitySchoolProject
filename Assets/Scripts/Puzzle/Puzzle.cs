@@ -13,6 +13,7 @@ public class Puzzle : MonoBehaviour
     private static List<GameObject> _PuzzlePieces = new List<GameObject>();
 
     public bool invertDirections = false;
+    public float speed = 0.5f;
 
     void Start()
     {
@@ -77,26 +78,26 @@ public class Puzzle : MonoBehaviour
 
     void handlePieceMovement()
     {
-        var speed = 2.5f * Time.deltaTime;
+        var speedNormalized = speed * Time.deltaTime;
 
         if (invertDirections)
         {
             //wasd keyboard movement
             if (Input.GetKey(KeyCode.W))
             {
-                currentPiece.transform.position += new Vector3(-speed, 0, 0);
+                currentPiece.transform.position += new Vector3(-speedNormalized, 0, 0);
             }
             if (Input.GetKey(KeyCode.S))
             {
-                currentPiece.transform.position += new Vector3(speed, 0, 0);
+                currentPiece.transform.position += new Vector3(speedNormalized, 0, 0);
             }
             if (Input.GetKey(KeyCode.A))
             {
-                currentPiece.transform.position += new Vector3(0, 0, -speed);
+                currentPiece.transform.position += new Vector3(0, 0, -speedNormalized);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                currentPiece.transform.position += new Vector3(0, 0, speed);
+                currentPiece.transform.position += new Vector3(0, 0, speedNormalized);
             }
         }
         else
@@ -104,19 +105,19 @@ public class Puzzle : MonoBehaviour
             //wasd keyboard movement
             if (Input.GetKey(KeyCode.W))
             {
-                currentPiece.transform.position += new Vector3(0, 0, -speed);
+                currentPiece.transform.position += new Vector3(0, 0, -speedNormalized);
             }
             if (Input.GetKey(KeyCode.S))
             {
-                currentPiece.transform.position += new Vector3(0, 0, speed);
+                currentPiece.transform.position += new Vector3(0, 0, speedNormalized);
             }
             if (Input.GetKey(KeyCode.A))
             {
-                currentPiece.transform.position += new Vector3(speed, 0, 0);
+                currentPiece.transform.position += new Vector3(speedNormalized, 0, 0);
             }
             if (Input.GetKey(KeyCode.D))
             {
-                currentPiece.transform.position += new Vector3(-speed, 0, 0);
+                currentPiece.transform.position += new Vector3(-speedNormalized, 0, 0);
             } 
         }
     }

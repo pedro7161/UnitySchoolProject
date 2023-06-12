@@ -5900,6 +5900,7 @@ MonoBehaviour:
   Camera: {fileID: 2047480126}
   PuzzlePieces: []
   invertDirections: 0
+  speed: 0.5
 --- !u!4 &142908215 stripped
 Transform:
   m_CorrespondingSourceObject: {fileID: 6954531691785998512, guid: cf8443763fc34314490f8a3e2f94dd37, type: 3}
@@ -78514,6 +78515,7 @@ MonoBehaviour:
   - {fileID: 424437020}
   - {fileID: 1220647531}
   invertDirections: 0
+  speed: 0.5
 --- !u!1001 &1932149709
 PrefabInstance:
   m_ObjectHideFlags: 0
@@ -87910,6 +87912,10 @@ PrefabInstance:
     - target: {fileID: 6331770242821689043, guid: 4b7e697f4c4330d42a2cef29e91cb77e, type: 3}
       propertyPath: m_Name
       value: CodeChallengeTest
+      objectReference: {fileID: 0}
+    - target: {fileID: 6331770242821689043, guid: 4b7e697f4c4330d42a2cef29e91cb77e, type: 3}
+      propertyPath: m_IsActive
+      value: 1
       objectReference: {fileID: 0}
     - target: {fileID: 6331770243293891080, guid: 4b7e697f4c4330d42a2cef29e91cb77e, type: 3}
       propertyPath: m_Camera

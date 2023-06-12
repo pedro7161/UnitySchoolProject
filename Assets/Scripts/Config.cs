@@ -57,6 +57,7 @@ public class QuestionPuzzle
 {
     public string code;
     public PuzzleQuestionsOrder PuzzleQuestionsOrder;
+    public QuestionDifficulty Difficulty;
 }
 
 public class QuestionPuzzleData {

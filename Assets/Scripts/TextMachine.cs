@@ -54,7 +54,15 @@ public class TextMachine : MonoBehaviour
         List<string> sentences = new List<string>();
         if (ActionCanvasType == DialogType.CODE_CHALLENGE)
         {
-            Question question = Config.GetRandomQuestion();
+            Question question;
+            if (LevelManager.GetCurrentLevel().level == LevelEnum.LEVEL_1)
+            {
+                question = Config.GetQuestions().Find(x => x.difficulty == QuestionDifficulty.EASY);
+            }
+            else
+            {
+                question = Config.GetRandomQuestion();
+            }
             StateManager.SelectedQuestion = question;
             
             sentences.Add(question.code);
@@ -93,6 +101,7 @@ public class TextMachine : MonoBehaviour
                                             "...",
                                             "Code challenge -> You must read the question and choose the correct answer. If you choose the wrong answer, you lose.",
                                             "To start the quest, please press R when interacting with the terminal on my right.",
+                                            "When you complete the quest, please interact with the terminal to complete the mission!"
                                         }
                                 );
                                 break;

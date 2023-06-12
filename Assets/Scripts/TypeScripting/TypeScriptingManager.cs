@@ -31,6 +31,7 @@ public class TypeScriptingManager : MonoBehaviour
     public Coroutine startCoroutine = null;
 
     public List<GameObject> RowItems = new List<GameObject>();
+    public List<string> words = new List<string>();
 
     void Update()
     {
@@ -98,12 +99,18 @@ public class TypeScriptingManager : MonoBehaviour
         StartTimer();
         currentSentenceIndex = 0;
         SelectedTypeScriptingSentences.Clear();
-        var words = Config.GetRandomTypescriptingPhrases(10);
-        for(int i = 0 ; i < words.Count; i++)
+        // Get random 10 words from words list.
+        var newWords = new List<string>();
+        for (int i = 0; i < 10; i++)
+        {
+            var randomIndex = Random.Range(0, words.Count);
+            newWords.Add(words[randomIndex]);
+        }
+        for(int i = 0 ; i < newWords.Count; i++)
         {
             TypeScriptingStructure sentence = new TypeScriptingStructure();
             sentence.id = i;
-            sentence.text = words[i];
+            sentence.text = newWords[i];
             sentence.currentIndex = 0;
             
             for (int j = 0 ; j < sentence.text.Length; j++)

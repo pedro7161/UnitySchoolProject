@@ -110,9 +110,35 @@ namespace StarterAssets
                         {
                             case MinigameType.CODE_CHALLENGE:
                                 anwser = StateManager.LastAnswerFromSelectedQuestion;
+                                if (anwser == "Correct" && questionmanager.CurrentQuest != null && !questionmanager.CurrentQuest.Isfinished)
+                                {
+                                    var questMission = questionmanager.CurrentQuest.AllItemsNeeded.Find(x => x.isMinigameQuest && x.MinigameName == MinigameType.CODE_CHALLENGE);
+                                    if (questMission != null && !questMission.IsCompleted)
+                                    {
+                                        questMission.CurrentAmount++;
+                                        if (questMission.CurrentAmount >= questMission.AmountRequired)
+                                        {
+                                            questMission.IsCompleted = true;
+                                        }
+                                        questionmanager.QuestCanvasReadyWithItems = false;
+                                    }
+                                }
                                 break;
                             case MinigameType.PUZZLE:
                                 anwser = StateManager.LastAnswerFromSelectedPuzzleQuestion;
+                                if (anwser == "Correct" && questionmanager.CurrentQuest != null && !questionmanager.CurrentQuest.Isfinished)
+                                {
+                                    var questMission = questionmanager.CurrentQuest.AllItemsNeeded.Find(x => x.isMinigameQuest && x.MinigameName == MinigameType.PUZZLE);
+                                    if (questMission != null && !questMission.IsCompleted)
+                                    {
+                                        questMission.CurrentAmount++;
+                                        if (questMission.CurrentAmount >= questMission.AmountRequired)
+                                        {
+                                            questMission.IsCompleted = true;
+                                        }
+                                        questionmanager.QuestCanvasReadyWithItems = false;
+                                    }
+                                }
                                 break;
                             case MinigameType.TYPE_SCRIPTING_CHALLENGE:
                                 isCorrectBool = StateManager.LastResultFromTypingscript;
@@ -259,14 +285,15 @@ namespace StarterAssets
 
         public void OnDialogButtonsHandler(GameObject gameObject) {
             var answer = "";
+            var shouldStopDialog = false;
             
             StateManager.SelectedDialogCanvas.ForEach(canvas => {
                 switch (canvas.DialogType) {
                     case DialogType.CODE_CHALLENGE:
                         var index = int.Parse(gameObject.name);
                         answer = StateManager.LastAnswerFromSelectedQuestion = StateManager.SelectedQuestion.correct_answer == index ? "Correct" : "Incorrect";
-
-                        break;
+                        shouldStopDialog = true;
+                        return;
                     case DialogType.PUZZLE:
                         var isCorrect = StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.capsule == StateManager.CurrentPuzzleAnswers["capsule"] &&
                             StateManager.SelectedQuestionPuzzle.PuzzleQuestionsOrder.cube == StateManager.CurrentPuzzleAnswers["cube"] &&
@@ -283,16 +310,19 @@ namespace StarterAssets
                                 status.color = Color.red;
                                 return;
                             }
+                            shouldStopDialog = true;
                             
                             status.text = "";
                             status.color = Color.white;
-                        break;
+                        return;
                 }
             });
 
-
-            StopDialog();
-            StateManager.SetupDialog(new List<string>{answer}, DialogType.ALERT, false);
+            if (shouldStopDialog)
+            {
+                StopDialog();
+                StateManager.SetupDialog(new List<string>{answer}, DialogType.ALERT, false);
+            }
         }
     }
 }

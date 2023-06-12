@@ -15,7 +15,14 @@ public class PuzzleStartCollider : MonoBehaviour
     void Update()
     {
         if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) && StateManager.SelectedMinigame == MinigameType.NONE) {
-            StateManager.SelectedQuestionPuzzle = Config.GetRandomQuestionPuzzle();
+            if (LevelManager.GetCurrentLevel().level == LevelEnum.LEVEL_1)
+            {
+                StateManager.SelectedQuestionPuzzle = Config.GetPuzzleQuestions().Find(x => x.Difficulty == QuestionDifficulty.EASY);
+            }
+            else
+            {
+                StateManager.SelectedQuestionPuzzle = Config.GetRandomQuestionPuzzle();
+            }
 
             StateManager.SetupDialog(new List<string>{StateManager.SelectedQuestionPuzzle.code}, DialogType.PUZZLE, false);
         }

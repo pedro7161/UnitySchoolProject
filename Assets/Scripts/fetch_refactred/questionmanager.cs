@@ -1,6 +1,7 @@
 using System;
 using System.Collections;
 using System.Collections.Generic;
+using TMPro;
 using UnityEngine;
 
 public class questionmanager : MonoBehaviour
@@ -36,6 +37,19 @@ public class questionmanager : MonoBehaviour
                 Destroy(other);
             }
         }
+        if (CurrentQuest != null && CurrentQuest.AllItemsNeeded.TrueForAll(x => x.IsCompleted))
+        {
+            var canvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.QUEST);
+            if (canvas == null)
+            {
+                return;
+            }
+            var parent = canvas.Canvas?.gameObject?.transform?.Find("background");
+            if (parent != null)
+            {
+                parent.Find("QuestInformation").GetComponentInChildren<TextMeshProUGUI>().text = "Nice! Please interact with the terminal to complete the quest.";
+            }
+        }
         if (CurrentQuest != null && !QuestCanvasReadyWithItems)
         {
             currentQuestRowItems.Clear();
@@ -48,6 +62,7 @@ public class questionmanager : MonoBehaviour
 
             var parent = canvas.Canvas.gameObject.transform.Find("background");
             var row = parent?.Find("Row");
+            parent.Find("QuestInformation").GetComponentInChildren<TextMeshProUGUI>().text = "";
 
             if (row)
             {
@@ -67,9 +82,7 @@ public class questionmanager : MonoBehaviour
                     var itemText = itemRow.Find("name");
                     var itemAmount = itemRow.Find("quantity");
 
-                    itemText.GetComponent<TMPro.TextMeshProUGUI>().text = item.isMinigameQuest && item.MinigameName != MinigameType.NONE
-                        ? humanizeMinigameName(item.MinigameName)
-                        : item.ItemName;
+                    itemText.GetComponent<TMPro.TextMeshProUGUI>().text = item.ItemName;
                     itemAmount.GetComponent<TMPro.TextMeshProUGUI>().text = $"{item.CurrentAmount}/{item.AmountRequired}";
 
                     currentQuestRowItems.Add(itemRow.gameObject);
