@@ -111,7 +111,7 @@ public class TextMachine : MonoBehaviour
             }
         }
 
-        //shouldStartDialogProgrammatically = false;
+        shouldStartDialogProgrammatically = false;
         StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE, gameObject.transform.parent.gameObject.name);
         //UpdateGameObjectQuests();
         UpdateGameObjectQuests();

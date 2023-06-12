@@ -11,6 +11,7 @@ public enum DialogType
     PUZZLE,
     QUEST,
     TYPE_SCRIPTING_CHALLENGE,
+    MENU,
 }
 
 public enum MinigameType {

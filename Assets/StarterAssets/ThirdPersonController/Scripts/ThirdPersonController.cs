@@ -156,8 +156,9 @@ namespace StarterAssets
         {
             _hasAnimator = TryGetComponent(out _animator);
             var alertDialog = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.DIALOG);
+            var menu = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.MENU);
 
-            this._playerInput.enabled = alertDialog == null && StateManager.SelectedMinigame == MinigameType.NONE && (
+            this._playerInput.enabled = alertDialog == null && StateManager.SelectedMinigame == MinigameType.NONE && menu == null && (
                     (!StateManager.isDialogRunning) || (StateManager.isDialogRunning && questionmanager.CurrentQuest != null)
                 );
 

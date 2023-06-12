@@ -39,6 +39,11 @@ public class StateManager : MonoBehaviour
         StateManager.sentencesDialog.Clear();
         StateManager.sentencesDialog.AddRange(sentences);
 
+        if (StateManager.dialogCanvasData.Count <= 0)
+        {
+            return;
+        }
+
         var canvas = StateManager.dialogCanvasData.First(canvas => canvas.DialogType == dialogType);
         if (canvas != null && !StateManager.SelectedDialogCanvas.Contains(canvas))
         {

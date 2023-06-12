@@ -27,7 +27,10 @@ namespace StarterAssets
 			// );
 
 			// Should lock cursor except when selected minigame is puzzle or quest
-			if (StateManager.SelectedMinigame == MinigameType.PUZZLE || StateManager.SelectedMinigame == MinigameType.CODE_CHALLENGE)
+			if (
+				StateManager.SelectedMinigame == MinigameType.PUZZLE || StateManager.SelectedMinigame == MinigameType.CODE_CHALLENGE || 
+				StateManager.SelectedDialogCanvas.Find(x => x.DialogType == DialogType.MENU) != null
+			)
 			{
 				SetCursorState(false);
 			} else

@@ -8,22 +8,25 @@ public class Menu : MonoBehaviour
 
     private void Start()
     {
-        menu.enabled = false;
-        SetMouseVisibility(true);
     }
 
-    private void FixedUpdate()
+    private void Update()
     {
-        if (Input.GetKeyDown(KeyCode.Escape))
+        if (
+            Input.GetKeyDown(KeyCode.Escape) && StateManager.SelectedDialogCanvas.TrueForAll(x => x.DialogType == DialogType.MENU || x.DialogType == DialogType.QUEST)
+        )
         {
-            menu.enabled = !menu.enabled;
-            SetMouseVisibility(!menu.enabled);
+            var canvas = StateManager.SelectedDialogCanvas.Find(x => x.DialogType == DialogType.MENU);
+            if (canvas != null && canvas.Canvas.gameObject.activeSelf)
+            {
+                StateManager.chatCanvasShouldRender = false;
+                StateManager.OnStopDialog();
+            }
+            else
+            {
+                Debug.Log("Menu - setup menu dialog");
+                StateManager.SetupDialog(new List<string>(){""}, DialogType.MENU, false);
+            }
         }
-    }
-
-    private void SetMouseVisibility(bool isVisible)
-    {
-        Cursor.visible = isVisible;
-        Cursor.lockState = isVisible ? CursorLockMode.None : CursorLockMode.Locked;
     }
 }
