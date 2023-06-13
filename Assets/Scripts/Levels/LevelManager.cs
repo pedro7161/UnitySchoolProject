@@ -38,6 +38,7 @@ public class LevelManager : MonoBehaviour
     // Start is called before the first frame update
 
     public bool isCurrentLevelFinished = false;
+    public static bool shouldShowWelcomeMessage = true;
 
     public void DefineLevels()
     {
@@ -55,21 +56,23 @@ public class LevelManager : MonoBehaviour
         setLevel(LevelEnum.LEVEL_1);
         setAudioLevel(LevelEnum.LEVEL_1);
         change_skybox.Change_Skybox(2);
-
-        StartCoroutine(Config.Waiter(() => { }, () =>
-        {
-            var welcomeMachine = GameObject.Find("WelcomeMachine");
-            if (welcomeMachine == null)
-            {
-                return;
-            }
-            welcomeMachine.GetComponentInChildren<TextMachine>().StartDialog();
-        }, 1f));
     }
 
     // Update is called once per frame
     void Update()
     {  
+        if (shouldShowWelcomeMessage)
+        {
+            StartCoroutine(Config.Waiter(() => { }, () =>
+            {
+                var welcomeMachine = GameObject.Find("WelcomeMachine");
+                if (welcomeMachine == null)
+                {
+                    return;
+                }
+                welcomeMachine.GetComponentInChildren<TextMachine>().StartDialog();
+            }, 1f));
+        }
         Debug.Log("Current level" + currentLevel);
         updateLevelObjects();
         CheckLevelQuests();

@@ -220,6 +220,7 @@ namespace StarterAssets
 
             ConfigureExtraSteps();
             StateManager.SelectedDialogCanvas.ForEach(canvas => canvas.Canvas.gameObject.SetActive(true));
+            LevelManager.shouldShowWelcomeMessage = false;
             StateManager.OnStartDialog();
             currentIndex = 0;
 

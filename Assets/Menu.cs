@@ -13,7 +13,7 @@ public class Menu : MonoBehaviour
     private void Update()
     {
         if (
-            Input.GetKeyDown(KeyCode.Escape) && StateManager.SelectedDialogCanvas.TrueForAll(x => x.DialogType == DialogType.MENU || x.DialogType == DialogType.QUEST)
+            Input.GetKeyDown(KeyCode.Escape) && StateManager.SelectedDialogCanvas.TrueForAll(x => x.DialogType == DialogType.MENU || x.DialogType == DialogType.QUEST) && !LevelManager.shouldShowWelcomeMessage
         )
         {
             var canvas = StateManager.SelectedDialogCanvas.Find(x => x.DialogType == DialogType.MENU);

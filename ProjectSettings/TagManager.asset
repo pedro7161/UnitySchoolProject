@@ -10,6 +10,7 @@ TagManager:
   - Zone
   - Environment
   - QuestRowItem
+  - Button
   layers:
   - Default
   - TransparentFX
