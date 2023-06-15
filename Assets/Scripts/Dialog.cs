@@ -102,7 +102,12 @@ namespace StarterAssets
                         break;
                     case DialogType.ALERT:
                         // On dialog mode, we should only one sentence
-                        canvas.OutputSentences.text = StateManager.sentencesDialog[0];
+                        var sentence = StateManager.sentencesDialog[0];
+                    canvas.OutputSentences.text = sentence == "Correct" ?
+                            questionmanager.CurrentQuest != null 
+                                ? "<b>Minigame completed!</b>\n<size=75%>Please check your quest status</size>" 
+                                : "<b>Minigame completed!</b>"
+                            : sentence;
                         var anwser = string.Empty;
                         var isCorrectBool = false;
 
@@ -172,8 +177,8 @@ namespace StarterAssets
 
                         canvas.Canvas.GetComponentInChildren<Image>().color =
                                 anwser == "Correct" || isCorrectBool ?
-                                    new Color(103f / 255f, 149f / 255f, 107f / 255f, 100f / 255f) :
-                                    new Color(178f / 255f, 123f / 255f, 110f / 255f, 100f / 255f);
+                                    new Color(103f / 255f, 149f / 255f, 107f / 255f, 200f / 255f) :
+                                    new Color(178f / 255f, 123f / 255f, 110f / 255f, 200f / 255f);
 
                         // Alert dialog should close automatically
                         StartCoroutine(Config.Waiter(() => {}, () => {

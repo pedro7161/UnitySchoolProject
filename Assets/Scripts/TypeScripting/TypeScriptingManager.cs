@@ -143,7 +143,9 @@ public class TypeScriptingManager : MonoBehaviour
             StateManager.chatCanvasShouldRender = false;
             StateManager.OnStopDialog();
             StateManager.LastResultFromTypingscript = true;
-            StateManager.SetupDialog(new List<string>(){"Quest completed!"}, DialogType.ALERT, false);
+            
+            // get levelmanager instance
+            StateManager.SetupDialog(new List<string>(){"Correct"}, DialogType.ALERT, false);
         }
         sentenceFinished = false;
     }

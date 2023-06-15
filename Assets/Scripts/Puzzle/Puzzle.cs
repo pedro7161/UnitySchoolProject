@@ -9,8 +9,8 @@ public class Puzzle : MonoBehaviour
     public List<GameObject> PuzzlePieces;
     public static GameObject currentPiece;
 
-    private static Vector3[] PuzzlePiecesOriginalPosition;
-    private static List<GameObject> _PuzzlePieces = new List<GameObject>();
+    private Vector3[] PuzzlePiecesOriginalPosition;
+    private List<GameObject> _PuzzlePieces = new List<GameObject>();
 
     public bool invertDirections = false;
     public float speed = 0.5f;
@@ -122,7 +122,7 @@ public class Puzzle : MonoBehaviour
         }
     }
 
-    public static void resetElement(GameObject gameObject)
+    public void resetElement(GameObject gameObject)
     {
         var index = _PuzzlePieces.IndexOf(gameObject);
         gameObject.transform.position = PuzzlePiecesOriginalPosition[index];

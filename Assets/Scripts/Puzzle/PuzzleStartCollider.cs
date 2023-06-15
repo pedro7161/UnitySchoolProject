@@ -14,7 +14,10 @@ public class PuzzleStartCollider : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
-        if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) && StateManager.SelectedMinigame == MinigameType.NONE) {
+        if (
+            PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) && StateManager.SelectedMinigame == MinigameType.NONE &&
+            (StateManager.SelectedDialogCanvas.Count == 0 || StateManager.SelectedDialogCanvas.Count == 1 && StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.QUEST) != null)	
+        ) {
             if (LevelManager.GetCurrentLevel().level == LevelEnum.LEVEL_1)
             {
                 StateManager.SelectedQuestionPuzzle = Config.GetPuzzleQuestions().Find(x => x.Difficulty == QuestionDifficulty.EASY);

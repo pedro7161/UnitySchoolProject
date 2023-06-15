@@ -2,6 +2,8 @@ using System.Collections;
 using System.Collections.Generic;
 using UnityEngine;
 using System;
+using System.Linq;
+
 [Serializable]
 
 public class QuestStructure
@@ -37,8 +39,15 @@ public class quest : MonoBehaviour
 
     public bool shouldStartQuestProgramatically = false;
 
+    public static bool playerCanInteract = false;
+
     private void Start()
     {
+        StartCoroutine(Config.Waiter(() => {
+            playerCanInteract = false;
+        }, () => {
+            playerCanInteract = true;
+        }, 1f));
         if (AllItemsNeeded != null)
         {
             questionmanager.AllItemsNeeded = AllItemsNeeded;
@@ -48,9 +57,9 @@ public class quest : MonoBehaviour
     public void StartQuest()
     {
         shouldStartQuestProgramatically = false;
+        questionmanager.shouldPlayQuestCompleteSound = true;
         questionmanager.MissionStart(this);
         StateManager.SetupDialog(new List<string>(), DialogType.QUEST, false);
-        Debug.Log("test - Setting up quest dialog");
     }
 
     private void Update()
@@ -59,10 +68,16 @@ public class quest : MonoBehaviour
         {
             return;
         }
-
-        if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) || shouldStartQuestProgramatically)
+        Debug.Log("test " + questionmanager.CurrentQuest + " " + AllMissionsCompleted + " " + playerCanInteract);
+        if (PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) && playerCanInteract || shouldStartQuestProgramatically)
         {
-            if (questionmanager.CurrentQuest == null && !AllMissionsCompleted)
+            StartCoroutine(Config.Waiter(() => {
+                playerCanInteract = false;
+            }, () => {
+                playerCanInteract = true;
+            }, 1f));
+
+            if ((questionmanager.CurrentQuest == null) && !AllMissionsCompleted)
             {
                 LevelManager.StartQuestLevel();
             }
@@ -87,6 +102,8 @@ public class quest : MonoBehaviour
                     Debug.Log("test - All Items completed");
                     AllMissionsCompleted = true;
                     questionmanager.MissionEnd();
+                    questionmanager.CurrentQuest = null;
+                    StateManager.OnStopDialog();
                 }
 
             }
@@ -96,6 +113,20 @@ public class quest : MonoBehaviour
             }
             else if (questionmanager.CurrentQuest != null && questionmanager.CurrentQuest.Isfinished)
             {
+                var levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+                var quests = levelManager.levels.Find(x => x.level == LevelManager.GetCurrentLevel().level).questsGameObject;
+
+                var allQuestionsAreCompleted = true;
+                var questsStructure = Resources.FindObjectsOfTypeAll<quest>().ToList().Where(x => quests.Contains(x.gameObject.name));
+                foreach (quest quest in questsStructure)
+                {
+                    allQuestionsAreCompleted = allQuestionsAreCompleted && quest.Isfinished;
+                }
+
+                if (allQuestionsAreCompleted)
+                {
+                    StateManager.OnStopDialog();
+                }
             }
             else
             {

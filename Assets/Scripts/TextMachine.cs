@@ -15,11 +15,12 @@ public class TextMachine : MonoBehaviour
     void Update()
     {
         if (
-            (enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) && 
+            (enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) &&
             (!StateManager.isDialogRunning || questionmanager.CurrentQuest != null) && 
             StateManager.SelectedMinigame == MinigameType.NONE &&
             StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == ActionCanvasType) == null)
         {
+
             if (ShouldConfigureCanvas())
             {
                 ConfigureCanvas();
@@ -29,7 +30,10 @@ public class TextMachine : MonoBehaviour
 
     public void StartDialog()
     {
-        ConfigureCanvas();
+        if (StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.DIALOG) == null)
+        {
+            ConfigureCanvas();
+        }
     }
 
     public bool ShouldConfigureCanvas()
@@ -74,14 +78,18 @@ public class TextMachine : MonoBehaviour
             {
                 case "StartQuestMachine_Dialog":
                     var levelInstance = GameObject.Find("LevelManager").GetComponent<LevelManager>();
-                    var levelStructure = levelInstance.levels.Find(x => x.level == LevelEnum.LEVEL_1);
+                    var levelStructure = LevelManager.GetCurrentLevel();
 
                     if (levelStructure != null)
                     {
                         if (levelStructure.isFinished)
                         {   
                             sentences.Clear();
-                            sentences.Add("Congratulations, you completed all questions of level 1. The maze door is been unlocked. Go check outside for level two :)");
+                            // normalize LEVEL_1 to Level 1
+                            var levelName = levelStructure.level.ToString().Replace("_", " ").ToLower();
+
+                            sentences.Add($"Congratulations, you completed all questions of {levelName}. The maze door is been unlocked. Go check outside for level two :)");
+                            questionmanager.CurrentQuest = null;
                         }
                         switch (levelStructure.currentQuest)
                         {
@@ -104,6 +112,7 @@ public class TextMachine : MonoBehaviour
                                             "When you complete the quest, please interact with the terminal to complete the mission!"
                                         }
                                 );
+                                questionmanager.CurrentQuest = null;
                                 break;
                         }
                     }
@@ -112,6 +121,7 @@ public class TextMachine : MonoBehaviour
         }
 
         shouldStartDialogProgrammatically = false;
+        Debug.Log("Setting up dialog with action canvas type: " + ActionCanvasType);
         StateManager.SetupDialog(sentences, ActionCanvasType, ActionCanvasType != DialogType.CODE_CHALLENGE, gameObject.transform.parent.gameObject.name);
         //UpdateGameObjectQuests();
         UpdateGameObjectQuests();
@@ -150,6 +160,25 @@ public class TextMachine : MonoBehaviour
                             if (
                                 currentLevel.currentQuest == "StartQuestMachine_Quest1" && 
                                 (this.gameObject.transform.parent.name == "StartQuestMachine_Dialog" && enteredCollider) // this quest object appers if player interact for the first time with the machine
+                            )
+                            {
+                                gameObject.SetActive(true);
+                            }
+                            break;
+                    }
+                }
+                break;
+            case LevelEnum.LEVEL_2:
+                foreach(var resource in allQuestsInMap)
+                {
+                    var gameObject = resource.gameObject;
+                    
+                    switch (gameObject.name)
+                    {
+                        case "QuestMachine_Quest3":
+                            if (
+                                currentLevel.currentQuest == "QuestMachine_Quest3" && 
+                                (this.gameObject.transform.parent.name == "OpenWorldStartMachine" && enteredCollider) // this quest object appers if player interact for the first time with the machine
                             )
                             {
                                 gameObject.SetActive(true);

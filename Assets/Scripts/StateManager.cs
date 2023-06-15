@@ -74,11 +74,13 @@ public class StateManager : MonoBehaviour
         // remove all active dialog canvas from selected dialog canvas
         StateManager.SelectedDialogCanvas.ForEach(canvas => {
             if (
-                (canvas.DialogType == DialogType.QUEST && !questionmanager.CurrentQuest.Isfinished) || 
+                (canvas.DialogType == DialogType.QUEST && questionmanager.CurrentQuest && !questionmanager.CurrentQuest.Isfinished) && 
+                (canvas.DialogType == DialogType.QUEST && !LevelManager.GetCurrentLevel().isFinished) || 
                 (canvas.DialogType != DialogType.QUEST && Enum.IsDefined(typeof(MinigameType), canvas.DialogType.ToString()) && canvas.Canvas.gameObject.activeSelf))
             {
                 return;
             }
+            Debug.Log("Removing canvas: " + canvas.DialogType.ToString() + " from selected dialog canvas");
             canvasToBeRemoved.Add(canvas);
         });
 
@@ -92,5 +94,7 @@ public class StateManager : MonoBehaviour
         StateManager.SelectedQuestion = null;
         StateManager.SelectedQuestionPuzzle = null;
         StateManager.CurrentPuzzleAnswers = new Dictionary<string, string>();
+
+        
     }
 }

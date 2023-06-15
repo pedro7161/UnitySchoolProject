@@ -21,6 +21,8 @@ public class questionmanager : MonoBehaviour
     private static List<GameObject> currentQuestRowItems = new List<GameObject>();
     public static bool shouldStartQuestAutomatically = false;
 
+    public static bool shouldPlayQuestCompleteSound = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -48,6 +50,16 @@ public class questionmanager : MonoBehaviour
             if (parent != null)
             {
                 parent.Find("QuestInformation").GetComponentInChildren<TextMeshProUGUI>().text = "Nice! Please interact with the terminal to complete the quest.";
+                if (shouldPlayQuestCompleteSound)
+                {
+                    StartCoroutine(
+                        Config.Waiter(null, () => {
+                            var levelManagerInstance = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+                            levelManagerInstance.soundEffects.Find(sound => sound.soundEffect == SoundEffectEnum.QUEST_COMPLETE).audioSource.Play();
+                            shouldPlayQuestCompleteSound = false;
+                        }, 0.25f)
+                    );
+                }
             }
         }
         if (CurrentQuest != null && !QuestCanvasReadyWithItems)
@@ -100,6 +112,8 @@ public class questionmanager : MonoBehaviour
         {
             int currentAmount = questItem.CurrentAmount;
             int amountRequired = questItem.AmountRequired;
+            var levelManagerInstance = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+            levelManagerInstance.soundEffects.Find(sound => sound.soundEffect == SoundEffectEnum.ITEM_COLLECT).audioSource.Play();
 
             if (currentAmount < amountRequired)
             {

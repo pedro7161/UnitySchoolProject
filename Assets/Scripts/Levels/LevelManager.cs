@@ -11,7 +11,7 @@ public enum LevelEnum
     LEVEL_1,
     LEVEL_2,
     LEVEL_3,
-    MENU
+    MENU,
 }
 
 [Serializable]
@@ -29,15 +29,30 @@ public class Level
     public bool isFinished = false;
 }
 
+public enum SoundEffectEnum
+{
+    ITEM_COLLECT,
+    QUEST_COMPLETE
+}
+
+[Serializable]
+public class SoundEffect
+{
+    public SoundEffectEnum soundEffect;
+    public AudioSource audioSource;
+}
+
 public class LevelManager : MonoBehaviour
 {
     public static LevelEnum currentLevel = LevelEnum.NONE;
     public List<AudioLevel> audioLevels = new List<AudioLevel>();
+    public List<SoundEffect> soundEffects = new List<SoundEffect>();
 
     public List<Level> levels = new List<Level>();
     // Start is called before the first frame update
 
-    public bool isCurrentLevelFinished = false;
+    public static bool isCurrentLevelFinished = false;
+    public static bool isAnyQuestRunning = false;
     public static bool shouldShowWelcomeMessage = true;
 
     public void DefineLevels()
@@ -47,15 +62,20 @@ public class LevelManager : MonoBehaviour
         level1.level = LevelEnum.LEVEL_1;
         level1.questsGameObject.AddRange(new string[] { "StartQuestMachine_Quest1", "StartQuestMachine_Quest2" });
         level1.currentQuest = "StartQuestMachine_Quest1";
+
         levels.Add(level1);
+
+        var level2 = new Level();
+        level2.level = LevelEnum.LEVEL_2;
+        level2.questsGameObject.AddRange(new string[] { "QuestMachine_Quest3", "QuestMachine_Quest4" });
+        level2.currentQuest = "QuestMachine_Quest3";
+        levels.Add(level2);
     }
     void Start()
     {
         DefineLevels();
         
         setLevel(LevelEnum.LEVEL_1);
-        setAudioLevel(LevelEnum.LEVEL_1);
-        change_skybox.Change_Skybox(2);
     }
 
     // Update is called once per frame
@@ -73,14 +93,28 @@ public class LevelManager : MonoBehaviour
                 welcomeMachine.GetComponentInChildren<TextMachine>().StartDialog();
             }, 1f));
         }
-        Debug.Log("Current level" + currentLevel);
+        Debug.Log("Current level = " + currentLevel);
         updateLevelObjects();
         CheckLevelQuests();
     }
 
     public static void setLevel(LevelEnum level, bool withoutAudioChange = false)
     {
+        switch(level)
+        {
+            case LevelEnum.LEVEL_1:
+                setAudioLevel(LevelEnum.LEVEL_1);
+                change_skybox.Change_Skybox(2);
+                break;
+            case LevelEnum.LEVEL_2:
+                setAudioLevel(LevelEnum.LEVEL_2);
+                change_skybox.Change_Skybox(0);
+                break;
+            
+        }
+        Debug.Log("Setting level to " + level);
         currentLevel = level;
+        isCurrentLevelFinished = false;
     }
 
     public static Level GetCurrentLevel()
@@ -147,20 +181,11 @@ public class LevelManager : MonoBehaviour
     public static void StartQuestLevel()
     {
         var levelStructure = GetCurrentLevel(); 
-        switch (levelStructure.level)
+        var questToStart = levelStructure.currentQuest;
+        var questGameObject = GameObject.Find(questToStart)?.GetComponent<quest>();
+        if (questGameObject != null)
         {
-            case LevelEnum.LEVEL_1:
-                // start mission on Gameobject with quest script
-                
-                // get level
-                var questToStart = levelStructure.currentQuest;
-                var questGameObject = GameObject.Find(questToStart)?.GetComponent<quest>();
-                if (questGameObject != null)
-                {
-                    questGameObject.StartQuest();
-                }
-        
-                break;
+            questGameObject.StartQuest();
         }
     }
 
@@ -173,18 +198,13 @@ public class LevelManager : MonoBehaviour
 
         var currentLevelStructure = GetCurrentLevel();
         // check if all quests from current level are completed
-        var allQuestionsAreCompletedFromCurrentLevel = false;
+        var allQuestionsAreCompletedFromCurrentLevel = true;
 
-        if (currentLevelStructure != null)
+        var questsStructure = Resources.FindObjectsOfTypeAll<quest>().ToList().Where(x => currentLevelStructure.questsGameObject.Contains(x.gameObject.name));
+        foreach (quest quest in questsStructure)
         {
-            allQuestionsAreCompletedFromCurrentLevel = currentLevelStructure.questsGameObject.TrueForAll(questGameObject =>
-            {
-                var quest = GameObject.Find(questGameObject)?.GetComponent<quest>();
-                return quest != null && quest.Isfinished;
-            });
+            allQuestionsAreCompletedFromCurrentLevel = allQuestionsAreCompletedFromCurrentLevel && quest.Isfinished;
         }
-
-        Debug.Log("test - " + allQuestionsAreCompletedFromCurrentLevel + " - " + levels.Find(level => level.level == currentLevel).questsGameObject.Count);
 
         if (!allQuestionsAreCompletedFromCurrentLevel)
         {
@@ -211,8 +231,10 @@ public class LevelManager : MonoBehaviour
                         currentLevel.currentQuest = allQuestsInLevel[currentQuestIndex + 1];
 
                         // Update quest level object
-                        foreach (var quest in Resources.FindObjectsOfTypeAll<quest>())
+                        var questsFilteredByCurrentLevel = Resources.FindObjectsOfTypeAll<quest>().ToList().Where(x => currentLevel.questsGameObject.Contains(x.gameObject.name));
+                        foreach (var quest in questsFilteredByCurrentLevel)
                         {
+                            var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
                             var gameObject = quest.gameObject;
                             switch (gameObject.name)
                             {
@@ -220,33 +242,50 @@ public class LevelManager : MonoBehaviour
                                     GameObject.Find("StartQuestMachine_Quest1")?.SetActive(false);
                                     gameObject?.SetActive(true);
                                     
-                                    var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
                                     globalDialogMachine.machineSentences = new string[] { 
                                         "Congratulations, you completed the first quest! :)",
                                         "Now, let's start the second quest. You must learn how to play the minigames",
                                         "To learn more about the quest, please interact with the ATM on your left :)",
                                     };
-                                    globalDialogMachine.shouldStartDialogProgrammatically = true;  
+                                    globalDialogMachine.shouldStartDialogProgrammatically = true;
                                 break;
+                                case "QuestMachine_Quest4":
+                                    GameObject.Find("QuestMachine_Quest3")?.SetActive(false);
+                                    gameObject?.SetActive(true);
+                                    
+                                    globalDialogMachine.machineSentences = new string[] { 
+                                        "Congratulations, you completed another quest! :)",
+                                        "To start another quest, please interact again with the terminal :)",
+                                    };
+                                    globalDialogMachine.shouldStartDialogProgrammatically = true;
+                                    questionmanager.CurrentQuest = null;
+                                break;
+
                             }
                         }
                     }
                 }
             }
         }
+
+        Debug.Log("allQuestionsAreCompletedFromCurrentLevel = " + allQuestionsAreCompletedFromCurrentLevel + " isCurrentLevelFinished = " + isCurrentLevelFinished + " StateManager.SelectedDialogCanvas.Count = " + StateManager.SelectedDialogCanvas.Count);
         
-        if (allQuestionsAreCompletedFromCurrentLevel && !isCurrentLevelFinished)
+        if (allQuestionsAreCompletedFromCurrentLevel && !isCurrentLevelFinished && StateManager.SelectedDialogCanvas.Count == 0)
         {
+            var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
+            Debug.Log("test - should finish the current level");
             switch (currentLevel)
             {
                 case LevelEnum.LEVEL_1:
-                    var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
                     globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 1. The maze door is been unlocked. Go check outside for level two :)" };
                     globalDialogMachine.shouldStartDialogProgrammatically = true;
                     isCurrentLevelFinished = true;
+                    questionmanager.CurrentQuest = null;
                     break;
                 case LevelEnum.LEVEL_2:
-                    setLevel(LevelEnum.LEVEL_3);
+                    globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 2. You may want to go forward to go to the level 3. It's a sunset environment :)" };
+                    globalDialogMachine.StartDialog();
+                    isCurrentLevelFinished = true;
                     break;
             }
 
