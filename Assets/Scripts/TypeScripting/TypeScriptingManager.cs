@@ -3,43 +3,31 @@ using System.Collections.Generic;
 using UnityEngine;
 using TMPro;
 
-public class TypeScriptChars {
-    public char character;
-    public int index;
-    public bool isTyped;
-}
-public class TypeScriptingStructure
-{
-    public int id = 0;
-    public string text;
-    public int currentIndex = 0;
-    public List<TypeScriptChars> characters = new List<TypeScriptChars>();
-}
-
 public class TypeScriptingManager : MonoBehaviour
 {
-    public static List<TypeScriptingStructure> SelectedTypeScriptingSentences = new List<TypeScriptingStructure>();
+    private List<TypeScriptingStructure> SelectedTypeScriptingSentences = new List<TypeScriptingStructure>();
     public bool minigameStarted = false;
     public bool minigameShouldStart = false;
     public bool sentenceFinished = false;
     public int currentSentenceIndex = 0;
 
-    public readonly float secondsRemaing = 120;
+    public float secondsRemaing = 120;
     public float currentSecondsRemaing = 0;
 
     public Coroutine timerCoroutine = null;
     public Coroutine startCoroutine = null;
 
     public List<GameObject> RowItems = new List<GameObject>();
-    public List<string> words = new List<string>();
-
+    public List<string> words;
     void Update()
     {
+        if (TextMachine.textMachineToExecute != this.gameObject.name)
+        {
+            return;
+        }
         var typeScritingCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.TYPE_SCRIPTING_CHALLENGE);
         var alertCanvas = StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.ALERT);
-        if (
-            alertCanvas == null &&
-            typeScritingCanvas == null)
+        if (alertCanvas == null && typeScritingCanvas == null)
         {
             minigameShouldStart = false;
             minigameStarted = false;

@@ -7,9 +7,11 @@ public class TextMachine : MonoBehaviour
 {
     public Canvas canvas = null;
     public DialogType ActionCanvasType;
-    private bool enteredCollider = false;
+    public bool enteredCollider = false;
     public string[] machineSentences;
     // Start is called before the first frame update
+
+    public static string textMachineToExecute = string.Empty;
 
     public bool shouldStartDialogProgrammatically = false;
     void Update()
@@ -130,11 +132,13 @@ public class TextMachine : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         enteredCollider = true;
+        textMachineToExecute = this.gameObject.transform.parent.gameObject.name;
     }
 
     void OnTriggerExit(Collider other)
     {
         enteredCollider = false;
+        textMachineToExecute = string.Empty;
         if (StateManager.isDialogRunning || StateManager.SelectedMinigame != MinigameType.NONE)
         {
             return;

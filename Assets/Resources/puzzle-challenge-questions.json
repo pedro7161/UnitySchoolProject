@@ -11,12 +11,42 @@
       "Difficulty": 0
     },
     {
-      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nint position = 0;\n\nint spherePosition = 1;\nint capsulePosition = 2;\nint cubePosition = 3;\nint cylinderPosition = 4;\n\nfor (int i = 1; i <= 4; i++) {\n  if (i == 1) {\n    spherePosition = (position++ % 4) + 1;\n  } else if (i == 2) {\n    capsulePosition = (position++ % 4) + 1;\n  } else if (i == 3) {\n    cubePosition = (position++ % 4) + 1;\n  } else if (i == 4) {\n    cylinderPosition = (position++ % 4) + 1;\n  }\n}\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nposition = 0\n\ncubePosition = 0\nspherePosition = 0\ncapsulePosition = 0\ncylinderPosition = 0\n\nfor i in range(1, 5):\n    if i == 1:\n        cubePosition = (position % 4) + 1\n        position += 1\n    elif i == 2:\n        spherePosition = (position % 4) + 1\n        position += 1\n    elif i == 3:\n        capsulePosition = (position % 4) + 1\n        position += 1\n    elif i == 4:\n        cylinderPosition = (position % 4) + 1\n        position += 1\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "PuzzleQuestionsOrder": {
+        "cube": "1",
+        "sphere": "2",
+        "capsule": "3",
+        "cylinder": "4"
+      },
+      "Difficulty": 1
+    },
+    {
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nposition = 0\n\ncubePosition = 0\nspherePosition = 0\ncapsulePosition = 0\ncylinderPosition = 0\n\nfor i in range(1, 5):\n    if i == 1:\n        spherePosition = (position % 4) + 1\n        position += 1\n    elif i == 2:\n        cubePosition = (position % 4) + 1\n        position += 1\n    elif i == 3:\n        cylinderPosition = (position % 4) + 1\n        position += 1\n    elif i == 4:\n        capsulePosition = (position % 4) + 1\n        position += 1\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
       "PuzzleQuestionsOrder": {
         "sphere": "1",
+        "cube": "2",
+        "cylinder": "3",
+        "capsule": "4"
+      },
+      "Difficulty": 1
+    },
+    {
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nposition = 0\n\ncubePosition = 0\nspherePosition = 0\ncapsulePosition = 0\ncylinderPosition = 0\n\nfor i in range(1, 5):\n    if i == 1:\n        capsulePosition = (position % 4) + 1\n        position += 1\n    elif i == 2:\n        cylinderPosition = (position % 4) + 1\n        position += 1\n    elif i == 3:\n        spherePosition = (position % 4) + 1\n        position += 1\n    elif i == 4:\n        cubePosition = (position % 4) + 1\n        position += 1\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "PuzzleQuestionsOrder": {
+        "capsule": "1",
+        "cylinder": "2",
+        "sphere": "3",
+        "cube": "4"
+      },
+      "Difficulty": 1
+    },
+    {
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nposition = 0\n\ncubePosition = 0\nspherePosition = 0\ncapsulePosition = 0\ncylinderPosition = 0\n\nfor i in range(1, 5):\n    if i == 1:\n        cylinderPosition = (position % 4) + 1\n        position += 1\n    elif i == 2:\n        capsulePosition = (position % 4) + 1\n        position += 1\n    elif i == 3:\n        spherePosition = (position % 4) + 1\n        position += 1\n    elif i == 4:\n        cubePosition = (position % 4) + 1\n        position += 1\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "PuzzleQuestionsOrder": {
         "capsule": "2",
-        "cube": "3",
-        "cylinder": "4"
+        "cylinder": "1",
+        "sphere": "3",
+        "cube": "4"
       },
       "Difficulty": 1
     }

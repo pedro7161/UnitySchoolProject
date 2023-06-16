@@ -70,6 +70,19 @@ public class TypescriptingData {
     public List<string> Words;
 }
 
+public class TypeScriptChars {
+    public char character;
+    public int index;
+    public bool isTyped;
+}
+public class TypeScriptingStructure
+{
+    public int id = 0;
+    public string text;
+    public int currentIndex = 0;
+    public List<TypeScriptChars> characters = new List<TypeScriptChars>();
+}
+
 
 public static class Config
 {

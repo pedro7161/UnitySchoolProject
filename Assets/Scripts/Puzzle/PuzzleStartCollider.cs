@@ -18,14 +18,22 @@ public class PuzzleStartCollider : MonoBehaviour
             PlayerEnteredOnCollider && Input.GetKey(KeyCode.R) && StateManager.SelectedMinigame == MinigameType.NONE &&
             (StateManager.SelectedDialogCanvas.Count == 0 || StateManager.SelectedDialogCanvas.Count == 1 && StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == DialogType.QUEST) != null)	
         ) {
-            if (LevelManager.GetCurrentLevel().level == LevelEnum.LEVEL_1)
+            List<QuestionPuzzle> questions = new List<QuestionPuzzle>();
+
+            switch (LevelManager.GetCurrentLevel().level)
             {
-                StateManager.SelectedQuestionPuzzle = Config.GetPuzzleQuestions().Find(x => x.Difficulty == QuestionDifficulty.EASY);
+                case LevelEnum.LEVEL_1:
+                    questions.AddRange(Config.GetPuzzleQuestions().FindAll(x => x.Difficulty == QuestionDifficulty.EASY));
+                    break;
+                case LevelEnum.LEVEL_2:
+                    questions.AddRange(Config.GetPuzzleQuestions().FindAll(x => x.Difficulty == QuestionDifficulty.MEDIUM));
+                    break;
             }
+
+            if (questions.Count > 0)
+                StateManager.SelectedQuestionPuzzle = questions[Random.Range(0, questions.Count)];
             else
-            {
                 StateManager.SelectedQuestionPuzzle = Config.GetRandomQuestionPuzzle();
-            }
 
             StateManager.SetupDialog(new List<string>{StateManager.SelectedQuestionPuzzle.code}, DialogType.PUZZLE, false);
         }
