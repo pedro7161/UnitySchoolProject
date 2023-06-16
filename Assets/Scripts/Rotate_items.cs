@@ -5,6 +5,9 @@ using UnityEngine;
 public class Rotate_items : MonoBehaviour
 {
     private float initialPosition = 0;
+
+    public bool withRotating = true;
+
     // Start is called before the first frame update
     void Start()
     {
@@ -14,7 +17,10 @@ public class Rotate_items : MonoBehaviour
     // Update is called once per frame
       void Update ()
     {
-        transform.Rotate (0,50 * Time.deltaTime, 0); //rotates 50 degrees per second around z axis
+        if (withRotating)
+        {
+          transform.Rotate (0,50 * Time.deltaTime, 0); //rotates 50 degrees per second around z axis
+        }
 
         // generate a small sine wave from initialPosition
         var sineWave = Mathf.Sin(Time.time * 2) * 0.2f;
