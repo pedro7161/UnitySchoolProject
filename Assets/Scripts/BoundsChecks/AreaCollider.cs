@@ -24,13 +24,14 @@ public class AreaCollider : MonoBehaviour
     {
 
     }
-    private void UpdateEnvironment()
+    private void  UpdateEnvironment()
     {
         var gameObjectName = this.gameObject.name;
+        var currentLevel = LevelManager.GetCurrentLevel().level;
         switch (gameObjectName)
         {
             case "Zone1":
-                if (LevelManager.GetCurrentLevel().level != LevelEnum.LEVEL_1)
+                if (currentLevel != LevelEnum.LEVEL_1)
                 {
                     return;
                 }
@@ -38,8 +39,11 @@ public class AreaCollider : MonoBehaviour
                 change_skybox.Change_Skybox(2);
                 break;
             case "Zone2":
+                if (currentLevel != LevelEnum.LEVEL_1)
+                {
                 LevelManager.setAudioLevel(LevelEnum.LEVEL_2);
-                change_skybox.Change_Skybox(0);
+                    change_skybox.Change_Skybox(0);
+                }
                 break;
             case "Zone3":
                 LevelManager.setAudioLevel(LevelEnum.LEVEL_3);
@@ -136,14 +140,10 @@ public class AreaCollider : MonoBehaviour
 
     private void OnTriggerEnter(Collider other)
     {
+        var levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
         if (other.gameObject.tag == "Player" && gameObject.tag == "Environment")
         {
-            if (zoneName != gameObject.name)
-            {
-                zoneName = gameObject.name;
-                UpdateEnvironment();
-                //warningCanvas.enabled = true;
-            }
+            UpdateEnvironment();
         }
         
         if (other.gameObject.tag == "Player" && gameObject.tag == "Zone")

@@ -307,12 +307,14 @@ public class LevelManager : MonoBehaviour
                     globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 2. You may want to go forward to go to the level 3. It's a sunset environment :)", "Please cross the whole street and interact with the orange machine to start the last level" };
                     globalDialogMachine.StartDialog();
                     isCurrentLevelFinished = true;
+                    questionmanager.CurrentQuest = null;
                     break;
                 case LevelEnum.LEVEL_3:
                     globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 3.", "Thank you for playing our game :) You are now free to explore to your hearts desire the entire map." };
                     globalDialogMachine.StartDialog();
                     isCurrentLevelFinished = true;
                     GameObject.Find("door_to_level_2").GetComponent<DoorController>().isLocked = false;
+                    questionmanager.CurrentQuest = null;
                     break;
             }
 
