@@ -47,7 +47,7 @@ public class quest : MonoBehaviour
             playerCanInteract = false;
         }, () => {
             playerCanInteract = true;
-        }, 1f));
+        }, 1.5f));
         if (AllItemsNeeded != null)
         {
             questionmanager.AllItemsNeeded = AllItemsNeeded;
@@ -75,7 +75,7 @@ public class quest : MonoBehaviour
                 playerCanInteract = false;
             }, () => {
                 playerCanInteract = true;
-            }, 1f));
+            }, 1.5f));
 
             if ((questionmanager.CurrentQuest == null) && !AllMissionsCompleted)
             {

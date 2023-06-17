@@ -22,14 +22,22 @@ public class PuzzleStartCollider : MonoBehaviour
         ) {
             List<QuestionPuzzle> questions = new List<QuestionPuzzle>();
 
-            switch (LevelManager.GetCurrentLevel().level)
+            // check if all levels are completed
+            var levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+            if (levelManager.levels.Find(level => !level.isFinished) != null)
             {
-                case LevelEnum.LEVEL_1:
-                    questions.AddRange(Config.GetPuzzleQuestions().FindAll(x => x.Difficulty == QuestionDifficulty.EASY));
-                    break;
-                case LevelEnum.LEVEL_2:
-                    questions.AddRange(Config.GetPuzzleQuestions().FindAll(x => x.Difficulty == QuestionDifficulty.MEDIUM));
-                    break;
+                switch (LevelManager.GetCurrentLevel().level)
+                {
+                    case LevelEnum.LEVEL_1:
+                        questions.AddRange(Config.GetPuzzleQuestions().FindAll(x => x.Difficulty == QuestionDifficulty.EASY));
+                        break;
+                    case LevelEnum.LEVEL_2:
+                        questions.AddRange(Config.GetPuzzleQuestions().FindAll(x => x.Difficulty == QuestionDifficulty.MEDIUM));
+                        break;
+                    case LevelEnum.LEVEL_3:
+                        questions.AddRange(Config.GetPuzzleQuestions().FindAll(x => x.Difficulty == QuestionDifficulty.HARD));
+                        break;
+                }
             }
 
             if (questions.Count > 0)

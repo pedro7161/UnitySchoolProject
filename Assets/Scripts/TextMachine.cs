@@ -60,17 +60,34 @@ public class TextMachine : MonoBehaviour
         List<string> sentences = new List<string>();
         if (ActionCanvasType == DialogType.CODE_CHALLENGE)
         {
-            Question question;
-            if (LevelManager.GetCurrentLevel().level == LevelEnum.LEVEL_1)
+            Question question = null;
+            var levelManager = GameObject.Find("LevelManager").GetComponent<LevelManager>();
+            var currentLevel = LevelManager.GetCurrentLevel().level;
+            if (levelManager.levels.Find(level => !level.isFinished) != null)
             {
-                question = Config.GetQuestions().Find(x => x.difficulty == QuestionDifficulty.EASY);
+                switch (currentLevel)
+                {
+                    case LevelEnum.LEVEL_1:
+                        question = Config.GetRandomQuestion(QuestionDifficulty.EASY);
+                        break;
+                    case LevelEnum.LEVEL_2:
+                        question = Config.GetRandomQuestion(QuestionDifficulty.MEDIUM);
+                        break;
+                    case LevelEnum.LEVEL_3:
+                        question = Config.GetRandomQuestion(QuestionDifficulty.HARD);
+                        break;
+                    default:
+                        question = Config.GetRandomQuestion();
+                        break;
+                }
             }
-            else
+            
+            if (question == null)
             {
                 question = Config.GetRandomQuestion();
             }
+
             StateManager.SelectedQuestion = question;
-            
             sentences.Add(question.code);
         } 
         else

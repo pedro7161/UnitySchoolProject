@@ -97,7 +97,7 @@ public class LevelManager : MonoBehaviour
                     return;
                 }
                 welcomeMachine.GetComponentInChildren<TextMachine>().StartDialog();
-            }, 1f));
+            }, 1.5f));
         }
         Debug.Log("Current level = " + currentLevel);
         updateLevelObjects();

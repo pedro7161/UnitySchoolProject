@@ -49,6 +49,46 @@
         "cube": "4"
       },
       "Difficulty": 1
+    },
+    {
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nposition = 0\n\ncubePosition = 0\nspherePosition = 0\ncapsulePosition = 0\ncylinderPosition = 0\n\nfor (let i = 1; i <= 5; i++) {\n  if (i === 1) {\n    cylinderPosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 2) {\n    capsulePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 3) {\n    spherePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 4) {\n    cubePosition = (position % 4) + 1;\n    position += 1;\n  }\n}\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "PuzzleQuestionsOrder": {
+        "capsule": "2",
+        "cylinder": "1",
+        "sphere": "3",
+        "cube": "4"
+      },
+      "Difficulty": 2
+    },
+    {
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nlet position = 0;\nlet cubePosition = 0;\nlet spherePosition = 0;\nlet capsulePosition = 0;\nlet cylinderPosition = 0;\n\nfor (let i = 1; i <= 5; i++) {\n  if (i === 1) {\n    spherePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 2) {\n    capsulePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 3) {\n    cylinderPosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 4) {\n    cubePosition = (position % 4) + 1;\n    position += 1;\n  }\n}\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "PuzzleQuestionsOrder": {
+        "capsule": "2",
+        "cylinder": "3",
+        "sphere": "1",
+        "cube": "4"
+      },
+      "Difficulty": 2
+    },
+    {
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nlet position = 0;\nlet cubePosition = 0;\nlet spherePosition = 0;\nlet capsulePosition = 0;\nlet cylinderPosition = 0;\n\nfor (let i = 1; i <= 5; i++) {\n  if (i === 1) {\n    capsulePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 2) {\n    cylinderPosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 3) {\n    spherePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 4) {\n    cubePosition = (position % 4) + 1;\n    position += 1;\n  }\n}\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "PuzzleQuestionsOrder": {
+        "capsule": "1",
+        "cylinder": "2",
+        "sphere": "3",
+        "cube": "4"
+      },
+      "Difficulty": 2
+    },
+    {
+      "code": "// Code to decipher:\n// sphere = any;\n// capsule = any;\n// cube = any;\n// cylinder = any;\n\n// Decipher the positions:\n// The positions are encoded using a complex algorithm.\n\nlet position = 0;\nlet cubePosition = 0;\nlet spherePosition = 0;\nlet capsulePosition = 0;\nlet cylinderPosition = 0;\n\nfor (let i = 1; i <= 5; i++) {\n  if (i === 1) {\n    cubePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 2) {\n    spherePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 3) {\n    capsulePosition = (position % 4) + 1;\n    position += 1;\n  } else if (i === 4) {\n    cylinderPosition = (position % 4) + 1;\n    position += 1;\n  }\n}\n\n// Now you have deciphered the positions! Good luck with the puzzle!",
+      "PuzzleQuestionsOrder": {
+        "capsule": "3",
+        "cylinder": "4",
+        "sphere": "2",
+        "cube": "1"
+      },
+      "Difficulty": 2
     }
   ]
 }

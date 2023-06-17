@@ -132,6 +132,7 @@ public static class Config
             difficulty != QuestionDifficulty.NONE ? questions.Where(q => q.difficulty == difficulty).ToList() : questions;
 
         randomQuestion = filteredQuestions[Random.Range(0, filteredQuestions.Count)];
+        Debug.Log("Random Question: " + randomQuestion.answers[randomQuestion.correct_answer] + " - " + randomQuestion.answers);
         return randomQuestion;
     }
 
