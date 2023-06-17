@@ -19,9 +19,11 @@ public class PuzzleWall : MonoBehaviour
     private void OnTriggerEnter(Collider other)
     {
         if (other.gameObject.layer == 3) {
-            var instance = GameObject.Find("Puzzle").GetComponents<Puzzle>();
+            var instance = GameObject.Find(PuzzleStartCollider.puzzleToExecute).GetComponents<Puzzle>();
+            Debug.Log("Puzzle to execute: " + PuzzleStartCollider.puzzleToExecute + " gameObject name: " + gameObject.name);
             foreach(var Puzzle in instance)
             {
+                Debug.Log("Resetting puzzle: " + Puzzle.name);
                 Puzzle.resetElement(other.gameObject);
             }
         }  

@@ -6,6 +6,8 @@ public class PuzzleStartCollider : MonoBehaviour
 {
     public bool PlayerEnteredOnCollider = false;
     // Start is called before the first frame update
+
+    public static string puzzleToExecute = string.Empty;
     void Start()
     {
         
@@ -47,10 +49,12 @@ public class PuzzleStartCollider : MonoBehaviour
     void OnTriggerEnter(Collider other)
     {
         PlayerEnteredOnCollider = true;
+        puzzleToExecute = gameObject.transform.parent.gameObject.name;
     }
 
     void OnTriggerExit(Collider other)
     {
         PlayerEnteredOnCollider = false;
+        puzzleToExecute = string.Empty;
     }
 }

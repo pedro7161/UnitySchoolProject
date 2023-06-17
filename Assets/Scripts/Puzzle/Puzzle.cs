@@ -15,6 +15,8 @@ public class Puzzle : MonoBehaviour
     public bool invertDirections = false;
     public float speed = 0.5f;
 
+    public bool shouldConfigurePieces = false;
+
     void Start()
     {
         _PuzzlePieces = PuzzlePieces;
@@ -27,6 +29,11 @@ public class Puzzle : MonoBehaviour
     // Update is called once per frame
     void Update()
     {
+        Debug.Log("PuzzleStartCollider.puzzleToExecute " + PuzzleStartCollider.puzzleToExecute);
+        if (gameObject.name != PuzzleStartCollider.puzzleToExecute)
+        {
+            return;
+        }
         Camera.enabled = StateManager.SelectedMinigame == MinigameType.PUZZLE;
         if (StateManager.SelectedMinigame == MinigameType.PUZZLE)
         {

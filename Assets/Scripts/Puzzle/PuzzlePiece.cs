@@ -17,6 +17,12 @@ public class PuzzlePiece : MonoBehaviour
 
     void OnMouseDown()
     {
+        Debug.Log("Puzzle piece clicked " + GetComponentInParent<Puzzle>().name + " " + PuzzleStartCollider.puzzleToExecute);
+        if (GetComponentInParent<Puzzle>().name != PuzzleStartCollider.puzzleToExecute)
+        {
+            return;
+        }
+
         if (StateManager.SelectedMinigame == MinigameType.PUZZLE)
         {
             Puzzle.currentPiece = gameObject;

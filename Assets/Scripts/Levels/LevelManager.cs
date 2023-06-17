@@ -70,6 +70,12 @@ public class LevelManager : MonoBehaviour
         level2.questsGameObject.AddRange(new string[] { "QuestMachine_Quest3", "QuestMachine_Quest4" });
         level2.currentQuest = "QuestMachine_Quest3";
         levels.Add(level2);
+
+        var level3 = new Level();
+        level3.level = LevelEnum.LEVEL_3;
+        level3.questsGameObject.AddRange(new string[] { "QuestMachine_Quest5", "QuestMachine_Quest6" });
+        level3.currentQuest = "QuestMachine_Quest5";
+        levels.Add(level3);
     }
     void Start()
     {
@@ -109,6 +115,10 @@ public class LevelManager : MonoBehaviour
             case LevelEnum.LEVEL_2:
                 setAudioLevel(LevelEnum.LEVEL_2);
                 change_skybox.Change_Skybox(0);
+                break;
+            case LevelEnum.LEVEL_3:
+                setAudioLevel(LevelEnum.LEVEL_3);
+                change_skybox.Change_Skybox(1);
                 break;
             
         }
@@ -260,6 +270,17 @@ public class LevelManager : MonoBehaviour
                                     globalDialogMachine.shouldStartDialogProgrammatically = true;
                                     questionmanager.CurrentQuest = null;
                                 break;
+                                case "QuestMachine_Quest6":
+                                    GameObject.Find("QuestMachine_Quest5")?.SetActive(false);
+                                    gameObject?.SetActive(true);
+                                    
+                                    globalDialogMachine.machineSentences = new string[] { 
+                                        "Congratulations, you completed another quest! :)",
+                                        "To start another quest, please interact again with the terminal :)",
+                                    };
+                                    globalDialogMachine.shouldStartDialogProgrammatically = true;
+                                    questionmanager.CurrentQuest = null;
+                                break;
 
                             }
                         }
@@ -283,9 +304,15 @@ public class LevelManager : MonoBehaviour
                     questionmanager.CurrentQuest = null;
                     break;
                 case LevelEnum.LEVEL_2:
-                    globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 2. You may want to go forward to go to the level 3. It's a sunset environment :)" };
+                    globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 2. You may want to go forward to go to the level 3. It's a sunset environment :)", "Please cross the whole street and interact with the orange machine to start the last level" };
                     globalDialogMachine.StartDialog();
                     isCurrentLevelFinished = true;
+                    break;
+                case LevelEnum.LEVEL_3:
+                    globalDialogMachine.machineSentences = new string[] { "Congratulations, you completed all questions of level 3.", "Thank you for playing our game :) You are now free to explore to your hearts desire the entire map." };
+                    globalDialogMachine.StartDialog();
+                    isCurrentLevelFinished = true;
+                    GameObject.Find("door_to_level_2").GetComponent<DoorController>().isLocked = false;
                     break;
             }
 

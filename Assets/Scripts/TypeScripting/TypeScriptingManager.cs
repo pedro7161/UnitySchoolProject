@@ -19,6 +19,8 @@ public class TypeScriptingManager : MonoBehaviour
 
     public List<GameObject> RowItems = new List<GameObject>();
     public List<string> words;
+
+    public static bool canInteractWithMachine = true;
     void Update()
     {
         if (TextMachine.textMachineToExecute != this.gameObject.name)
@@ -70,6 +72,8 @@ public class TypeScriptingManager : MonoBehaviour
             StateManager.OnStopDialog();
             StateManager.LastResultFromTypingscript = false;
             StateManager.SetupDialog(new List<string>(){"Time's up! :/"}, DialogType.ALERT, false);
+
+            StartCoroutine(Config.Waiter(() => canInteractWithMachine = false, () => canInteractWithMachine = true, 1f));
             return;
         }
 

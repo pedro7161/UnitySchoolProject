@@ -17,7 +17,7 @@ public class TextMachine : MonoBehaviour
     void Update()
     {
         if (
-            (enteredCollider && Input.GetKeyDown("r") || shouldStartDialogProgrammatically) &&
+            (enteredCollider && Input.GetKeyDown("r") && TypeScriptingManager.canInteractWithMachine|| shouldStartDialogProgrammatically) && 
             (!StateManager.isDialogRunning || questionmanager.CurrentQuest != null) && 
             StateManager.SelectedMinigame == MinigameType.NONE &&
             StateManager.SelectedDialogCanvas.Find(canvas => canvas.DialogType == ActionCanvasType) == null)
@@ -183,6 +183,25 @@ public class TextMachine : MonoBehaviour
                             if (
                                 currentLevel.currentQuest == "QuestMachine_Quest3" && 
                                 (this.gameObject.transform.parent.name == "OpenWorldStartMachine" && enteredCollider) // this quest object appers if player interact for the first time with the machine
+                            )
+                            {
+                                gameObject.SetActive(true);
+                            }
+                            break;
+                    }
+                }
+                break;
+            case LevelEnum.LEVEL_3:
+                foreach(var resource in allQuestsInMap)
+                {
+                    var gameObject = resource.gameObject;
+                    
+                    switch (gameObject.name)
+                    {
+                        case "QuestMachine_Quest5":
+                            if (
+                                currentLevel.currentQuest == "QuestMachine_Quest5" && 
+                                (this.gameObject.transform.parent.name == "OpenWorldStartMachineLevel3" && enteredCollider) // this quest object appers if player interact for the first time with the machine
                             )
                             {
                                 gameObject.SetActive(true);

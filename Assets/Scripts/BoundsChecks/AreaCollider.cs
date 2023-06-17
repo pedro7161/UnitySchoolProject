@@ -12,6 +12,7 @@ public class AreaCollider : MonoBehaviour
     private static LevelEnum currentZone = LevelEnum.LEVEL_1;
     public LevelEnum zoneToUpdate = LevelEnum.LEVEL_1;
     public static bool shouldShowLevelTwoMessage = true;
+    public static bool shouldShowLevelThreeMessage = true;
     public static bool shouldShowCannotGoToMessage = true;
     void Start()
     {
@@ -54,22 +55,26 @@ public class AreaCollider : MonoBehaviour
         switch (zoneToUpdate)
         {
             case LevelEnum.LEVEL_2:
-                if (currentZone == LevelEnum.LEVEL_1)
-                {
                     LevelManager.setLevel(LevelEnum.LEVEL_2);
                     if (shouldShowLevelTwoMessage)
                     {
                         var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
-                        globalDialogMachine.machineSentences = new string[] { "Welcome to open world. The level 2 will start soon. Please interact with the yellow machine to start the quests" };
+                        globalDialogMachine.machineSentences = new string[] { "Welcome to open world. The level 2 will start soon. Please interact with the orange machine to start the quests" };
                         globalDialogMachine.shouldStartDialogProgrammatically = true;
                         shouldShowLevelTwoMessage = false;
                     }
-                }
                 break;
             case LevelEnum.LEVEL_3:
-                if (currentZone == LevelEnum.LEVEL_2)
+                var level = LevelManager.GetCurrentLevel();
+                if (level.level == LevelEnum.LEVEL_2 && level.isFinished)
                 {
                     LevelManager.setLevel(LevelEnum.LEVEL_3);
+                    if (shouldShowLevelThreeMessage)
+                    {
+                        var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
+                        globalDialogMachine.machineSentences = new string[] { "Welcome to the level 3. Please move forward and interact with the orange machine to start the quests" };
+                        globalDialogMachine.shouldStartDialogProgrammatically = true;
+                    }
                 }
                 break;
         }
@@ -82,18 +87,50 @@ public class AreaCollider : MonoBehaviour
         switch (gameObject.name)
         {
             case "next_area_3":
-                if (level.level == LevelEnum.LEVEL_2 && level.isFinished)
+                switch (level.level)
                 {
-                    colliders.Find(collider => !collider.isTrigger).enabled = false;
-                } 
-                else if (shouldShowCannotGoToMessage)
+                    case LevelEnum.LEVEL_2:
+                        if (!level.isFinished)
+                        {
+                            colliders[0].isTrigger = true;
+                            colliders[1].isTrigger = false;
+                            shouldShowLevelThreeMessage = true;
+                        }
+                        else
+                        {
+                            colliders[0].isTrigger = true;
+                            colliders[1].isTrigger = true; 
+                            shouldShowLevelThreeMessage = false;
+                            shouldShowCannotGoToMessage = false;
+                        }
+                    break;
+                    case LevelEnum.LEVEL_3:
+                        if (!level.isFinished && questionmanager.CurrentQuest != null)
+                        {
+                            colliders[0].isTrigger = true;
+                            colliders[1].isTrigger = false;
+                            shouldShowLevelThreeMessage = true; 
+                        }
+                        else
+                        {
+                            colliders[0].isTrigger = true;
+                            colliders[1].isTrigger = true; 
+                            shouldShowLevelThreeMessage = true;
+                            shouldShowCannotGoToMessage = false;
+                        }
+                    break;
+                }
+
+                if (shouldShowCannotGoToMessage)
                 {
                     var globalDialogMachine = GameObject.Find("GlobalDialogMachine").GetComponentInChildren<TextMachine>();
                     globalDialogMachine.machineSentences = new string[] { "You cannot go to the next area. Please finish the current level quests first" };
                     globalDialogMachine.StartDialog();
                     shouldShowCannotGoToMessage = false;
+                    shouldShowLevelThreeMessage = false;
                 }
                 break;
+            
         }
     }
 
